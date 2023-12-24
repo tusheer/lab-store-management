@@ -135,8 +135,8 @@ const DashboardPage = () => {
                                 </TableCell>
                                 <TableCell>
                                 <div className='flex gap-1.5 items-center'>
-                                    <Avatar>
-                                        <AvatarFallback className='w-9 h-9'>{
+                                    <Avatar className='w-7 h-7'>
+                                        <AvatarFallback className='w-7 h-7 text-xs'>{
                                             department.updatedBy.slice(0, 2)
                                         }</AvatarFallback>
                                     </Avatar>

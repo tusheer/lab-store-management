@@ -1,6 +1,41 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs));
 }
+
+export const generateRandomUid = (): string => {
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substring(2, 8);
+    return `${timestamp}-${random}`;
+};
+
+export const debounce = (func: (...args: any[]) => void, wait: number): ((...args: any[]) => void) => {
+    let timeout: NodeJS.Timeout | null = null;
+
+    return function executedFunction(...args: any[]) {
+        const later = () => {
+            timeout = null;
+            func(...args);
+        };
+
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(later, wait);
+    };
+};
+
+export const isRouterPathnameMatched = (pathname: string, routerPath: string, exact: boolean) => {
+    if (exact) {
+        return pathname === routerPath;
+    }
+
+    return isStringInclude(routerPath, pathname);
+};
+
+export const isStringInclude = (str: string, matchStr: string): boolean => {
+    return str.includes(matchStr);
+};
