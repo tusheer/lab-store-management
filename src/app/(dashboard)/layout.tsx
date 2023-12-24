@@ -1,6 +1,6 @@
-"use cleint";
+'use cleint';
 
-import Sidebar from "../components/Sidebar";
+import Sidebar from '../components/Sidebar';
 const DashboardLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <main className="flex w-full">

@@ -1,7 +1,5 @@
 'use client';
 
-
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { debounce } from '@/lib/utils';
 
@@ -50,7 +48,11 @@ const ShopFilter = () => {
     return (
         <>
             <div className="mt-6 flex items-center gap-4">
-                <Input className="w-3/12" placeholder="Search by name or department name"  {...form.register('search')} />
+                <Input
+                    className="w-3/12"
+                    placeholder="Search by name or department name"
+                    {...form.register('search')}
+                />
             </div>
         </>
     );

@@ -1,17 +1,25 @@
 'use client';
-import React, { useState } from 'react';
-import ShopsTable from './components/ShopsTable';
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
-import ShopFilter from './components/ShopFilter';
-import { useSearchParams } from 'next/navigation';
-import { Dialog } from '@radix-ui/react-dialog';
-import { DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { departments, getRandomPastDate } from '../departments/page';
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Dialog } from '@radix-ui/react-dialog';
+import { useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
+import { departments, getRandomPastDate } from '../departments/page';
+import ShopFilter from './components/ShopFilter';
+import ShopsTable from './components/ShopsTable';
 
 export const _shops = [
     {
@@ -82,21 +90,23 @@ export const _shops = [
 
 function searchShops(word = '') {
     return _shops.filter(
-        (shop) => shop.department.toLowerCase().includes(word.toLowerCase()) || shop.name.toLowerCase().includes(word.toLowerCase())
+        (shop) =>
+            shop.department.toLowerCase().includes(word.toLowerCase()) ||
+            shop.name.toLowerCase().includes(word.toLowerCase())
     );
 }
 
 export type ShopsType = typeof _shops;
 
 const ShopsPage = () => {
-    const [shops, setShops] = useState(_shops);
+    const [shops] = useState(_shops);
     const searchQuery = useSearchParams().get('search');
     const filteredShops = searchShops(searchQuery || '');
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
     return (
         <Container>
-            <div className='flex justify-between'>
-                <PageHeading title='Shops' description='View all shop list' />
+            <div className="flex justify-between">
+                <PageHeading title="Shops" description="View all shop list" />
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
                         <Button>Add new shop</Button>
@@ -107,12 +117,12 @@ const ShopsPage = () => {
                         </DialogHeader>
                         <div>
                             <form>
-                                <Label className='block mb-2' htmlFor='Name'>
+                                <Label className="mb-2 block" htmlFor="Name">
                                     Department name
                                 </Label>
                                 <Select>
-                                    <SelectTrigger className='w-full'>
-                                        <SelectValue placeholder='Select department' />
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select department" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -125,23 +135,23 @@ const ShopsPage = () => {
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                <Label className='block mb-2 mt-2.5' htmlFor='Name'>
+                                <Label className="mb-2 mt-2.5 block" htmlFor="Name">
                                     Shop name
                                 </Label>
                                 <Input
-                                    className='mb-3'
-                                    id='Name'
-                                    placeholder='Shop name'
-                                    type='text'
-                                    autoCapitalize='none'
-                                    autoComplete='Name'
-                                    autoCorrect='off'
+                                    className="mb-3"
+                                    id="Name"
+                                    placeholder="Shop name"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoComplete="Name"
+                                    autoCorrect="off"
                                     required
                                 />
                             </form>
                         </div>
                         <DialogFooter>
-                            <Button onClick={() => setIsDialogOpen(false)} type='submit'>
+                            <Button onClick={() => setIsDialogOpen(false)} type="submit">
                                 Submit
                             </Button>
                         </DialogFooter>

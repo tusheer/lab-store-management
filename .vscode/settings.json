@@ -1,0 +1,17 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "source.organizeImports": true,
+    "editor.formatOnSave": true, // Tell VSCode to format files on save
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascriptreact,typescript,typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // "files.autoSave": "afterDelay",
+    "typescript.tsserver.watchOptions": {},
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    } // Tell VSCode to use Prettier as default file formatter
+}

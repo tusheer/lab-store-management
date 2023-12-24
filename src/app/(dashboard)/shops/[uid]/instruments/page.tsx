@@ -1,19 +1,25 @@
 'use client';
 
-import Container from '@/components/ui/Container';
-import React, { useCallback, useEffect, useState, useTransition } from 'react';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { getRandomPastDate } from '@/app/(dashboard)/departments/page';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Container from '@/components/ui/Container';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { debounce } from '@/lib/utils';
-import { useForm } from 'react-hook-form';
+import { MoreHorizontal } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 
 const _instruments = [
     {
@@ -27,7 +33,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '2',
@@ -40,7 +46,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '3',
@@ -53,7 +59,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '4',
@@ -66,7 +72,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '5',
@@ -79,7 +85,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '6',
@@ -92,7 +98,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
 
     {
@@ -106,7 +112,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '8',
@@ -119,7 +125,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '9',
@@ -132,7 +138,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '10',
@@ -145,7 +151,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '11',
@@ -158,7 +164,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '12',
@@ -171,7 +177,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '13',
@@ -184,7 +190,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '14',
@@ -197,7 +203,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '15',
@@ -210,7 +216,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '16',
@@ -223,7 +229,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '17',
@@ -236,7 +242,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '18',
@@ -249,7 +255,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '19',
@@ -262,7 +268,7 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
     {
         id: '20',
@@ -275,13 +281,15 @@ const _instruments = [
         department: 'Mechanical Technology',
         shopId: '1',
         departmentId: '1',
-        unitName : 'Pcs'
+        unitName: 'Pcs',
     },
 ];
 
 function searchShops(word = '') {
     return _instruments.filter(
-        (shop) => shop.department.toLowerCase().includes(word.toLowerCase()) || shop.name.toLowerCase().includes(word.toLowerCase())
+        (shop) =>
+            shop.department.toLowerCase().includes(word.toLowerCase()) ||
+            shop.name.toLowerCase().includes(word.toLowerCase())
     );
 }
 
@@ -332,8 +340,8 @@ const InstrumentsPage = () => {
 
     return (
         <Container>
-            <div className='flex justify-between'>
-                <h1 className='text-2xl font-bold'>Instruments</h1>
+            <div className="flex justify-between">
+                <h1 className="text-2xl font-bold">Instruments</h1>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
                         <Button>Add new instrument</Button>
@@ -344,60 +352,60 @@ const InstrumentsPage = () => {
                         </DialogHeader>
                         <div>
                             <form>
-                                <Label className='block mb-2 mt-2.5' htmlFor='Name'>
+                                <Label className="mb-2 mt-2.5 block" htmlFor="Name">
                                     Instruments name
                                 </Label>
                                 <Input
-                                    className='mb-3'
-                                    id='Name'
-                                    placeholder='Instruments name'
-                                    type='text'
-                                    autoCapitalize='none'
-                                    autoComplete='Name'
-                                    autoCorrect='off'
+                                    className="mb-3"
+                                    id="Name"
+                                    placeholder="Instruments name"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoComplete="Name"
+                                    autoCorrect="off"
                                     required
                                 />
-                                <Label className='block mb-2 mt-2.5' htmlFor='Name'>
+                                <Label className="mb-2 mt-2.5 block" htmlFor="Name">
                                     Quantity
                                 </Label>
                                 <Input
-                                    className='mb-3'
-                                    id='Quantity'
-                                    placeholder='Quantity'
-                                    type='text'
-                                    autoCapitalize='none'
-                                    autoComplete='Name'
-                                    autoCorrect='off'
+                                    className="mb-3"
+                                    id="Quantity"
+                                    placeholder="Quantity"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoComplete="Name"
+                                    autoCorrect="off"
                                     required
                                 />
-                                <Label className='block mb-2 mt-2.5' htmlFor='Name'>
-                                Unit name
+                                <Label className="mb-2 mt-2.5 block" htmlFor="Name">
+                                    Unit name
                                 </Label>
                                 <Input
-                                    className='mb-3'
-                                    id='Name'
-                                    placeholder='Unit name'
-                                    type='text'
-                                    autoCapitalize='none'
-                                    autoComplete='Name'
-                                    autoCorrect='off'
+                                    className="mb-3"
+                                    id="Name"
+                                    placeholder="Unit name"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoComplete="Name"
+                                    autoCorrect="off"
                                     required
                                 />
                             </form>
                         </div>
                         <DialogFooter>
-                            <Button onClick={() => setIsDialogOpen(false)} type='submit'>
+                            <Button onClick={() => setIsDialogOpen(false)} type="submit">
                                 Submit
                             </Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
             </div>
-            <div className='mt-6 flex items-center gap-4'>
-                <Input className='w-3/12' placeholder='Search by name' {...form.register('search')} />
+            <div className="mt-6 flex items-center gap-4">
+                <Input className="w-3/12" placeholder="Search by name" {...form.register('search')} />
             </div>
 
-            <section className='mt-5 rounded-md border'>
+            <section className="mt-5 rounded-md border">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -411,19 +419,21 @@ const InstrumentsPage = () => {
                     </TableHeader>
                     <TableBody>
                         {instuments.map((instrument) => (
-                            <TableRow key={instrument.id} className='cursor-pointer'>
+                            <TableRow key={instrument.id} className="cursor-pointer">
                                 <TableCell>{instrument.name}</TableCell>
                                 <TableCell>{instrument.shop}</TableCell>
-                                <TableCell>{instrument.total + " " + instrument.unitName}</TableCell>
+                                <TableCell>{instrument.total + ' ' + instrument.unitName}</TableCell>
                                 <TableCell>
                                     {new Intl.DateTimeFormat('en-US', {
                                         dateStyle: 'medium',
                                     }).format(instrument.lastUpdatedAt)}
                                 </TableCell>
                                 <TableCell>
-                                    <div className='flex gap-1.5 items-center'>
+                                    <div className="flex items-center gap-1.5">
                                         <Avatar>
-                                            <AvatarFallback className='w-9 h-9'>{instrument.updatedBy.slice(0, 2)}</AvatarFallback>
+                                            <AvatarFallback className="h-9 w-9">
+                                                {instrument.updatedBy.slice(0, 2)}
+                                            </AvatarFallback>
                                         </Avatar>
                                         {instrument.updatedBy}
                                     </div>
@@ -432,15 +442,15 @@ const InstrumentsPage = () => {
                                 <TableCell>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant='ghost' className='h-8 w-8 p-0'>
-                                                <span className='sr-only'>Open menu</span>
-                                                <MoreHorizontal className='h-4 w-4' />
+                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <span className="sr-only">Open menu</span>
+                                                <MoreHorizontal className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align='end'>
+                                        <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem>View all instrument</DropdownMenuItem>
-                                            <DropdownMenuItem className='cursor-pointer'>Edit shop</DropdownMenuItem>
+                                            <DropdownMenuItem className="cursor-pointer">Edit shop</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
