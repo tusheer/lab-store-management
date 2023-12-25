@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 export default async function Home() {
     const res = await prisma?.user.findMany({
         select: {
+            
             email: true,
             id: true,
         },
