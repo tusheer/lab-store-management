@@ -16,6 +16,7 @@ export default async function Home() {
             data: {
                 email: formData.get('email') as string,
                 password: formData.get('password') as string,
+                name: 'test',
             },
         });
 
