@@ -13,9 +13,9 @@ datasource db {
 
 model User {
   id              Int      @id @default(autoincrement())
-  email           String   @unique
+  email           String   @unique @map("email")
   password        String
-  name            String
+  name            String?
   access          Json     @default("{}")
   isActive        Boolean  @default(true)
   isDeleted       Boolean  @default(false)

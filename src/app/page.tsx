@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input';
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
 
 export default async function Home() {
     const res = await prisma?.user.findMany({
@@ -10,19 +9,6 @@ export default async function Home() {
             id: true,
         },
     });
-// console.log(ok);
-
-    // async function onSubmit(formData: FormData) {
-    //     'use server';
-    //     await prisma.user.create({
-    //         data: {
-    //             email: formData.get('email') as string,
-    //             password: formData.get('password') as string,
-    //         },
-    //     });
-
-    //     revalidatePath('/');
-    // }
 
     return (
         <>
@@ -32,7 +18,7 @@ export default async function Home() {
                 ))}
             </div>
             <div>
-                <form >
+                <form>
                     <Input type="email" name="email" />
                     <Input type="password" name="password" />
                     <button type="submit">Create</button>
