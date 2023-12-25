@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma';
 export default async function Home() {
     const res = await prisma?.user.findMany({
         select: {
-            
             email: true,
             id: true,
         },
