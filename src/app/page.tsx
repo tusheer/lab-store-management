@@ -9,6 +9,7 @@ export default async function Home() {
             id: true,
         },
     });
+// console.log(ok);
 
     // async function onSubmit(formData: FormData) {
     //     'use server';
