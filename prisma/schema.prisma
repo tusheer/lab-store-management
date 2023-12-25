@@ -27,6 +27,31 @@ model User {
   designation     String?
   department      String?
   reportingBossId Int? // Nullable
-  reportingBoss   User?    @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates    User[]   @relation("ReportingBoss")
+
+  reportingBoss      User?          @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+  subordinates       User[]         @relation("ReportingBoss")
+  lastGeneralUpdates GeneralStore[] @relation("LastUpdatedBy")
+}
+
+model GeneralStore {
+  id           Int      @id @default(autoincrement())
+  point        Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isDeleted    Boolean  @default(false)
+  productName  String
+  reciptAmount String
+  stockAmount  String
+  price        Int
+  unitName     String
+
+  lastUpdatedById   Int? // Nullable
+  lastUpdatedBy     User?  @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+  sellerNameAddress String
+  CashMemoNo        String
+  CashMemoDate      String
+
+  OIC_Signature String
+  SK_Signature  String
+  note          String
 }
