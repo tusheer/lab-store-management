@@ -8,19 +8,6 @@ export default async function Home() {
             id: true,
         },
     });
-    // console.log(ok);
-
-    // async function onSubmit(formData: FormData) {
-    //     'use server';
-    //     await prisma.user.create({
-    //         data: {
-    //             email: formData.get('email') as string,
-    //             password: formData.get('password') as string,
-    //         },
-    //     });
-
-    //     revalidatePath('/');
-    // }
 
     return (
         <>
