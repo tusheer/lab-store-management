@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { UserAuthForm } from '../login/components/AuthForm';
+import RegisterForm from './components/RegisterForm';
 
 const RegisterUserPage = () => {
     return (
@@ -12,18 +11,8 @@ const RegisterUserPage = () => {
                             To create a new account, you need to fill out the form below.
                         </p>
                     </div>
-                    <UserAuthForm />
-                    <p className="px-8 text-center text-sm text-muted-foreground">
-                        By clicking continue, you agree to our{' '}
-                        <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
-                            Terms of Service
-                        </Link>{' '}
-                        and{' '}
-                        <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
-                            Privacy Policy
-                        </Link>
-                        .
-                    </p>
+
+                    <RegisterForm />
                 </div>
             </div>
         </div>
