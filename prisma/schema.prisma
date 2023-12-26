@@ -14,7 +14,7 @@ datasource db {
 model User {
   id              Int      @id @default(autoincrement())
   email           String   @unique @map("email")
-  password        String
+  password        String?
   name            String?
   access          Json     @default("{}")
   isActive        Boolean  @default(true)
@@ -31,6 +31,7 @@ model User {
   reportingBoss      User?          @relation("ReportingBoss", fields: [reportingBossId], references: [id])
   subordinates       User[]         @relation("ReportingBoss")
   lastGeneralUpdates GeneralStore[] @relation("LastUpdatedBy")
+  registerID         String?        @unique
 }
 
 model GeneralStore {

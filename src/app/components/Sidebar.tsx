@@ -5,6 +5,7 @@ import { LogOut, Microscope, School } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -76,7 +77,7 @@ const Sidebar = () => {
                         </div>
                     </div>
                     <div className="mt-2.5 flex w-full items-center justify-center gap-2.5">
-                        <Button variant="secondary" size="sm" className="border-none">
+                        <Button variant="secondary" onClick={() => signOut()} size="sm" className="border-none">
                             <LogOut className="mr-2" width={18} height={18} />
                             Logout
                         </Button>
