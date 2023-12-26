@@ -12,47 +12,93 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique @map("email")
-  password        String?
-  name            String?
-  access          Json     @default("{}")
-  isActive        Boolean  @default(true)
-  isDeleted       Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  phone           String?
-  address         String?
-  avatar          String?
-  designation     String?
-  department      String?
-  reportingBossId Int? // Nullable
+  id                          Int                      @id @default(autoincrement())
+  email                       String                   @unique @map("email")
+  password                    String?
+  name                        String?
+  access                      Json                     @default("{}")
+  isActive                    Boolean                  @default(true)
+  isDeleted                   Boolean                  @default(false)
+  createdAt                   DateTime                 @default(now())
+  updatedAt                   DateTime                 @updatedAt
+  phone                       String?
+  address                     String?
+  avatar                      String?
+  designation                 String?
+  department                  String?
+  reportingBossId             Int? // Nullable
+  reportingBoss               User?                    @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+  subordinates                User[]                   @relation("ReportingBoss")
+  lastGeneralUpdates          GeneralStore[]           @relation("LastUpdatedBy")
+  registerID                  String?                  @unique
+  generalStoreNote            GeneralStoreNote[]
+  generalStorePurchaseUpdates GeneralStorePurchase[]
+  generalStoreAllocation      GeneralStoreAllocation[]
+}
 
-  reportingBoss      User?          @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates       User[]         @relation("ReportingBoss")
-  lastGeneralUpdates GeneralStore[] @relation("LastUpdatedBy")
-  registerID         String?        @unique
+model GeneralStorePurchase {
+  id                Int      @id @default(autoincrement())
+  point             Int
+  purchasedAt       DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  isDeleted         Boolean  @default(false)
+  productName       String
+  reciptAmount      String?
+  stockAmount       String?
+  price             Int?
+  unitName          String?
+  sellerNameAddress String
+  cashMemoNo        String
+  cashMemoDate      String
+  oic_Signature     String?
+  sk_Signature      String?
+  User              User?    @relation(fields: [userId], references: [id])
+  userId            Int?
+  note              String?
+  images            String[]
+}
+
+model GeneralStoreAllocation {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  allocatedAt DateTime @default(now())
+  personName  String?
+  productName String
+  department  String
+  quantity    Int?
+  unitName    String?
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
+  note        String?
+  images      String[]
 }
 
 model GeneralStore {
-  id           Int      @id @default(autoincrement())
-  point        Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  isDeleted    Boolean  @default(false)
-  productName  String
-  reciptAmount String
-  stockAmount  String
-  price        Int
-  unitName     String
+  id                             Int                @id @default(autoincrement())
+  point                          Int
+  createdAt                      DateTime           @default(now())
+  updatedAt                      DateTime           @updatedAt
+  isDeleted                      Boolean            @default(false)
+  productName                    String
+  stockAmount                    String?
+  unitName                       String?
+  lastUpdatedById                Int? // Nullable
+  lastUpdatedBy                  User?              @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+  generalStoreNotes              GeneralStoreNote[]
+  alertWhenStockAmountIsLessThan Int?
+}
 
-  lastUpdatedById   Int? // Nullable
-  lastUpdatedBy     User?  @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
-  sellerNameAddress String
-  CashMemoNo        String
-  CashMemoDate      String
-
-  OIC_Signature String
-  SK_Signature  String
-  note          String
+model GeneralStoreNote {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  note           String
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+  generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
+  generalStoreId Int
+  images         String[]
 }
