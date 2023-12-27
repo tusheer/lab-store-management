@@ -1,5 +1,6 @@
-import { type ClassValue, clsx } from 'clsx';
+import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { z } from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -38,4 +39,18 @@ export const isRouterPathnameMatched = (pathname: string, routerPath: string, ex
 
 export const isStringInclude = (str: string, matchStr: string): boolean => {
     return str.includes(matchStr);
+};
+export const zodStrng = (massage: string) => {
+    return z
+        .string()
+        .refine(
+            (value) => {
+                if (!value) return true;
+                return /^[0-9]+(\.[0-9]+)?$/.test(value);
+            },
+            {
+                message: massage,
+            }
+        )
+        .or(z.number());
 };
