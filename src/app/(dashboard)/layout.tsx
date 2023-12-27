@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 
 const DashboardLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
     const res = await getServerSession();
+
     if (!res) {
         redirect('/login');
     }

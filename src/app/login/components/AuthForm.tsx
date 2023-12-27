@@ -11,6 +11,7 @@ import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { loginSchecma } from '../schema';
 
@@ -30,13 +31,21 @@ export function UserAuthForm({}: UserAuthFormProps) {
         const { email, password } = data;
 
         try {
-            await signIn('credentials', {
+            const response = await signIn('credentials', {
                 redirect: false,
                 email: email,
                 password: password,
+                callbackUrl: '/departments',
             });
+
+            if (response?.error) {
+                toast.error("Couldn't login");
+                return;
+            }
             router.push('/departments');
-        } catch (error) {}
+        } catch (error) {
+            toast.error("Couldn't login");
+        }
     };
 
     return (

@@ -12,68 +12,75 @@ datasource db {
 }
 
 model User {
-  id                          Int                      @id @default(autoincrement())
-  email                       String                   @unique @map("email")
+  id                          Int                        @id @default(autoincrement())
+  email                       String                     @unique @map("email")
   password                    String?
   name                        String?
-  access                      Json                     @default("{}")
-  isActive                    Boolean                  @default(true)
-  isDeleted                   Boolean                  @default(false)
-  createdAt                   DateTime                 @default(now())
-  updatedAt                   DateTime                 @updatedAt
+  access                      Json                       @default("{}")
+  isActive                    Boolean                    @default(true)
+  isDeleted                   Boolean                    @default(false)
+  createdAt                   DateTime                   @default(now())
+  updatedAt                   DateTime                   @updatedAt
   phone                       String?
   address                     String?
   avatar                      String?
   designation                 String?
   department                  String?
   reportingBossId             Int? // Nullable
-  reportingBoss               User?                    @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates                User[]                   @relation("ReportingBoss")
-  lastGeneralUpdates          GeneralStore[]           @relation("LastUpdatedBy")
-  registerID                  String?                  @unique
+  reportingBoss               User?                      @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+  subordinates                User[]                     @relation("ReportingBoss")
+  lastGeneralUpdates          GeneralStore[]             @relation("LastUpdatedBy")
+  registerID                  String?                    @unique
   generalStoreNote            GeneralStoreNote[]
   generalStorePurchaseUpdates GeneralStorePurchase[]
-  generalStoreAllocation      GeneralStoreAllocation[]
+  generalStoreDistribution    GeneralStoreDistribution[]
 }
 
 model GeneralStorePurchase {
-  id                Int      @id @default(autoincrement())
-  point             Int
-  purchasedAt       DateTime
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  isDeleted         Boolean  @default(false)
-  productName       String
-  reciptAmount      String?
-  stockAmount       String?
-  price             Int?
-  unitName          String?
-  sellerNameAddress String
-  cashMemoNo        String
-  cashMemoDate      String
-  oic_Signature     String?
-  sk_Signature      String?
-  User              User?    @relation(fields: [userId], references: [id])
-  userId            Int?
-  note              String?
-  images            String[]
+  id                 Int       @id @default(autoincrement())
+  point              Int?
+  purchasedAt        DateTime
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  isDeleted          Boolean   @default(false)
+  name               String
+  brandName          String?
+  quantity           Int?
+  unitName           String?
+  totalPrice         Int?
+  sellerInformation  String?
+  cashMemoNo         String?
+  cashMemoDate       String?
+  cashMemoImage      String?
+  oicSignature       String?
+  skSignature        String?
+  User               User?     @relation(fields: [userId], references: [id])
+  userId             Int?
+  note               String?
+  images             String[]
+  finalQuantity      Int?
+  intendNumber       Int?
+  warrantyExpireDate DateTime?
+  warrantyType       String?
 }
 
-model GeneralStoreAllocation {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  allocatedAt DateTime @default(now())
-  personName  String?
-  productName String
-  department  String
-  quantity    Int?
-  unitName    String?
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      Int?
-  note        String?
-  images      String[]
+model GeneralStoreDistribution {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isDeleted     Boolean  @default(false)
+  allocatedAt   DateTime @default(now())
+  personName    String?
+  name          String
+  department    String
+  quantity      Int?
+  unitName      String?
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        Int?
+  note          String?
+  images        String[]
+  finalQuantity Int?
+  intendNumber  Int?
 }
 
 model GeneralStore {
@@ -82,13 +89,16 @@ model GeneralStore {
   createdAt                      DateTime           @default(now())
   updatedAt                      DateTime           @updatedAt
   isDeleted                      Boolean            @default(false)
-  productName                    String
+  name                           String
   stockAmount                    String?
   unitName                       String?
   lastUpdatedById                Int? // Nullable
   lastUpdatedBy                  User?              @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
   generalStoreNotes              GeneralStoreNote[]
   alertWhenStockAmountIsLessThan Int?
+  type                           ItemType           @default(other)
+  status                         MachineStatus      @default(operational)
+  storageLocation                String?
 }
 
 model GeneralStoreNote {
@@ -101,4 +111,22 @@ model GeneralStoreNote {
   generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
   generalStoreId Int
   images         String[]
+}
+
+enum ItemType {
+  machine
+  tools
+  rawmaterial
+  equipment
+  vehicle
+  furniture
+  computer
+  other
+}
+
+enum MachineStatus {
+  operational
+  faulty
+  underRepair
+  disposed
 }

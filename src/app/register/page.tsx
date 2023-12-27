@@ -1,6 +1,13 @@
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 import RegisterForm from './components/RegisterForm';
 
-const RegisterUserPage = () => {
+const RegisterUserPage = async () => {
+    const res = await getServerSession();
+    if (!res) {
+        redirect('/login');
+    }
+
     return (
         <div className="relative flex h-svh  items-center justify-center lg:px-0">
             <div className="w-full">

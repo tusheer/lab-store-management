@@ -27,12 +27,13 @@ export const authOptions: NextAuthOptions = {
                         avatar: true,
                     },
                 });
+
                 // if user doesn't exist or password doesn't match
                 if (!user || !(await compare(password, user?.password || ''))) {
                     throw new Error('Invalid username or password');
                 }
 
-                return { email: user.email, id: user.id.toString(), name: user.name, somthing: 'lll' };
+                return { email: user.email, id: user.id.toString(), name: user.name };
             },
         }),
     ],
