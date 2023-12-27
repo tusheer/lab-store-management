@@ -11,7 +11,7 @@ const DashboardLayout: React.FC<React.PropsWithChildren> = async ({ children }) 
     return (
         <main className="flex w-full">
             <Sidebar />
-            <div className="w-[calc(100%-260px)]">{children}</div>
+            <div className="w-[calc(100%-240px)]">{children}</div>
         </main>
     );
 };
