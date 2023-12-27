@@ -30,30 +30,29 @@ const CreateItemForm = () => {
     });
     const onSubmit = async (data: GeneralStoreCreateSchema) => {
         try {
-            const res = await createNewGeneralStoreItem({
+            await createNewGeneralStoreItem({
                 ...data,
                 quantity: Number(data.quantity),
-                price: Number(data.price),
+                totalPrice: Number(data.totalPrice),
                 intendNumber: Number(data.intendNumber),
             });
 
-            toast.success('Login successful');
+            toast.success('Created successful');
         } catch (error) {
             toast.error('error');
         }
     };
-    console.log(form.formState.errors);
 
     return (
-        <div>
+        <div className="max-w-xl">
             <Form {...form}>
-                <form className=" space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="flex gap-3">
+                <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your name" {...field} />
@@ -66,7 +65,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="unitName"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Unit name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your unit name " {...field} />
@@ -78,12 +77,12 @@ const CreateItemForm = () => {
                         />
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="brandName"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Brand Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter Brand  name" {...field} />
@@ -97,7 +96,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="totalPrice"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel> Price</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter total Price" {...field} />
@@ -108,12 +107,12 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="quantity"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel> Quantity</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter quantity" {...field} />
@@ -127,7 +126,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="purchasedAt"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel className="mb-2 block"> purchasedAt</FormLabel>
                                     <FormControl>
                                         <Popover>
@@ -147,7 +146,7 @@ const CreateItemForm = () => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent className="w-full p-0">
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value}
@@ -164,12 +163,12 @@ const CreateItemForm = () => {
                         />
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="type"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Select Type</FormLabel>
                                     <FormControl>
                                         <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
@@ -199,7 +198,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="status"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Select status</FormLabel>
                                     <FormControl>
                                         <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
@@ -223,50 +222,21 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex gap-3">
-                        <FormField
-                            control={form.control}
-                            name="note"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel> Note</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="Type your note here." {...field} />
-                                    </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="sellerInformation"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel> seller Information</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter seller Information" {...field} />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex gap-3">
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="warrantyExpireDate"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel> warranty Expire Date</FormLabel>
                                     <FormControl>
                                         <Popover>
-                                            <PopoverTrigger asChild>
+                                            <PopoverTrigger className='className="w-6/12"' asChild>
                                                 <Button
                                                     variant={'outline'}
                                                     className={cn(
-                                                        'w-[280px] justify-start text-left font-normal',
+                                                        'w-full justify-start text-left font-normal',
                                                         !field.value && 'text-muted-foreground'
                                                     )}
                                                 >
@@ -278,7 +248,7 @@ const CreateItemForm = () => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent className="w-full p-0">
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value}
@@ -297,7 +267,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="warrantyType"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel> Warranty Type</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter warranty Type" {...field} />
@@ -308,12 +278,12 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="storageLocation"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Storage location</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter storage location" {...field} />
@@ -327,7 +297,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="intendNumber"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Intend number</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter intend Number" {...field} />
@@ -338,26 +308,26 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex gap-3">
-                        <FormField
-                            control={form.control}
-                            name="cashMemoNo"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>cash Memo No </FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter cash Memo No" {...field} />
-                                    </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="cashMemoNo"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel>cash Memo No </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter cash Memo No" {...field} />
+                                </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="cashMemoDate"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Cash Memo Date</FormLabel>
                                     <FormControl>
                                         <Popover>
@@ -396,7 +366,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="alertWhenStockAmountIsLessThan"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="w-6/12">
                                     <FormLabel>Alert when stock amount is less than </FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter stock amount" {...field} />
@@ -407,6 +377,34 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
+                    <FormField
+                        control={form.control}
+                        name="note"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel> Note</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Type your note here." {...field} />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="sellerInformation"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel> seller Information</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Enter seller Information" {...field} />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <Button type="submit">
                         {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Submit
                     </Button>

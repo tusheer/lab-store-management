@@ -29,8 +29,6 @@ export async function createNewUser(data: z.infer<typeof registerUserSchema>) {
 
 export async function createPassword(data: z.infer<typeof passwordSetSchema>) {
     try {
-        console.log(data);
-
         const isUser = await prisma.user.findUnique({
             where: {
                 registerID: data.registerID,

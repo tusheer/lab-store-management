@@ -33,10 +33,26 @@ export const authOptions: NextAuthOptions = {
                     throw new Error('Invalid username or password');
                 }
 
-                return { email: user.email, id: user.id.toString(), name: user.name };
+                return { email: user.email, id: user.id.toString(), name: user.name, avatar: user.avatar };
             },
         }),
     ],
+    callbacks: {
+        async jwt({ user, token }) {
+            if (user) {
+                // Note that this if condition is needed
+                token.user = { ...user };
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (token?.user) {
+                // Note that this if condition is needed
+                session.user = token.user;
+            }
+            return session;
+        },
+    },
 };
 
 const handler = NextAuth(authOptions);

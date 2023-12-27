@@ -1,16 +1,18 @@
 'use server';
 import prisma from '@/lib/prisma';
 
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { generalStoreCreateSchema, GeneralStoreCreateSchema } from './schema';
 
 export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) => {
     try {
         const validateData = generalStoreCreateSchema.safeParse(data);
-        if (validateData.success) {
-            const userAccount = await getServerSession();
 
-            if (!userAccount) {
+        if (validateData.success) {
+            const userSession = await getServerSession(authOptions);
+
+            if (!userSession) {
                 throw new Error('user not found');
             }
 
@@ -24,7 +26,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                     type: data.type,
                     lastUpdatedBy: {
                         connect: {
-                            id: 1,
+                            id: Number(userSession.user.id),
                         },
                     },
                     purchases: {
@@ -45,7 +47,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             finalQuantity: Number(data.quantity),
                             User: {
                                 connect: {
-                                    id: 1,
+                                    id: Number(userSession.user.id),
                                 },
                             },
                             note: data.note,
@@ -68,8 +70,6 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
             throw new Error('something wrong');
         }
     } catch (error) {
-        console.log(error);
-
         throw new Error(String(error));
     }
 };
