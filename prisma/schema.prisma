@@ -23,7 +23,7 @@ model User {
   updatedAt                   DateTime                   @updatedAt
   phone                       String?
   address                     String?
-  avatar                      String?
+  avatar                      Json?
   designation                 String?
   department                  String?
   reportingBossId             Int? // Nullable
@@ -51,13 +51,13 @@ model GeneralStorePurchase {
   sellerInformation  String?
   cashMemoNo         String?
   cashMemoDate       DateTime?
-  cashMemoImage      String?
+  cashMemoImage      Json?
   oicSignature       String?
   skSignature        String?
   User               User?         @relation(fields: [userId], references: [id])
   userId             Int?
   note               String?
-  images             String[]
+  images             Json[]
   finalQuantity      Int?
   intendNumber       Int?
   warrantyExpireDate DateTime?
@@ -80,7 +80,7 @@ model GeneralStoreDistribution {
   User           User?         @relation(fields: [userId], references: [id])
   userId         Int?
   note           String?
-  images         String[]
+  images         Json[]
   finalQuantity  Int?
   intendNumber   Int?
   GeneralStore   GeneralStore? @relation(fields: [generalStoreId], references: [id])
@@ -115,7 +115,7 @@ model GeneralStoreNote {
   userId         Int
   generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
   generalStoreId Int
-  images         String[]
+  images         Json[]
 }
 
 enum ItemType {

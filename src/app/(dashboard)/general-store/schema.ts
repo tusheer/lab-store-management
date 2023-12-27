@@ -15,13 +15,25 @@ export const generalStoreCreateSchema = z.object({
     intendNumber: zodStrng('error'),
     cashMemoNo: z.string(),
     cashMemoDate: z.date(),
-    cashMemoImage: z.string().optional(),
+    cashMemoImage: z
+        .object({
+            url: z.string(),
+            key: z.string(),
+        })
+        .optional(),
     unitName: z.string().min(1),
     totalPrice: zodStrng('error'),
     status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational'),
     alertWhenStockAmountIsLessThan: zodStrng('error'),
     note: z.string(),
-    images: z.array(z.string()).optional(),
+    images: z
+        .array(
+            z.object({
+                url: z.string(),
+                key: z.string(),
+            })
+        )
+        .optional(),
 });
 
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;

@@ -15,6 +15,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import useFileUpload from '@/hooks/useFileUpload';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -28,13 +29,26 @@ const CreateItemForm = () => {
     const form = useForm<GeneralStoreCreateSchema>({
         resolver: zodResolver(generalStoreCreateSchema),
     });
+
+    const { onChange, onUpload } = useFileUpload({
+        endpoint: 'imageUploader',
+        previousUploadedFiles: [],
+        multiple: false,
+    });
+
     const onSubmit = async (data: GeneralStoreCreateSchema) => {
         try {
+            const files = await onUpload();
+
             await createNewGeneralStoreItem({
                 ...data,
                 quantity: Number(data.quantity),
                 totalPrice: Number(data.totalPrice),
                 intendNumber: Number(data.intendNumber),
+                cashMemoImage: {
+                    key: files[0].key,
+                    url: files[0].url,
+                },
             });
 
             toast.success('Created successful');
@@ -405,6 +419,11 @@ const CreateItemForm = () => {
                             </FormItem>
                         )}
                     />
+                    <div>
+                        <FormLabel htmlFor="cashmemo_iamge">Cashmemo image</FormLabel>
+                        <Input onChange={onChange} id="cashmemo_iamge" type="file" accept="image/*" />
+                    </div>
+
                     <Button type="submit">
                         {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Submit
                     </Button>
