@@ -1,6 +1,14 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { generalStoreCreateSchema } from '../schema';
+
 const CreateItemForm = () => {
+    const form = useForm({
+        resolver: zodResolver(generalStoreCreateSchema),
+    });
+
     return (
         <div>
             <div className="flex flex-col">

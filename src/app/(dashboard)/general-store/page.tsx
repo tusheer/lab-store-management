@@ -11,7 +11,9 @@ export async function getGeneralStores() {
             stockAmount: true,
             alertWhenStockAmountIsLessThan: true,
             lastUpdatedBy: true,
-            productName: true,
+            name: true,
+            storageLocation: true,
+            distributions: true,
             generalStoreNotes: true,
         },
         where: {

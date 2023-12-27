@@ -3,7 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -44,9 +52,9 @@ export default function RegisterForm() {
         }
     };
     return (
-        <div className={cn('grid gap-6')}>
+        <div>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                     <FormField
                         control={form.control}
                         name="name"
@@ -81,7 +89,32 @@ export default function RegisterForm() {
                             <FormItem>
                                 <FormLabel>Department</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Enter Department name" {...field} />
+                                    <Select onValueChange={(e) => field.onChange(e)}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select department" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Departments</SelectLabel>
+                                                <SelectItem value="Mechanical Technology">
+                                                    Mechanical Technology
+                                                </SelectItem>
+                                                <SelectItem value="Civil Technology">Civil Technology</SelectItem>
+                                                <SelectItem value="Electrical Technology">
+                                                    Electrical Technology
+                                                </SelectItem>
+                                                <SelectItem value="Electronics Technology">
+                                                    Electronics Technology
+                                                </SelectItem>
+                                                <SelectItem value="Power Technology">Power Technology</SelectItem>
+                                                <SelectItem value="Computer Technology">Computer Technology</SelectItem>
+                                                <SelectItem value="Non Tech">Non Tech</SelectItem>
+                                                <SelectItem value="Account Section">Account Section</SelectItem>
+                                                <SelectItem value="Library">Library</SelectItem>
+                                                <SelectItem value="Academic Department">Academic Department</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </FormControl>
 
                                 <FormMessage />
