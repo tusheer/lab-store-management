@@ -17,9 +17,9 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
             const generalStore = await prisma.generalStore.create({
                 data: {
                     name: data.name,
-                    alertWhenStockAmountIsLessThan: data.alertWhenStockAmountIsLessThan,
+                    alertWhenStockAmountIsLessThan: Number(data.alertWhenStockAmountIsLessThan),
                     status: data.status,
-                    stockAmount: data.quantity,
+                    stockAmount: Number(data.quantity),
                     unitName: data.unitName,
                     type: data.type,
                     lastUpdatedBy: {
@@ -29,20 +29,20 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                     },
                     purchases: {
                         create: {
-                            totalPrice: data.price,
+                            totalPrice: Number(data.totalPrice),
                             purchasedAt: data.purchasedAt,
                             brandName: data.brandName,
                             sellerInformation: data.sellerInformation,
                             warrantyExpireDate: data.warrantyExpireDate,
                             warrantyType: data.warrantyType,
-                            intendNumber: data.intendNumber,
+                            intendNumber: Number(data.intendNumber),
                             cashMemoNo: data.cashMemoNo,
                             cashMemoDate: data.cashMemoDate,
                             cashMemoImage: data.cashMemoImage,
-                            quantity: data.quantity,
+                            quantity: Number(data.quantity),
                             unitName: data.unitName,
                             name: data.name,
-                            finalQuantity: data.quantity,
+                            finalQuantity: Number(data.quantity),
                             User: {
                                 connect: {
                                     id: 1,
@@ -68,6 +68,8 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
             throw new Error('something wrong');
         }
     } catch (error) {
+        console.log(error);
+
         throw new Error(String(error));
     }
 };
@@ -87,7 +89,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                     id,
                 },
                 data: {
-                    stockAmount: data.quantity,
+                    stockAmount: Number(data.quantity),
                     lastUpdatedBy: {
                         connect: {
                             id: 1,
@@ -95,20 +97,20 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                     },
                     purchases: {
                         create: {
-                            totalPrice: data.price,
+                            totalPrice: Number(data.totalPrice),
                             purchasedAt: data.purchasedAt,
                             brandName: data.brandName,
                             sellerInformation: data.sellerInformation,
                             warrantyExpireDate: data.warrantyExpireDate,
                             warrantyType: data.warrantyType,
-                            intendNumber: data.intendNumber,
+                            intendNumber: Number(data.intendNumber),
                             cashMemoNo: data.cashMemoNo,
                             cashMemoDate: data.cashMemoDate,
                             cashMemoImage: data.cashMemoImage,
-                            quantity: data.quantity,
+                            quantity: Number(data.quantity),
                             unitName: data.unitName,
                             name: data.name,
-                            finalQuantity: data.quantity,
+                            finalQuantity: Number(data.quantity),
                             User: {
                                 connect: {
                                     id: 1,

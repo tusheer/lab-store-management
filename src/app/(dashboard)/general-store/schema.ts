@@ -1,26 +1,27 @@
+import { zodStrng } from '@/lib/utils';
 import { z } from 'zod';
 
 export const generalStoreCreateSchema = z.object({
     type: z.enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle']).default('other'),
     name: z.string(),
-    quantity: z.number(),
-    price: z.number().default(0),
+    quantity: zodStrng('error'),
+
     purchasedAt: z.date().default(new Date()),
     brandName: z.string(),
     sellerInformation: z.string(),
     warrantyExpireDate: z.date(),
     warrantyType: z.string(),
     storageLocation: z.string(),
-    intendNumber: z.number(),
+    intendNumber: zodStrng('error'),
     cashMemoNo: z.string(),
     cashMemoDate: z.date(),
-    cashMemoImage: z.string(),
+    cashMemoImage: z.string().optional(),
     unitName: z.string().min(1),
-    totalPrice: z.number().default(0),
+    totalPrice: zodStrng('error'),
     status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational'),
-    alertWhenStockAmountIsLessThan: z.number().default(0),
+    alertWhenStockAmountIsLessThan: zodStrng('error'),
     note: z.string(),
-    images: z.array(z.string()),
+    images: z.array(z.string()).optional(),
 });
 
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;
