@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { cn } from '@/lib/utils';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
-import { FinancialYear } from '../financial-year/page';
+import { FinancialYear } from '../../financial-year/page';
 import ConfirmInactiveFinalcialYear from './ConfirmInactiveFinalcialYear';
 
 const FinancialYearTable = ({ data }: { data: FinancialYear }) => {

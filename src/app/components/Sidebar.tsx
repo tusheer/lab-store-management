@@ -1,15 +1,26 @@
 'use client';
 
-import { cn, isRouterPathnameMatched } from '@/lib/utils';
-import { LogOut, Microscope, School } from 'lucide-react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { signOut } from 'next-auth/react';
+import { cn, isRouterPathnameMatched } from '@/lib/utils';
+import { LineChart, Microscope, School, Store } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const links = [
+    {
+        icon: Store,
+        name: 'General Store',
+        link: '/general-store',
+        exact: false,
+    },
+    {
+        icon: LineChart,
+        name: 'Financial Year',
+        link: '/financial-year',
+        exact: false,
+    },
     {
         icon: School,
         name: 'Departments',
@@ -26,33 +37,39 @@ const links = [
 
 const Sidebar = () => {
     const pathname = usePathname();
+    const { data } = useSession();
 
     return (
-        <aside className="sticky top-0 h-screen w-[240px] flex-col justify-between border-r">
-            <div className="h-[calc(100%-154px)]">
-                <div className="mt-8 flex items-center gap-3  px-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        height={60}
-                        width={60}
-                        className="rounded-full border"
-                        src="https://cumillapoly.gov.bd/wp-content/uploads/elementor/thumbs/300521_02_59_10-pw3wkuctbqgomd0rbugx0zkr2bqfu9m3bbalucmo0w.png"
-                        alt="Cumilla polytechnic institute"
-                    />
+        <aside className="sticky top-0  h-svh w-[240px] flex-col justify-between border-r bg-primary">
+            <div className="">
+                <div className="mt-4 flex flex-col items-center">
+                    <Avatar className="h-16 w-16 flex-shrink-0">
+                        <AvatarImage src={data?.user.avatar} />
+                        <AvatarFallback>
+                            {data?.user?.name
+                                ?.split(' ')
+                                .map((name: string) => name[0])
+                                .join('')}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="mt-2 w-full px-3">
+                        <p className="text-center text-sm font-semibold text-white">{data?.user.name}</p>
+                    </div>
                 </div>
+
                 <div>
-                    <ul className="mt-10 flex w-full flex-col gap-1 px-2">
+                    <ul className="mt-8 flex w-full flex-col gap-1 px-2">
                         {links.map((link) => (
                             <Link
-                                className="rounded-md ring-offset-background transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                                className="rounded-md ring-offset-white transition-colors hover:bg-white/20 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                                 href={link.link}
                                 key={link.name}
                             >
                                 <li
                                     className={cn(
-                                        'flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground ',
+                                        'flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white ',
                                         isRouterPathnameMatched(link.link, pathname, link.exact) &&
-                                            'bg-muted text-foreground'
+                                            'bg-white text-black'
                                     )}
                                 >
                                     <link.icon width={20} height={20} />
@@ -64,7 +81,7 @@ const Sidebar = () => {
                 </div>
             </div>
 
-            <div className={cn('px-4')}>
+            {/* <div className={cn('px-4')}>
                 <div className="justify-between border-t py-4">
                     <div className="flex gap-3">
                         <Avatar className="h-10 w-10 flex-shrink-0">
@@ -83,7 +100,7 @@ const Sidebar = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </aside>
     );
 };

@@ -42,7 +42,8 @@ export function UserAuthForm({}: UserAuthFormProps) {
                 toast.error("Couldn't login");
                 return;
             }
-            router.push('/departments');
+            toast.success('Logged in successfully');
+            router.push('/general-store');
         } catch (error) {
             toast.error("Couldn't login");
         }
@@ -51,13 +52,13 @@ export function UserAuthForm({}: UserAuthFormProps) {
     return (
         <div className={cn('grid gap-3')}>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                     <FormField
                         control={form.control}
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>email</FormLabel>
+                                <FormLabel>Email*</FormLabel>
                                 <FormControl>
                                     <Input placeholder="Enter your email" {...field} />
                                 </FormControl>
@@ -70,11 +71,10 @@ export function UserAuthForm({}: UserAuthFormProps) {
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>password</FormLabel>
+                                <FormLabel>Password*</FormLabel>
                                 <FormControl>
                                     <Input placeholder="Enter your password " type="password" {...field} />
                                 </FormControl>
-
                                 <FormMessage />
                             </FormItem>
                         )}

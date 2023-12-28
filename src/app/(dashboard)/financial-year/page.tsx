@@ -1,8 +1,8 @@
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
 import prisma from '@/lib/prisma';
-import FinancialYearCreateDialog from '../components/FinancialYearCreateDialog';
-import FinancialYearTable from '../components/FinancialYearTable';
+import FinancialYearCreateDialog from '../general-store/components/FinancialYearCreateDialog';
+import FinancialYearTable from '../general-store/components/FinancialYearTable';
 
 async function getFinancialYearDate() {
     const finalcialYear = await prisma.financialYear.findMany();
