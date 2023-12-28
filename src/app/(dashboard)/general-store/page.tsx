@@ -21,8 +21,13 @@ export async function getGeneralStores() {
                     isDeleted: false,
                 },
                 select: {
-                    name: true,
                     id: true,
+                    name: true,
+                    unitName: true,
+                    lastUpdatedBy: true,
+                    updatedAt: true,
+                    createdAt: true,
+                    type: true,
                 },
             },
             id: true,
@@ -60,13 +65,13 @@ const GeneralStores = async () => {
     }
 
     return (
-        <div>
+        <Container>
             <PageHeading
                 title={`General store - ${gerelStores.name}`}
                 description="Veiw all general store stock item"
             />
             <StockTable data={gerelStores.data} />
-        </div>
+        </Container>
     );
 };
 
