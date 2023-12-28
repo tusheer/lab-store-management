@@ -11,8 +11,8 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { createNewActiveFinancialYear } from '../actions';
@@ -40,6 +40,14 @@ const FinancialYearCreateDialog = () => {
             toast.error((error as Error).message);
         }
     };
+    const searchParams = useSearchParams();
+    const isModalOpen = searchParams.get('modal') === 'true';
+    useEffect(() => {
+        if (isModalOpen) {
+            setOpen(true);
+        }
+    }, [searchParams, isModalOpen]);
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>

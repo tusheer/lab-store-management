@@ -14,7 +14,7 @@ type ConfirmInactiveFinalcialYearProps = {
 };
 
 const ConfirmInactiveFinalcialYear: React.FC<ConfirmInactiveFinalcialYearProps> = ({ open, setOpen, id }) => {
-    const [confirmationText, setConfirmationText] = useState(''); // State to track the input text
+    const [confirmationText, setConfirmationText] = useState('');
     const router = useRouter();
     const onSubmit = async () => {
         if (id === null || confirmationText.toLowerCase() !== 'inactive') {

@@ -1,7 +1,7 @@
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
-import { Button } from '@/components/ui/button';
 import prisma from '@/lib/prisma';
+import Link from 'next/link';
 import StockTable from './components/StockTable';
 
 export async function getGeneralStores() {
@@ -21,8 +21,13 @@ export async function getGeneralStores() {
                     isDeleted: false,
                 },
                 select: {
-                    name: true,
                     id: true,
+                    name: true,
+                    unitName: true,
+                    lastUpdatedBy: true,
+                    updatedAt: true,
+                    createdAt: true,
+                    type: true,
                 },
             },
             id: true,
@@ -48,19 +53,25 @@ const GeneralStores = async () => {
         return (
             <Container>
                 No active financial year found
-                <Button>Add new financial year</Button>
+                {/* <Button onClick={handleAddFinancialYearClick}>Add new financial year</Button> */}
+                <Link
+                    className="block w-fit rounded-md bg-black px-3 py-3 text-white"
+                    href={{ pathname: '/general-store/financial-year', query: { modal: true } }}
+                >
+                    Add a new financial year
+                </Link>
             </Container>
         );
     }
 
     return (
-        <div>
+        <Container>
             <PageHeading
                 title={`General store - ${gerelStores.name}`}
                 description="Veiw all general store stock item"
             />
             <StockTable data={gerelStores.data} />
-        </div>
+        </Container>
     );
 };
 
