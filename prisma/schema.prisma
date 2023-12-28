@@ -36,6 +36,20 @@ model User {
   generalStoreDistribution    GeneralStoreDistribution[]
 }
 
+model FinancialYear {
+  id                       Int                        @id @default(autoincrement())
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  isDeleted                Boolean                    @default(false)
+  name                     String
+  startDate                DateTime
+  endDate                  DateTime
+  isActive                 Boolean                    @default(true)
+  GeneralStore             GeneralStore[]
+  GeneralStorePurchase     GeneralStorePurchase[]
+  GeneralStoreDistribution GeneralStoreDistribution[]
+}
+
 model GeneralStorePurchase {
   id                 Int           @id @default(autoincrement())
   point              Int?
@@ -64,27 +78,31 @@ model GeneralStorePurchase {
   warrantyType       String?
   GeneralStore       GeneralStore? @relation(fields: [generalStoreId], references: [id])
   generalStoreId     Int?
+  financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
+  financialYearId    Int
 }
 
 model GeneralStoreDistribution {
-  id             Int           @id @default(autoincrement())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  isDeleted      Boolean       @default(false)
-  allocatedAt    DateTime      @default(now())
-  personName     String?
-  name           String
-  department     String
-  quantity       Int?
-  unitName       String?
-  User           User?         @relation(fields: [userId], references: [id])
-  userId         Int?
-  note           String?
-  images         Json[]
-  finalQuantity  Int?
-  intendNumber   Int?
-  GeneralStore   GeneralStore? @relation(fields: [generalStoreId], references: [id])
-  generalStoreId Int?
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  isDeleted       Boolean       @default(false)
+  allocatedAt     DateTime      @default(now())
+  personName      String?
+  name            String
+  department      String
+  quantity        Int?
+  unitName        String?
+  User            User?         @relation(fields: [userId], references: [id])
+  userId          Int?
+  note            String?
+  images          Json[]
+  finalQuantity   Int?
+  intendNumber    Int?
+  GeneralStore    GeneralStore? @relation(fields: [generalStoreId], references: [id])
+  generalStoreId  Int?
+  financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
+  financialYearId Int
 }
 
 model GeneralStore {
@@ -104,6 +122,8 @@ model GeneralStore {
   storageLocation                String?
   purchases                      GeneralStorePurchase[]
   distributions                  GeneralStoreDistribution[]
+  financialYear                  FinancialYear              @relation(fields: [financialYearId], references: [id])
+  financialYearId                Int
 }
 
 model GeneralStoreNote {

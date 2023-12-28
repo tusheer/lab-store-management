@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { createNewGeneralStoreItem } from '../actions';
@@ -30,7 +31,9 @@ const CreateItemForm = () => {
         resolver: zodResolver(generalStoreCreateSchema),
     });
 
-    const { onChange, onUpload } = useFileUpload({
+    const router = useRouter();
+
+    const { onChange, onUpload: onCashmemoImageUpload } = useFileUpload({
         endpoint: 'imageUploader',
         previousUploadedFiles: [],
         multiple: false,
@@ -38,19 +41,22 @@ const CreateItemForm = () => {
 
     const onSubmit = async (data: GeneralStoreCreateSchema) => {
         try {
-            const files = await onUpload();
+            const cashMemoImages = await onCashmemoImageUpload();
 
             await createNewGeneralStoreItem({
                 ...data,
                 quantity: Number(data.quantity),
                 totalPrice: Number(data.totalPrice),
                 intendNumber: Number(data.intendNumber),
-                cashMemoImage: {
-                    key: files[0].key,
-                    url: files[0].url,
-                },
+                cashMemoImage: cashMemoImages[0]
+                    ? {
+                          key: cashMemoImages[0].key,
+                          url: cashMemoImages[0].url,
+                      }
+                    : undefined,
             });
 
+            router.push('/general-store');
             toast.success('Created successful');
         } catch (error) {
             toast.error('error');
@@ -58,7 +64,7 @@ const CreateItemForm = () => {
     };
 
     return (
-        <div className="max-w-xl">
+        <div className="max-w-2xl">
             <Form {...form}>
                 <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex w-full gap-3">
@@ -194,11 +200,11 @@ const CreateItemForm = () => {
                                                     <SelectLabel>Departments</SelectLabel>
                                                     <SelectItem value="machine">Machine</SelectItem>
                                                     <SelectItem value="tools">Tools</SelectItem>
-                                                    <SelectItem value="underRepair">Raw material</SelectItem>
-                                                    <SelectItem value="other">Other</SelectItem>
+                                                    <SelectItem value="rawmaterial">Raw material</SelectItem>
                                                     <SelectItem value="electronics">Electronics</SelectItem>
                                                     <SelectItem value="furniture">Furniture</SelectItem>
                                                     <SelectItem value="vehicle">Vehicle</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -243,7 +249,7 @@ const CreateItemForm = () => {
                             name="warrantyExpireDate"
                             render={({ field }) => (
                                 <FormItem className="w-6/12">
-                                    <FormLabel> warranty Expire Date</FormLabel>
+                                    <FormLabel>Warranty expire date</FormLabel>
                                     <FormControl>
                                         <Popover>
                                             <PopoverTrigger className='className="w-6/12"' asChild>
@@ -282,7 +288,7 @@ const CreateItemForm = () => {
                             name="warrantyType"
                             render={({ field }) => (
                                 <FormItem className="w-6/12">
-                                    <FormLabel> Warranty Type</FormLabel>
+                                    <FormLabel>Warranty type</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter warranty Type" {...field} />
                                     </FormControl>
@@ -322,34 +328,44 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <FormField
-                        control={form.control}
-                        name="cashMemoNo"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel>cash Memo No </FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter cash Memo No" {...field} />
-                                </FormControl>
+                    <div className="flex gap-3">
+                        <FormField
+                            control={form.control}
+                            name="cashMemoNo"
+                            render={({ field }) => (
+                                <FormItem className="w-6/12">
+                                    <FormLabel>Cashmemo number</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter cash Memo No" {...field} />
+                                    </FormControl>
 
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className="w-6/12 space-y-3">
+                            <FormLabel className="mt-1 block" htmlFor="cashmemo_iamge">
+                                Cashmemo image
+                            </FormLabel>
+                            <Input onChange={onChange} id="cashmemo_iamge" type="file" accept="image/*" />
+                        </div>
+                    </div>
+
                     <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
                             name="cashMemoDate"
                             render={({ field }) => (
                                 <FormItem className="w-6/12">
-                                    <FormLabel>Cash Memo Date</FormLabel>
+                                    <FormLabel>Cashmemo date</FormLabel>
                                     <FormControl>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Button
                                                     variant={'outline'}
                                                     className={cn(
-                                                        'w-[280px] justify-start text-left font-normal',
+                                                        'w-full justify-start text-left font-normal',
                                                         !field.value && 'text-muted-foreground'
                                                     )}
                                                 >
@@ -371,7 +387,6 @@ const CreateItemForm = () => {
                                             </PopoverContent>
                                         </Popover>
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -383,7 +398,7 @@ const CreateItemForm = () => {
                                 <FormItem className="w-6/12">
                                     <FormLabel>Alert when stock amount is less than </FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter stock amount" {...field} />
+                                        <Input placeholder="Enter number value" {...field} />
                                     </FormControl>
 
                                     <FormMessage />
@@ -391,37 +406,34 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <FormField
-                        control={form.control}
-                        name="note"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel> Note</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="Type your note here." {...field} />
-                                </FormControl>
+                    <div className="flex gap-3 ">
+                        <FormField
+                            control={form.control}
+                            name="note"
+                            render={({ field }) => (
+                                <FormItem className="w-6/12">
+                                    <FormLabel>Note</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Type your note here." {...field} />
+                                    </FormControl>
 
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="sellerInformation"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel> seller Information</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="Enter seller Information" {...field} />
-                                </FormControl>
-
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <div>
-                        <FormLabel htmlFor="cashmemo_iamge">Cashmemo image</FormLabel>
-                        <Input onChange={onChange} id="cashmemo_iamge" type="file" accept="image/*" />
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="sellerInformation"
+                            render={({ field }) => (
+                                <FormItem className="w-6/12">
+                                    <FormLabel>Seller information</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Enter seller Information" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
 
                     <Button type="submit">
