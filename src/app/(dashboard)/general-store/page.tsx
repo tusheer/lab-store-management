@@ -1,37 +1,65 @@
+import Container from '@/components/ui/Container';
+import PageHeading from '@/components/ui/PageHeading';
+import { Button } from '@/components/ui/button';
 import prisma from '@/lib/prisma';
 import StockTable from './components/StockTable';
 
 export async function getGeneralStores() {
-    const generalStores = await prisma.generalStore.findMany({
-        select: {
-            id: true,
-            unitName: true,
-            createdAt: true,
-            updatedAt: true,
-            stockAmount: true,
-            alertWhenStockAmountIsLessThan: true,
-            lastUpdatedBy: true,
-            name: true,
-            storageLocation: true,
-            distributions: true,
-            generalStoreNotes: true,
-        },
+    const activeFinancialYear = await prisma.financialYear.findFirst({
         where: {
-            isDeleted: false,
+            isActive: true,
+            GeneralStore: {
+                every: {
+                    isDeleted: false,
+                },
+            },
+        },
+        select: {
+            name: true,
+            GeneralStore: {
+                where: {
+                    isDeleted: false,
+                },
+                select: {
+                    name: true,
+                    id: true,
+                },
+            },
+            id: true,
         },
     });
 
-    return generalStores;
+    if (activeFinancialYear === null) {
+        return null;
+    }
+
+    return {
+        name: activeFinancialYear.name,
+        data: activeFinancialYear.GeneralStore,
+    };
 }
 
-export type GeneralStore = Awaited<ReturnType<typeof getGeneralStores>>[0];
+export type GeneralStore = Awaited<ReturnType<typeof getGeneralStores>>;
 
 const GeneralStores = async () => {
     const gerelStores = await getGeneralStores();
 
+    if (gerelStores === null) {
+        return (
+            <Container>
+                No active financial year found
+                <Button>Add new financial year</Button>
+            </Container>
+        );
+    }
+
     return (
         <div>
-            <StockTable data={gerelStores} />
+            <PageHeading
+                title={`General store - ${gerelStores.name}`}
+                description="Veiw all general store stock item"
+            />
+            <StockTable data={gerelStores.data} />
         </div>
     );
 };

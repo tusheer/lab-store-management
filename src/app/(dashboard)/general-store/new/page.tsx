@@ -1,10 +1,11 @@
+import Container from '@/components/ui/Container';
 import CreateItemForm from '../components/CreateItemForm';
 
 const CreateGeneralStoreItemPage = () => {
     return (
-        <div>
+        <Container>
             <CreateItemForm />
-        </div>
+        </Container>
     );
 };
 

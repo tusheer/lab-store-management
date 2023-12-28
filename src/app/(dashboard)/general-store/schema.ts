@@ -36,4 +36,26 @@ export const generalStoreCreateSchema = z.object({
         .optional(),
 });
 
+export const financialYearCreateSchema = z.object({
+    name: z.string(),
+    date: z.array(z.date().or(z.undefined()), z.date().or(z.undefined())).refine(
+        (data) => {
+            const [firstDate, secondDate] = data;
+            // Check if one of the dates is null and the other is not
+            if (
+                (firstDate === undefined && secondDate !== undefined) ||
+                (firstDate !== undefined && secondDate === undefined)
+            ) {
+                return false;
+            }
+            return true;
+        },
+        {
+            message: 'Start date and end date must be required',
+        }
+    ),
+});
+
+export type FinancialYearCreateSchema = z.infer<typeof financialYearCreateSchema>;
+
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;

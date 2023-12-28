@@ -1,53 +1,27 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Container from '@/components/ui/Container';
+import PageHeading from '@/components/ui/PageHeading';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { GeneralStore } from '../page';
-import CreateItemFormModal from './CreateItemForm';
 
 type StockTableProps = {
-    data: GeneralStore[];
+    data: NonNullable<GeneralStore>['data'];
 };
 
 const StockTable: React.FC<StockTableProps> = ({ data }) => {
     return (
-        <div>
-            <CreateItemFormModal />
+        <Container>
+            <div className="flex justify-between">
+                <PageHeading title="General store" description="Veiw all general store stock item" />
+                <Link href="/general-store/new">
+                    <Button>Add new item</Button>
+                </Link>
+            </div>
 
-            <Table>
-                <TableCaption>A list of your recent invoices.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">Name</TableHead>
-                        <TableHead>Unit name</TableHead>
-                        <TableHead>Brand Name</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Purchased At</TableHead>
-                        <TableHead> Type</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>warranty Expire Date</TableHead>
-                        <TableHead>Warranty Type</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Intend number</TableHead>
-                        <TableHead>cash Memo No</TableHead>
-                        <TableHead>Cash Memo Date</TableHead>
-                        <TableHead>Alert when stock amount is less than</TableHead>
-                        <TableHead>Note</TableHead>
-                        <TableHead>seller Information</TableHead>
-
-                        <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data.map((d) => {
-                        return (
-                            <TableRow key={d.id}>
-                                <TableCell className="font-medium">{d.id}</TableCell>
-                                <TableCell className="font-medium">{d.unitName}</TableCell>
-                            </TableRow>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        </div>
+            {data.map((d) => {
+                return <div key={d.id}>{d.name}</div>;
+            })}
+        </Container>
     );
 };
 
