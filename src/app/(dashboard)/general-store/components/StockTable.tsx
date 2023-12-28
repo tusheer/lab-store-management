@@ -37,20 +37,14 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        {data.map((d) => {
-                            return (
-                                <>
-                                    <TableCell key={d.id} className="font-medium">
-                                        {d.name}
-                                    </TableCell>
-                                    <TableCell key={d.id} className="font-medium">
-                                        {d.unitName}
-                                    </TableCell>
-                                </>
-                            );
-                        })}
-                    </TableRow>
+                    {data.map((d) => {
+                        return (
+                            <TableRow key={d.id}>
+                                <TableCell className="font-medium">{d.id}</TableCell>
+                                <TableCell className="font-medium">{d.unitName}</TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
         </div>
