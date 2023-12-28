@@ -1,5 +1,6 @@
 'use client';
 
+import PageHeading from '@/components/ui/PageHeading';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -64,7 +65,10 @@ const CreateItemForm = () => {
     };
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-3xl">
+            <div className="mb-5">
+                <PageHeading title={`Create general store item `} description="Veiw all general store stock item" />
+            </div>
             <Form {...form}>
                 <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex w-full gap-3">
