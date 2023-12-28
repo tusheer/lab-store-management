@@ -53,7 +53,6 @@ const GeneralStores = async () => {
         return (
             <Container>
                 No active financial year found
-                {/* <Button onClick={handleAddFinancialYearClick}>Add new financial year</Button> */}
                 <Link
                     className="block w-fit rounded-md bg-black px-3 py-3 text-white"
                     href={{ pathname: '/general-store/financial-year', query: { modal: true } }}
