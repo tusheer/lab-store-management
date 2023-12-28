@@ -141,7 +141,7 @@ const CreateItemForm = () => {
                             name="purchasedAt"
                             render={({ field }) => (
                                 <FormItem className="w-6/12">
-                                    <FormLabel className="mb-2 block"> purchasedAt</FormLabel>
+                                    <FormLabel className="mb-2 block"> Purchased At</FormLabel>
                                     <FormControl>
                                         <Popover>
                                             <PopoverTrigger asChild>
