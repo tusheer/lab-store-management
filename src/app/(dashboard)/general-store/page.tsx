@@ -55,7 +55,7 @@ const GeneralStores = async () => {
                 No active financial year found
                 <Link
                     className="block w-fit rounded-md bg-black px-3 py-3 text-white"
-                    href={{ pathname: '/general-store/financial-year', query: { modal: true } }}
+                    href={{ pathname: '/financial-year', query: { modal: true } }}
                 >
                     Add a new financial year
                 </Link>
