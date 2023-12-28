@@ -80,27 +80,6 @@ const Sidebar = () => {
                     </ul>
                 </div>
             </div>
-
-            {/* <div className={cn('px-4')}>
-                <div className="justify-between border-t py-4">
-                    <div className="flex gap-3">
-                        <Avatar className="h-10 w-10 flex-shrink-0">
-                            <AvatarImage src="https://cumillapoly.gov.bd/wp-content/uploads/elementor/thumbs/300521_02_59_10-pw3wkuctbqgomd0rbugx0zkr2bqfu9m3bbalucmo0w.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="text-sm">Admin</p>
-                            <p className="text-sm text-muted-foreground">admin@dhakai.com</p>
-                        </div>
-                    </div>
-                    <div className="mt-2.5 flex w-full items-center justify-center gap-2.5">
-                        <Button variant="secondary" onClick={() => signOut()} size="sm" className="border-none">
-                            <LogOut className="mr-2" width={18} height={18} />
-                            Logout
-                        </Button>
-                    </div>
-                </div>
-            </div> */}
         </aside>
     );
 };
