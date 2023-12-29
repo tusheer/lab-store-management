@@ -44,7 +44,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             id: Number(userSession.user.id),
                         },
                     },
-                    purchases: {
+                    sources: {
                         create: {
                             totalPrice: Number(data.totalPrice),
                             purchasedAt: data.purchasedAt,
@@ -82,7 +82,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                 },
                 include: {
                     lastUpdatedBy: true,
-                    purchases: true,
+                    sources: true,
                 },
             });
 
@@ -130,7 +130,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                             id: 1,
                         },
                     },
-                    purchases: {
+                    sources: {
                         create: {
                             totalPrice: Number(data.totalPrice),
                             purchasedAt: data.purchasedAt,
@@ -168,7 +168,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                 },
                 include: {
                     lastUpdatedBy: true,
-                    purchases: true,
+                    sources: true,
                 },
             });
 
