@@ -5,16 +5,16 @@ export const generalStoreCreateSchema = z.object({
     type: z.enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle']).default('other'),
     name: z.string(),
     quantity: zodStrng('error'),
-
     purchasedAt: z.date().default(new Date()),
-    brandName: z.string(),
-    sellerInformation: z.string(),
-    warrantyExpireDate: z.date(),
-    warrantyType: z.string(),
-    storageLocation: z.string(),
+    brandName: z.string().optional(),
+    sellerInformation: z.string().optional(),
+    warrantyExpireDate: z.date().optional(),
+    warrantyType: z.string().optional(),
+    storageLocation: z.string().optional(),
     intendNumber: zodStrng('error'),
-    cashMemoNo: z.string(),
-    cashMemoDate: z.date(),
+    cashMemoNo: z.string().optional(),
+    cashMemoDate: z.date().optional(),
+    sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
     cashMemoImage: z
         .object({
             url: z.string(),
@@ -22,10 +22,10 @@ export const generalStoreCreateSchema = z.object({
         })
         .optional(),
     unitName: z.string().min(1),
-    totalPrice: zodStrng('error'),
-    status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational'),
+    totalPrice: zodStrng('error').optional(),
+    status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational').optional(),
     alertWhenStockAmountIsLessThan: zodStrng('error'),
-    note: z.string(),
+    note: z.string().optional(),
     images: z
         .array(
             z.object({

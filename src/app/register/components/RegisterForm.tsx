@@ -41,7 +41,7 @@ export default function RegisterForm() {
             }
             toast.success('Login successful');
         } catch (error) {
-            toast.error('error');
+            toast.error((error as Error).message);
         }
     };
     const handleCopy = async () => {

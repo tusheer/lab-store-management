@@ -7,8 +7,6 @@ import { passwordSetSchema, registerUserSchema } from './schema';
 
 export async function createNewUser(data: z.infer<typeof registerUserSchema>) {
     try {
-        // Validate the form data here if needed
-        // Generate uniqueID here
         const validetedData = registerUserSchema.safeParse(data);
         if (validetedData.success) {
             const registerID = nanoid();
@@ -16,14 +14,13 @@ export async function createNewUser(data: z.infer<typeof registerUserSchema>) {
             await prisma.user.create({
                 data: { ...data, registerID },
             });
+
             return registerID;
         } else {
-            throw new Error('something wrong');
+            throw new Error('User already exist');
         }
-
-        // Handle successful registration (redirect, display message, etc.)
     } catch (error) {
-        throw new Error('something wrong');
+        throw new Error('User already exist');
     }
 }
 
