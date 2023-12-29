@@ -32,13 +32,21 @@ export const authOptions: NextAuthOptions = {
                 if (!user || !(await compare(password, user?.password || ''))) {
                     throw new Error('Invalid username or password');
                 }
+                const avatar = user?.avatar as {
+                    url: string;
+                    key: string;
+                };
 
-                return { email: user.email, id: user.id.toString(), name: user.name, avatar: user.avatar };
+                return { email: user.email, id: user.id.toString(), name: user.name, avatar: avatar?.url || null };
             },
         }),
     ],
     callbacks: {
-        async jwt({ user, token }) {
+        async jwt({ user, token, trigger, session }) {
+            if (trigger === 'update' && session) {
+                token.user = { ...session };
+            }
+
             if (user) {
                 // Note that this if condition is needed
                 token.user = { ...user };

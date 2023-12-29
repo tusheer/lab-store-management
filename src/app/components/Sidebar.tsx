@@ -3,8 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn, isRouterPathnameMatched } from '@/lib/utils';
 import { LineChart, Microscope, School, Store } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -35,25 +33,29 @@ const links = [
     },
 ];
 
-const Sidebar = () => {
+type SidebarProps = {
+    name: string;
+    avatar: string;
+};
+
+const Sidebar: React.FC<SidebarProps> = ({ avatar, name }) => {
     const pathname = usePathname();
-    const { data } = useSession();
 
     return (
         <aside className="sticky top-0  h-svh w-[240px] flex-col justify-between border-r bg-primary">
             <div className="">
                 <div className="mt-4 flex flex-col items-center">
                     <Avatar className="h-16 w-16 flex-shrink-0">
-                        <AvatarImage src={data?.user.avatar} />
+                        <AvatarImage src={avatar} />
                         <AvatarFallback>
-                            {data?.user?.name
+                            {name
                                 ?.split(' ')
                                 .map((name: string) => name[0])
                                 .join('')}
                         </AvatarFallback>
                     </Avatar>
                     <div className="mt-2 w-full px-3">
-                        <p className="text-center text-sm font-semibold text-white">{data?.user.name}</p>
+                        <p className="text-center text-sm font-semibold text-white">{name}</p>
                     </div>
                 </div>
 

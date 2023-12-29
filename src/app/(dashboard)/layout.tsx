@@ -11,12 +11,13 @@ const DashboardLayout: React.FC<React.PropsWithChildren> = async ({ children }) 
     if (!res) {
         redirect('/login');
     }
+
     return (
         <SessionProviderClient>
             <main className="flex w-full">
-                <Sidebar />
+                <Sidebar name={res.user.name} avatar={res.user.avatar}  />
                 <div className="w-[calc(100%-240px)]">
-                    <Navbar />
+                    <Navbar name={res.user.name} avatar={res.user.avatar} />
                     {children}
                 </div>
             </main>

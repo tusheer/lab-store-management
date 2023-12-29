@@ -67,7 +67,7 @@ const CreateItemForm = () => {
     return (
         <div className="max-w-3xl">
             <div className="mb-5">
-                <PageHeading title={`Create general store item `} description="Veiw all general store stock item" />
+                <PageHeading title={`Create general store item `} />
             </div>
             <Form {...form}>
                 <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>

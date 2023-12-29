@@ -12,28 +12,28 @@ datasource db {
 }
 
 model User {
-  id                          Int                        @id @default(autoincrement())
-  email                       String                     @unique @map("email")
-  password                    String?
-  name                        String?
-  access                      Json                       @default("{}")
-  isActive                    Boolean                    @default(true)
-  isDeleted                   Boolean                    @default(false)
-  createdAt                   DateTime                   @default(now())
-  updatedAt                   DateTime                   @updatedAt
-  phone                       String?
-  address                     String?
-  avatar                      Json?
-  designation                 String?
-  department                  String?
-  reportingBossId             Int? // Nullable
-  reportingBoss               User?                      @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates                User[]                     @relation("ReportingBoss")
-  lastGeneralUpdates          GeneralStore[]             @relation("LastUpdatedBy")
-  registerID                  String?                    @unique
-  generalStoreNote            GeneralStoreNote[]
-  generalStorePurchaseUpdates GeneralStorePurchase[]
-  generalStoreDistribution    GeneralStoreDistribution[]
+  id                                  Int                        @id @default(autoincrement())
+  email                               String                     @unique @map("email")
+  password                            String?
+  name                                String?
+  access                              Json                       @default("{}")
+  isActive                            Boolean                    @default(true)
+  isDeleted                           Boolean                    @default(false)
+  createdAt                           DateTime                   @default(now())
+  updatedAt                           DateTime                   @updatedAt
+  phone                               String?
+  address                             String?
+  avatar                              Json?
+  designation                         String?
+  department                          String?
+  reportingBossId                     Int? // Nullable
+  reportingBoss                       User?                      @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+  subordinates                        User[]                     @relation("ReportingBoss")
+  registerID                          String?                    @unique
+  generalStoreNote                    GeneralStoreNote[]
+  lastGeneralStorePurchaseUpdates     GeneralStorePurchase[]     @relation("LastUpdatedBy")
+  lastGeneralStoreDistributionUpdates GeneralStoreDistribution[] @relation("LastUpdatedBy")
+  lastGeneralUpdates                  GeneralStore[]             @relation("LastUpdatedBy")
 }
 
 model FinancialYear {
@@ -68,8 +68,8 @@ model GeneralStorePurchase {
   cashMemoImage      Json?
   oicSignature       String?
   skSignature        String?
-  User               User?         @relation(fields: [userId], references: [id])
-  userId             Int?
+  lastUpdatedById    Int? // Nullable
+  lastUpdatedBy      User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
   note               String?
   images             Json[]
   finalQuantity      Int?
@@ -93,8 +93,8 @@ model GeneralStoreDistribution {
   department      String
   quantity        Int?
   unitName        String?
-  User            User?         @relation(fields: [userId], references: [id])
-  userId          Int?
+  lastUpdatedById Int? // Nullable
+  lastUpdatedBy   User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
   note            String?
   images          Json[]
   finalQuantity   Int?

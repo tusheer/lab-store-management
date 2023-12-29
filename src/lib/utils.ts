@@ -54,3 +54,11 @@ export const zodStrng = (massage: string) => {
         )
         .or(z.number());
 };
+
+export const getUserAvatar = (avatar: any) => {
+    if (!avatar) {
+        return null;
+    }
+
+    return avatar?.url;
+};

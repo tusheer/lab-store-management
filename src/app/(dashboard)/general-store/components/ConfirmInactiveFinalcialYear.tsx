@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -15,16 +16,21 @@ type ConfirmInactiveFinalcialYearProps = {
 
 const ConfirmInactiveFinalcialYear: React.FC<ConfirmInactiveFinalcialYearProps> = ({ open, setOpen, id }) => {
     const [confirmationText, setConfirmationText] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const onSubmit = async () => {
         if (id === null || confirmationText.toLowerCase() !== 'inactive') {
             return;
         }
+
         try {
+            setIsLoading(true);
             await inActiveFinancialYear(id);
             toast.success('inactive successful');
+            setIsLoading(false);
             router.refresh();
         } catch (error) {
+            setIsLoading(false);
             toast.error('error');
         }
 
@@ -50,6 +56,7 @@ const ConfirmInactiveFinalcialYear: React.FC<ConfirmInactiveFinalcialYearProps> 
                 </div>
                 <DialogFooter>
                     <Button type="submit" onClick={onSubmit} disabled={isButtonDisabled}>
+                        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Confirm
                     </Button>
                 </DialogFooter>

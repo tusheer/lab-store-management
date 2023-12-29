@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -67,7 +67,7 @@ const FinancialYearCreateDialog = () => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your email" {...field} />
+                                            <Input placeholder="Enter financial year name" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -128,7 +128,12 @@ const FinancialYearCreateDialog = () => {
                                 )}
                             />
                             <DialogFooter>
-                                <Button type="submit">Submit</Button>
+                                <Button type="submit">
+                                    {form.formState.isSubmitting ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : null}
+                                    Submit
+                                </Button>
                             </DialogFooter>
                         </form>
                     </Form>

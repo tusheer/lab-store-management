@@ -1,29 +1,20 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getUserAvatar } from '@/lib/utils';
 import { Box } from 'lucide-react';
-import Link from 'next/link';
-import { GeneralStore } from './GeneralStore.server';
+import { PurchaseData } from './PurchaseTable.server';
 
-type StockTableProps = {
-    data: NonNullable<GeneralStore>;
+type PurchaseTableProps = {
+    data: NonNullable<PurchaseData>;
 };
 
-const StockTable: React.FC<StockTableProps> = ({ data }) => {
+const PurchaseTable: React.FC<PurchaseTableProps> = ({ data }) => {
     if (data?.length === 0)
         return (
             <div className="mt-20">
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">
                     <Box size={100} color="gray" strokeWidth={0.7} />
                     <h4 className="text-xl font-medium text-gray-500">No data found</h4>
-                    <Link
-                        href={{
-                            pathname: '/general-store/new',
-                        }}
-                    >
-                        <Button className="px-5 py-5">Add new item</Button>
-                    </Link>
                 </div>
             </div>
         );
@@ -40,6 +31,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                             <TableHead>Updated At</TableHead>
                             <TableHead>Last updated by</TableHead>
                             <TableHead>Type</TableHead>
+
                             <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
@@ -72,7 +64,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                         {d.lastUpdatedBy?.name}
                                     </div>
                                 </TableCell>
-                                <TableCell>{d.type}</TableCell>
+                                <TableCell>"</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -82,4 +74,4 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
     );
 };
 
-export default StockTable;
+export default PurchaseTable;

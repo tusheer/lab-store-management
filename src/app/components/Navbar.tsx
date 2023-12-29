@@ -11,14 +11,20 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LogOut, User } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
-    const { data } = useSession();
+type NavbarProps = {
+    name: string;
+    avatar: string;
+};
+
+const Navbar: React.FC<NavbarProps> = ({ avatar, name }) => {
+    const router = useRouter();
 
     return (
-        <nav className="z-50 border-b bg-white">
-            <Container className="sticky top-0 z-50 flex h-16 items-center justify-between py-0">
+        <nav className="sticky top-0 z-50 border-b bg-white">
+            <Container className="z-50 flex h-16 items-center justify-between py-0">
                 <div className="flex w-full items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -34,10 +40,10 @@ const Navbar = () => {
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Avatar className="h-10 w-10 flex-shrink-0 cursor-pointer">
-                            <AvatarImage src={data?.user.avatar} />
+                        <Avatar className="h-10 w-10 flex-shrink-0 cursor-pointer border">
+                            <AvatarImage src={avatar} />
                             <AvatarFallback>
-                                {data?.user?.name
+                                {name
                                     ?.split(' ')
                                     .map((name: string) => name[0])
                                     .join('')}
@@ -47,20 +53,25 @@ const Navbar = () => {
                     <DropdownMenuContent className="w-56" align="end">
                         <DropdownMenuLabel>
                             <div className="flex items-center gap-1.5">
-                                <Avatar className="h-7 w-7 flex-shrink-0 cursor-pointer">
-                                    <AvatarImage src={data?.user.avatar} />
+                                <Avatar className="h-7 w-7 flex-shrink-0 cursor-pointer border">
+                                    <AvatarImage src={avatar} />
                                     <AvatarFallback className="text-[10px] font-medium">
-                                        {data?.user?.name
+                                        {name
                                             ?.split(' ')
                                             .map((name: string) => name[0])
                                             .join('')}
                                     </AvatarFallback>
                                 </Avatar>
-                                {data?.user.name}
+                                {name}
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer" onClick={() => {}}>
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => {
+                                router.push('/profile');
+                            }}
+                        >
                             <User className="mr-2 h-4 w-4" />
                             Profile
                         </DropdownMenuItem>

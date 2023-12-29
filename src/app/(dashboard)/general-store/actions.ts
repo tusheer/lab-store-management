@@ -60,7 +60,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             unitName: data.unitName,
                             name: data.name,
                             finalQuantity: Number(data.quantity),
-                            User: {
+                            lastUpdatedBy: {
                                 connect: {
                                     id: Number(userSession.user.id),
                                 },
@@ -146,7 +146,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                             unitName: data.unitName,
                             name: data.name,
                             finalQuantity: Number(data.quantity),
-                            User: {
+                            lastUpdatedBy: {
                                 connect: {
                                     id: 1,
                                 },

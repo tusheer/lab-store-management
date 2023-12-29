@@ -51,12 +51,6 @@ const useFileUpload = ({
         onClientUploadComplete: (file) => {
             return file;
         },
-        onUploadError: () => {
-            alert('error occurred while uploading');
-        },
-        onUploadBegin: () => {
-            alert('upload has begun');
-        },
     });
 
     const onUpload = async (_files: IFile[] = []): Promise<Omit<IFileWithType, 'uid'>[]> => {
