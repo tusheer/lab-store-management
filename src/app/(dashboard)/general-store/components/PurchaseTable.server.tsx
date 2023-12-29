@@ -1,8 +1,8 @@
 import prisma from '@/lib/prisma';
-import PurchaseTable from './PurchaseTable';
+import PurchaseTable from './ItemSourceTable';
 
 export const getPurchaseData = async (id: number) => {
-    const response = await prisma.generalStorePurchase.findMany({
+    const response = await prisma.generalStoreSource.findMany({
         where: {
             financialYearId: id,
         },

@@ -31,7 +31,7 @@ model User {
   subordinates                        User[]                     @relation("ReportingBoss")
   registerID                          String?                    @unique
   generalStoreNote                    GeneralStoreNote[]
-  lastGeneralStorePurchaseUpdates     GeneralStorePurchase[]     @relation("LastUpdatedBy")
+  lastGeneralStoreSourceUpdates       GeneralStoreSource[]       @relation("LastUpdatedBy")
   lastGeneralStoreDistributionUpdates GeneralStoreDistribution[] @relation("LastUpdatedBy")
   lastGeneralUpdates                  GeneralStore[]             @relation("LastUpdatedBy")
 }
@@ -46,11 +46,11 @@ model FinancialYear {
   endDate                  DateTime
   isActive                 Boolean                    @default(true)
   GeneralStore             GeneralStore[]
-  GeneralStorePurchase     GeneralStorePurchase[]
+  GeneralStoreSource       GeneralStoreSource[]
   GeneralStoreDistribution GeneralStoreDistribution[]
 }
 
-model GeneralStorePurchase {
+model GeneralStoreSource {
   id                 Int           @id @default(autoincrement())
   point              Int?
   purchasedAt        DateTime
@@ -80,6 +80,7 @@ model GeneralStorePurchase {
   generalStoreId     Int?
   financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId    Int
+  sourceType         SourceType    @default(others)
 }
 
 model GeneralStoreDistribution {
@@ -120,7 +121,7 @@ model GeneralStore {
   type                           ItemType                   @default(other)
   status                         MachineStatus              @default(operational)
   storageLocation                String?
-  purchases                      GeneralStorePurchase[]
+  sources                        GeneralStoreSource[]
   distributions                  GeneralStoreDistribution[]
   financialYear                  FinancialYear              @relation(fields: [financialYearId], references: [id])
   financialYearId                Int
@@ -154,4 +155,11 @@ enum MachineStatus {
   faulty
   underRepair
   disposed
+}
+
+enum SourceType {
+  purchase
+  donation
+  others
+  restock
 }
