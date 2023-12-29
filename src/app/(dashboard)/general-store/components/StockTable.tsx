@@ -1,9 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getUserAvatar } from '@/lib/utils';
-import { Box } from 'lucide-react';
+import { Box, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { GeneralStore } from './GeneralStore.server';
 
@@ -41,7 +48,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                             <TableHead>Updated At</TableHead>
                             <TableHead>Last updated by</TableHead>
                             <TableHead>Type</TableHead>
-                            <TableHead></TableHead>
+                            <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -107,6 +114,26 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                     </div>
                                 </TableCell>
                                 <TableCell>{d.type}</TableCell>
+
+                                <TableCell>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <span className="sr-only">Open menu</span>
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+                                            <DropdownMenuItem className="cursor-pointer">
+                                                <Link href={`/general-store/storeDetails/${d.id}/view`}>
+                                                    View Store Details
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
