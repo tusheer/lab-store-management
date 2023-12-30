@@ -50,7 +50,7 @@ export function UserAuthForm({}: UserAuthFormProps) {
     };
 
     return (
-        <div className={cn('grid gap-3')}>
+        <div className={cn('grid gap-3 px-5 lg:px-0')}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                     <FormField
