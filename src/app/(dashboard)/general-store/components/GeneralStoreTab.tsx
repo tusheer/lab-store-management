@@ -10,7 +10,7 @@ const GeneralStoreTab = () => {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const tab = searchParams.get('tab');
+    const tab = searchParams.get('tab') || 'stock';
 
     return (
         <Tabs
@@ -19,7 +19,7 @@ const GeneralStoreTab = () => {
                     router.push(`/general-store?tab=${e}`);
                 });
             }}
-            defaultValue="stock"
+            defaultValue={tab as string}
             className="mt-6 w-full"
         >
             <TabsList defaultValue={tab as string} className="inline-flex">

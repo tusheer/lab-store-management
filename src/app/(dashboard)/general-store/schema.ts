@@ -71,6 +71,41 @@ export const financialYearCreateSchema = z.object({
     ),
 });
 
+export const distributionCreateFormSchema = z
+    .object({
+        storeId: z.number(),
+        personName: z.string().min(1),
+        department: z.string().min(1),
+        name: z.string().min(1),
+        shopName: z.string().optional(),
+        note: z.string().optional(),
+        images: z
+            .array(
+                z.object({
+                    key: z.string(),
+                    url: z.string(),
+                })
+            )
+            .optional(),
+        quantity: zodStrng('Quantity requred').refine((data) => data !== '', {
+            message: 'Quantity requred',
+        }),
+        unitName: z.string(),
+        allocatedAt: z.date(),
+        stock: z.number(),
+    })
+    .refine(
+        (data) => {
+            return data.stock >= Number(data.quantity);
+        },
+        {
+            message: 'Quantity must be less than or equal to stock',
+            path: ['quantity'],
+        }
+    );
+
+export type DistributionCreateSchemaType = z.infer<typeof distributionCreateFormSchema>;
+
 export type FinancialYearCreateSchema = z.infer<typeof financialYearCreateSchema>;
 
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;

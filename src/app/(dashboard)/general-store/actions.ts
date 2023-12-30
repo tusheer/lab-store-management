@@ -1,9 +1,12 @@
 'use server';
 import prisma from '@/lib/prisma';
 
+import { getActiveFinancialYear } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import {
+    distributionCreateFormSchema,
+    DistributionCreateSchemaType,
     financialYearCreateSchema,
     FinancialYearCreateSchema,
     generalStoreCreateSchema,
@@ -267,5 +270,81 @@ export const inActiveFinancialYear = async (id: number) => {
         return financialYear;
     } catch (error) {
         throw new Error(String(error));
+    }
+};
+
+export const addNewDistributionToGeneralStore = async (data: DistributionCreateSchemaType, id: number) => {
+    try {
+        const validateData = distributionCreateFormSchema.safeParse(data);
+        if (validateData.success) {
+            const userAccount = await getServerSession(authOptions);
+
+            if (!userAccount) {
+                throw new Error('User not found');
+            }
+
+            const activeFinancialYear = await getActiveFinancialYear();
+
+            if (!activeFinancialYear) {
+                throw new Error('Financial year not found');
+            }
+
+            const generalStore = await prisma.generalStore.update({
+                where: {
+                    id: Number(id),
+                },
+                data: {
+                    stockAmount: data.stock - Number(data.quantity),
+                    lastUpdatedBy: {
+                        connect: {
+                            id: Number(userAccount.user.id),
+                        },
+                    },
+                    distributions: {
+                        create: {
+                            department: data.department,
+                            allocatedAt: data.allocatedAt,
+                            personName: data.personName,
+                            name: data.name,
+                            shopName: data.shopName,
+                            note: data.note,
+                            images: data.images,
+                            quantity: Number(data.quantity),
+                            unitName: data.unitName,
+                            lastUpdatedBy: {
+                                connect: {
+                                    id: Number(userAccount.user.id),
+                                },
+                            },
+                            financialYear: {
+                                connect: {
+                                    id: activeFinancialYear.id,
+                                },
+                            },
+                            finalQuantity: data.stock - Number(data.quantity),
+                        },
+                    },
+                    financialYear: {
+                        connect: {
+                            id: activeFinancialYear.id,
+                        },
+                    },
+                },
+                include: {
+                    lastUpdatedBy: true,
+                    distributions: true,
+                },
+            });
+
+            if (!generalStore) {
+                throw new Error('General store create error');
+            }
+
+            return generalStore;
+        } else {
+            throw new Error("Form data isn't valid");
+        }
+    } catch (error) {
+        throw new Error((error as Error).message);
     }
 };

@@ -90,6 +90,7 @@ model GeneralStoreDistribution {
   allocatedAt     DateTime      @default(now())
   personName      String?
   name            String
+  shopName        String?
   department      String
   quantity        Int?
   unitName        String?
