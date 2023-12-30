@@ -22,26 +22,28 @@ const GeneralStoreItemDetailsCard: React.FC<GeneralStoreItemDetailsCardProps> = 
                         {data.stockAmount} {data.unitName}
                     </p>
                 </div>
-                <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-500">Storage location</p>
-                    <p className="text-sm font-medium text-gray-700">{data.storageLocation}</p>
+                <div className="grid grid-cols-12 items-center  ">
+                    <p className="col-span-3 text-sm font-medium text-gray-500">Storage location</p>
+                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">
+                        {data.storageLocation ? data.storageLocation : 'N/A'}
+                    </p>
                 </div>
-                <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-500">Type</p>
-                    <p className="text-sm font-medium text-gray-700">{data.type}</p>
+                <div className="grid grid-cols-12 items-center  ">
+                    <p className="col-span-3 text-sm font-medium text-gray-500">Type</p>
+                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">{data.type}</p>
                 </div>
 
-                <div className="flex items-center">
-                    <p className="min-w-32 text-sm font-medium text-gray-500">Stock amount</p>
-                    <p className="text-sm font-medium text-gray-700">{data.stockAmount}</p>
+                <div className="grid grid-cols-12 items-center  ">
+                    <p className="col-span-3 text-sm font-medium text-gray-500">Stock amount</p>
+                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">{data.stockAmount}</p>
                 </div>
-                <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-500">Status</p>
-                    <p className="text-sm font-medium text-gray-700">{data.status}</p>
+                <div className="grid grid-cols-12 items-center  ">
+                    <p className="col-span-3 text-sm font-medium text-gray-500">Status</p>
+                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">{data.status}</p>
                 </div>
-                <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-500">Financial year</p>
-                    <p className="text-sm font-medium text-gray-700">{data.financialYear.name}</p>
+                <div className="grid grid-cols-12 items-center  ">
+                    <p className="col-span-3 text-sm font-medium text-gray-500">Financial year</p>
+                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">{data.financialYear.name}</p>
                 </div>
             </CardContent>
         </Card>
