@@ -12,9 +12,11 @@ export const generateRandomUid = (): string => {
     return `${timestamp}-${random}`;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = (func: (...args: any[]) => void, wait: number): ((...args: any[]) => void) => {
     let timeout: NodeJS.Timeout | null = null;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function executedFunction(...args: any[]) {
         const later = () => {
             timeout = null;
@@ -55,6 +57,7 @@ export const zodStrng = (massage: string) => {
         .or(z.number());
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUserAvatar = (avatar: any) => {
     if (!avatar) {
         return null;
