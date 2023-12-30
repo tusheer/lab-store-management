@@ -1,40 +1,55 @@
 import { zodStrng } from '@/lib/utils';
 import { z } from 'zod';
 
-export const generalStoreCreateSchema = z.object({
-    type: z.enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle']).default('other'),
-    name: z.string(),
-    quantity: zodStrng('error'),
-    purchasedAt: z.date().default(new Date()),
-    brandName: z.string().optional(),
-    sellerInformation: z.string().optional(),
-    warrantyExpireDate: z.date().optional(),
-    warrantyType: z.string().optional(),
-    storageLocation: z.string().optional(),
-    intendNumber: zodStrng('error'),
-    cashMemoNo: z.string().optional(),
-    cashMemoDate: z.date().optional(),
-    sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
-    cashMemoImage: z
-        .object({
-            url: z.string(),
-            key: z.string(),
-        })
-        .optional(),
-    unitName: z.string().min(1),
-    totalPrice: zodStrng('error').optional(),
-    status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational').optional(),
-    alertWhenStockAmountIsLessThan: zodStrng('error'),
-    note: z.string().optional(),
-    images: z
-        .array(
-            z.object({
+export const generalStoreCreateSchema = z
+    .object({
+        type: z
+            .enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle'])
+            .default('other'),
+        name: z.string(),
+        quantity: zodStrng('error'),
+        purchasedAt: z.date().default(new Date()),
+        brandName: z.string().optional(),
+        sellerInformation: z.string().optional(),
+        warrantyExpireDate: z.date().optional(),
+        warrantyType: z.string().optional(),
+        storageLocation: z.string().optional(),
+        intendNumber: zodStrng('error'),
+        cashMemoNo: z.string().optional(),
+        cashMemoDate: z.date().optional(),
+        sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
+        cashMemoImage: z
+            .object({
                 url: z.string(),
                 key: z.string(),
             })
-        )
-        .optional(),
-});
+            .optional(),
+        unitName: z.string().min(1),
+        totalPrice: zodStrng('error').optional(),
+        status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational').optional(),
+        alertWhenStockAmountIsLessThan: zodStrng('error'),
+        note: z.string().optional(),
+        images: z
+            .array(
+                z.object({
+                    url: z.string(),
+                    key: z.string(),
+                })
+            )
+            .optional(),
+    })
+    .refine(
+        (data) => {
+            if (data.sourceType === 'purchase') {
+                return data.totalPrice !== undefined;
+            }
+            return true;
+        },
+        {
+            message: 'Total price is required for purchase type',
+            path: ['totalPrice'],
+        }
+    );
 
 export const financialYearCreateSchema = z.object({
     name: z.string(),

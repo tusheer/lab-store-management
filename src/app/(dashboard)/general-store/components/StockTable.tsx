@@ -127,9 +127,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
                                             <DropdownMenuItem className="cursor-pointer">
-                                                <Link href={`/general-store/storeDetails/${d.id}/view`}>
-                                                    View Store Details
-                                                </Link>
+                                                <Link href={`/general-store/${d.id}/view`}>View Store Details</Link>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>

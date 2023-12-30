@@ -29,7 +29,7 @@ const GeneralStoreTab = () => {
                 </TabsTrigger>
                 <TabsTrigger value="purchase">
                     <FilePlus size={15} className="mr-1.5" />
-                    Purchase list
+                    Source list
                 </TabsTrigger>
                 <TabsTrigger value="distribution">
                     <FileMinus size={15} className="mr-1.5" />

@@ -49,8 +49,8 @@ const CreateItemForm = () => {
             await createNewGeneralStoreItem({
                 ...data,
                 quantity: Number(data.quantity),
-                totalPrice: Number(data.totalPrice),
-                intendNumber: Number(data.intendNumber),
+                totalPrice: data.totalPrice,
+                intendNumber: data.intendNumber,
                 cashMemoImage: cashMemoImages[0]
                     ? {
                           key: cashMemoImages[0].key,
@@ -96,13 +96,11 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter your unit name " {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-
                     <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
@@ -113,7 +111,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter Brand  name" {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -127,7 +124,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter quantity" {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -144,7 +140,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter storage location" {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -158,7 +153,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter intend Number" {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -190,7 +184,6 @@ const CreateItemForm = () => {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -217,7 +210,6 @@ const CreateItemForm = () => {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -233,7 +225,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Input placeholder="Enter number value" {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -266,7 +257,6 @@ const CreateItemForm = () => {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -282,7 +272,6 @@ const CreateItemForm = () => {
                                     <FormControl>
                                         <Textarea placeholder="Type your note here." {...field} />
                                     </FormControl>
-
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -301,7 +290,6 @@ const CreateItemForm = () => {
                                             <FormControl>
                                                 <Input placeholder="Enter total Price" {...field} />
                                             </FormControl>
-
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -340,7 +328,6 @@ const CreateItemForm = () => {
                                                     </PopoverContent>
                                                 </Popover>
                                             </FormControl>
-
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -382,7 +369,6 @@ const CreateItemForm = () => {
                                                     </PopoverContent>
                                                 </Popover>
                                             </FormControl>
-
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -396,7 +382,6 @@ const CreateItemForm = () => {
                                             <FormControl>
                                                 <Input placeholder="Enter warranty Type" {...field} />
                                             </FormControl>
-
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -413,7 +398,6 @@ const CreateItemForm = () => {
                                             <FormControl>
                                                 <Input placeholder="Enter cash Memo No" {...field} />
                                             </FormControl>
-
                                             <FormMessage />
                                         </FormItem>
                                     )}

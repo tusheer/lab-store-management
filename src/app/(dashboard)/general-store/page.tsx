@@ -1,7 +1,7 @@
+import { getActiveFinancialYear } from '@/app/action';
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
 import { Button } from '@/components/ui/button';
-import prisma from '@/lib/prisma';
 import { Box, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -9,29 +9,11 @@ import GeneralStoreServer from './components/GeneralStore.server';
 import GeneralStoreTab from './components/GeneralStoreTab';
 import PurchaseServerTable from './components/PurchaseTable.server';
 
-export async function getGeneralStores() {
-    const activeFinancialYear = await prisma.financialYear.findFirst({
-        where: {
-            isActive: true,
-        },
-    });
-
-    if (activeFinancialYear === null) {
-        return null;
-    }
-
-    return {
-        name: activeFinancialYear.name,
-        id: activeFinancialYear.id,
-    };
-}
-
 const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }) => {
-    const gerelStores = await getGeneralStores();
-
+    const activeFinancialyear = await getActiveFinancialYear();
     const tab = searchParams.tab || 'stock';
 
-    if (gerelStores === null) {
+    if (!activeFinancialyear) {
         return (
             <Container>
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">
@@ -48,7 +30,7 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
     return (
         <Container>
             <div className="flex justify-between">
-                <PageHeading title={`General store - ${gerelStores.name}`} />
+                <PageHeading title={`General store - ${activeFinancialyear.name}`} />
                 <Link href="/general-store/new">
                     <Button>Add new item</Button>
                 </Link>
@@ -63,7 +45,7 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
                         </div>
                     }
                 >
-                    <GeneralStoreServer activeFinancialYearId={gerelStores.id} />
+                    <GeneralStoreServer activeFinancialYearId={activeFinancialyear.id} />
                 </Suspense>
             )}
             {tab === 'purchase' && (
@@ -74,7 +56,7 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
                         </div>
                     }
                 >
-                    <PurchaseServerTable activeFinancialYearId={gerelStores.id} />
+                    <PurchaseServerTable activeFinancialYearId={activeFinancialyear.id} />
                 </Suspense>
             )}
         </Container>

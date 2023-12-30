@@ -52,8 +52,7 @@ model FinancialYear {
 
 model GeneralStoreSource {
   id                 Int           @id @default(autoincrement())
-  point              Int?
-  purchasedAt        DateTime
+  purchasedAt        DateTime?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   isDeleted          Boolean       @default(false)
@@ -68,7 +67,7 @@ model GeneralStoreSource {
   cashMemoImage      Json?
   oicSignature       String?
   skSignature        String?
-  lastUpdatedById    Int? // Nullable
+  lastUpdatedById    Int?
   lastUpdatedBy      User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
   note               String?
   images             Json[]
@@ -112,8 +111,8 @@ model GeneralStore {
   updatedAt                      DateTime                   @updatedAt
   isDeleted                      Boolean                    @default(false)
   name                           String
-  stockAmount                    Int?
-  unitName                       String?
+  stockAmount                    Int
+  unitName                       String
   lastUpdatedById                Int? // Nullable
   lastUpdatedBy                  User?                      @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
   generalStoreNotes              GeneralStoreNote[]

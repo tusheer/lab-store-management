@@ -44,6 +44,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             id: Number(userSession.user.id),
                         },
                     },
+                    storageLocation: data.storageLocation,
                     sources: {
                         create: {
                             totalPrice: Number(data.totalPrice),
@@ -95,7 +96,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
             throw new Error('something wrong');
         }
     } catch (error) {
-        throw new Error(String(error));
+        throw new Error((error as Error).message);
     }
 };
 
