@@ -15,8 +15,8 @@ import { ShopsType } from '../page';
 const ShopsTable = ({ data }: { data: ShopsType }) => {
     const router = useRouter();
     return (
-        <section className="mt-5 rounded-md border">
-            <Table>
+        <section className="mt-5 overflow-x-auto rounded-md border">
+            <Table className="min-w-[950px] ">
                 <TableHeader>
                     <TableRow>
                         <TableHead>Shop name</TableHead>
@@ -24,7 +24,7 @@ const ShopsTable = ({ data }: { data: ShopsType }) => {
                         <TableHead>Department name</TableHead>
                         <TableHead>Last updated At</TableHead>
                         <TableHead>Last updated by</TableHead>
-                        <TableHead></TableHead>
+                        <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

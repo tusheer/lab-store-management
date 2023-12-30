@@ -416,7 +416,7 @@ const CreateItemForm = () => {
                                     control={form.control}
                                     name="cashMemoDate"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full">
                                             <FormLabel>Cashmemo date</FormLabel>
                                             <FormControl>
                                                 <Popover>
@@ -456,7 +456,7 @@ const CreateItemForm = () => {
                                     control={form.control}
                                     name="sellerInformation"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full">
                                             <FormLabel>Seller information</FormLabel>
                                             <FormControl>
                                                 <Textarea placeholder="Enter seller Information" {...field} />

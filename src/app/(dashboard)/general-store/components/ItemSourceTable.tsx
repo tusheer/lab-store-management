@@ -22,8 +22,8 @@ const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
 
     return (
         <div className="mt-10">
-            <div className="rounded-md border">
-                <Table>
+            <div className="overflow-x-auto rounded-md border ">
+                <Table className="min-w-[1200px] ">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>

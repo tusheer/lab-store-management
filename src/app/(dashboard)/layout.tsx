@@ -14,7 +14,7 @@ const DashboardLayout: React.FC<React.PropsWithChildren> = async ({ children }) 
 
     return (
         <SessionProviderClient>
-            <main className="relative flex w-full">
+            <main className="relative flex w-full pb-20 lg:pb-0">
                 <Sidebar name={res.user.name} avatar={res.user.avatar} />
                 <div className="w-[calc(100%-10px)] lg:w-[calc(100%-240px)]">
                     <Navbar name={res.user.name} avatar={res.user.avatar} />
