@@ -35,7 +35,12 @@ const Navbar: React.FC<NavbarProps> = ({ avatar, name }) => {
                         alt="Cumilla polytechnic institute"
                     />
                     <h2>
-                        <span className="text-xl font-bold text-primary">Comilla Polytechnic Institute</span>
+                        <span className="hidden text-lg font-bold text-primary lg:block lg:text-base">
+                            Comilla Polytechnic Institute
+                        </span>
+                        <span className="block text-xl font-bold tracking-wider text-primary lg:hidden lg:text-base">
+                            CPI
+                        </span>
                     </h2>
                 </div>
                 <DropdownMenu>
