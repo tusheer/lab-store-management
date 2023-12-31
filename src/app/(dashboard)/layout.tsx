@@ -14,9 +14,9 @@ const DashboardLayout: React.FC<React.PropsWithChildren> = async ({ children }) 
 
     return (
         <SessionProviderClient>
-            <main className="relative flex w-full pb-20 lg:pb-0">
+            <main className="relative flex h-svh w-full pb-20 lg:pb-0">
                 <Sidebar name={res.user.name} avatar={res.user.avatar} />
-                <div className="w-[calc(100%-10px)] lg:w-[calc(100%-240px)]">
+                <div className="h-full w-full overflow-y-auto overflow-x-hidden lg:w-[calc(100%-240px)]">
                     <Navbar name={res.user.name} avatar={res.user.avatar} />
                     {children}
                 </div>

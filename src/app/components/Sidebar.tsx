@@ -69,12 +69,12 @@ const Sidebar: React.FC<SidebarProps> = ({ avatar, name }) => {
                             >
                                 <li
                                     className={cn(
-                                        'flex flex-shrink-0  cursor-pointer flex-col items-center gap-2  rounded-md px-2 py-2 text-xs font-medium text-white lg:w-full lg:flex-row lg:gap-3 lg:px-3 lg:text-sm ',
+                                        'flex flex-shrink-0  cursor-pointer flex-col items-center gap-2  rounded-md px-2 py-2 text-[10px] font-medium text-white lg:w-full lg:flex-row lg:gap-3 lg:px-3 lg:text-sm ',
                                         isRouterPathnameMatched(link.link, pathname, link.exact) &&
                                             'bg-white text-black'
                                     )}
                                 >
-                                    <link.icon width={20} height={20} />
+                                    <link.icon className="h-4 w-4 lg:h-5 lg:w-5" />
                                     <span>{link.name}</span>
                                 </li>
                             </Link>
