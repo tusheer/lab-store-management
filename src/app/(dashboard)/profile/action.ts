@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { UpdateUserSchema } from './schema';
@@ -32,4 +32,24 @@ export const updateProfile = async (data: UpdateUserSchema) => {
     } catch (error) {
         throw new Error(String(error));
     }
+};
+
+export const getMyProfile = async () => {
+    const session = await getServerSession(authOptions);
+    const response = await prisma.user.findUnique({
+        select: {
+            email: true,
+            id: true,
+            address: true,
+            name: true,
+            phone: true,
+            designation: true,
+            department: true,
+            avatar: true,
+        },
+        where: {
+            id: Number(session?.user.id),
+        },
+    });
+    return response;
 };

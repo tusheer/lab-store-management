@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import StockTable from './StockTable';
 
-export const getGeneralStores = async (id: number) => {
+const getGeneralStores = async (id: number) => {
     const response = await prisma.generalStore.findMany({
         where: {
             financialYearId: id,

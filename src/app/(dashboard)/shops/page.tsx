@@ -17,11 +17,69 @@ import {
 import { Dialog } from '@radix-ui/react-dialog';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import { departments, getRandomPastDate } from '../departments/page';
 import ShopFilter from './components/ShopFilter';
 import ShopsTable from './components/ShopsTable';
 
-export const _shops = [
+const getRandomPastDate = (days: number) => {
+    const today = new Date();
+    const pastDate = new Date(today);
+    pastDate.setDate(pastDate.getDate() - days);
+    return pastDate;
+};
+
+const departments = [
+    {
+        uid: '1',
+        name: 'Mechanical Technology',
+        totalShops: 10,
+        lastUpdatedAt: getRandomPastDate(20),
+        updatedBy: 'Md. Shohel Rana',
+    },
+    {
+        uid: '2',
+        name: 'Civil Technology',
+        totalShops: 8,
+        lastUpdatedAt: getRandomPastDate(10),
+        updatedBy: 'Eng. Gazi Faruq',
+    },
+    {
+        uid: '3',
+        name: 'Electrical Technology',
+        totalShops: 3,
+        lastUpdatedAt: getRandomPastDate(80),
+        updatedBy: 'Eng. Murad Hossain',
+    },
+    {
+        uid: '4',
+        name: 'Electronics Technology',
+        totalShops: 5,
+        lastUpdatedAt: getRandomPastDate(30),
+        updatedBy: 'Eng. Sulaiman Hossain',
+    },
+    {
+        uid: '5',
+        name: 'Power Technology',
+        totalShops: 5,
+        lastUpdatedAt: getRandomPastDate(29),
+        updatedBy: 'Eng. Abdullah Al Mamun',
+    },
+    {
+        uid: '6',
+        name: 'Computer Technology',
+        totalShops: 2,
+        lastUpdatedAt: getRandomPastDate(3),
+        updatedBy: 'Eng. Abdullah Al Mamun',
+    },
+    {
+        uid: '7',
+        name: 'Non Tech',
+        totalShops: 2,
+        lastUpdatedAt: getRandomPastDate(3),
+        updatedBy: 'Eng. Abdullah Al Mamun',
+    },
+];
+
+const _shops = [
     {
         uid: '1',
         name: 'Welding Shop',

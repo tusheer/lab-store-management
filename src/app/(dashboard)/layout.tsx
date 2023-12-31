@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/authOption';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SessionProviderClient from './SessionProvider.client';

@@ -2,7 +2,7 @@
 import prisma from '@/lib/prisma';
 
 import { getActiveFinancialYear } from '@/app/action';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import { getServerSession } from 'next-auth';
 import {
     distributionCreateFormSchema,

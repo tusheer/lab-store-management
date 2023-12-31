@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import DistributionTable from './DistributionTable';
 
-export const getDistributionData = async (id: number) => {
+const getDistributionData = async (id: number) => {
     const response = await prisma.generalStoreDistribution.findMany({
         where: {
             financialYearId: id,

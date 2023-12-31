@@ -19,14 +19,14 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export const getRandomPastDate = (days: number) => {
+const getRandomPastDate = (days: number) => {
     const today = new Date();
     const pastDate = new Date(today);
     pastDate.setDate(pastDate.getDate() - days);
     return pastDate;
 };
 
-export const departments = [
+const departments = [
     {
         uid: '1',
         name: 'Mechanical Technology',
