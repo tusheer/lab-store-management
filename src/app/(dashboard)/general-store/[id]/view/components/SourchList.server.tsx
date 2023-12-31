@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import PurchaseServerTable from '../../../components/PurchaseTable.server';
+import ItemSourceTable from '../../../components/ItemSourceTable';
 
 export const getSourchListByid = async (id: number) => {
     const response = await prisma.generalStoreSource.findMany({
@@ -28,7 +28,7 @@ type SourchListserverProps = {
 
 const SourchListserver: React.FC<SourchListserverProps> = async ({ id }) => {
     const resposen = await getSourchListByid(id);
-    return <PurchaseServerTable data={resposen} />;
+    return <ItemSourceTable data={resposen} />;
 };
 
 export default SourchListserver;
