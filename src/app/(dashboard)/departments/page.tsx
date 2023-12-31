@@ -118,15 +118,15 @@ const DashboardPage = () => {
                     </DialogContent>
                 </Dialog>
             </div>
-            <section className="mt-5 rounded-md border">
-                <Table>
+            <section className="mt-5 overflow-x-auto rounded-md border">
+                <Table className="min-w-[800px] ">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Department name</TableHead>
                             <TableHead>Total shops</TableHead>
                             <TableHead>Last updated At</TableHead>
                             <TableHead>Last updated by</TableHead>
-                            <TableHead></TableHead>
+                            <TableHead>Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
