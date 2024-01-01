@@ -22,6 +22,9 @@ const getDistributionData = async (id: number) => {
             images: true,
             note: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
     });
 
     return response;

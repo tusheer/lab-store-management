@@ -17,6 +17,9 @@ const getPurchaseData = async (id: number) => {
             quantity: true,
             lastUpdatedBy: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
     });
 
     return response;

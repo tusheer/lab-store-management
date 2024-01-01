@@ -16,6 +16,9 @@ const getGeneralStores = async (id: number) => {
             updatedAt: true,
             type: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
     });
 
     return response;
