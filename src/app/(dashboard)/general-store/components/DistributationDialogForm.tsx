@@ -82,10 +82,7 @@ const DistributationDialogForm: React.FC<DistributationDialogFormProps> = ({ dat
                         </DrawerTitle>
                     </DrawerHeader>
                     <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(handleSubmit)}
-                            className="max-h-[calc(100vh-100px)] w-full space-y-3 overflow-auto"
-                        >
+                        <form onSubmit={form.handleSubmit(handleSubmit)} className=" w-full space-y-3">
                             <div className="flex w-full gap-3">
                                 <FormField
                                     control={form.control}
