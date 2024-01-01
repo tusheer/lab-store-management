@@ -1,6 +1,15 @@
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { authOptions } from '../api/auth/[...nextauth]/authOption';
 import { UserAuthForm } from './components/AuthForm';
 
-const Liginpage = () => {
+const Liginpage = async () => {
+    const userSession = await getServerSession(authOptions);
+
+    if (userSession?.user) {
+        return redirect('/general-store');
+    }
+
     return (
         <>
             <div className="relative flex h-svh  items-center justify-center lg:px-0">

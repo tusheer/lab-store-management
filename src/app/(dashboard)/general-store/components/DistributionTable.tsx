@@ -28,11 +28,11 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                             <TableHead>ID</TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Quantity</TableHead>
-                            <TableHead>Qty after distribute</TableHead>
+                            <TableHead>Quantity after</TableHead>
                             <TableHead>Department</TableHead>
                             <TableHead>Shop/Lab</TableHead>
                             <TableHead>Handover to</TableHead>
-                            <TableHead>Last updated by</TableHead>
+                            <TableHead>Updated by</TableHead>
                             <TableHead>Distribution date</TableHead>
                             <TableHead>Updated by</TableHead>
                             <TableHead></TableHead>
