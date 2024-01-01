@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import StockTable from './StockTable';
+import GeneralStoreTable from './GeneralStoreTable';
 
 const getGeneralStores = async (id: number) => {
     const response = await prisma.generalStore.findMany({
@@ -26,7 +26,7 @@ export type GeneralStore = Awaited<ReturnType<typeof getGeneralStores>>;
 const GeneralStoreServer = async ({ activeFinancialYearId }: { activeFinancialYearId: number }) => {
     const response = await getGeneralStores(activeFinancialYearId);
 
-    return <StockTable data={response} />;
+    return <GeneralStoreTable data={response} />;
 };
 
 export default GeneralStoreServer;

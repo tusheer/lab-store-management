@@ -162,6 +162,21 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                             >
                                                 Dristributaion from this item
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    setSelectedDistributionItem({
+                                                        name: d.name,
+                                                        unitName: d.unitName,
+                                                        storeId: d.id,
+                                                        stock: d.stockAmount,
+                                                    });
+
+                                                    setDistributionModal(true);
+                                                }}
+                                                className="cursor-pointer"
+                                            >
+                                                Add new source
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -171,13 +186,12 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                 </Table>
             </div>
 
-            {distributionModal && !!selectedDistributionitem.storeId && (
-                <DistributationDialogForm
-                    data={selectedDistributionitem}
-                    setOpen={setDistributionModal}
-                    open={distributionModal && !!selectedDistributionitem.storeId}
-                />
-            )}
+            <DistributationDialogForm
+                key={selectedDistributionitem.storeId}
+                data={selectedDistributionitem}
+                setOpen={setDistributionModal}
+                open={distributionModal && !!selectedDistributionitem.storeId}
+            />
         </div>
     );
 };
