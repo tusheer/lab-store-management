@@ -74,7 +74,7 @@ const DistributationDialogForm: React.FC<DistributationDialogFormProps> = ({ dat
 
     return (
         <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerContent>
+            <DrawerContent className="max-h-[80vh] overflow-y-auto">
                 <div className="mx-auto w-full max-w-xl pb-6">
                     <DrawerHeader className="px-0">
                         <DrawerTitle>
