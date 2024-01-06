@@ -19,16 +19,18 @@ const NoteCard: React.FC<NoteCardProps> = ({ data }) => {
                         <div key={id} className="rounded-lg bg-white py-3.5">
                             <div className="flex space-x-3">
                                 <HoverCard>
-                                    <HoverCardTrigger>
-                                        <Avatar className="h-10 w-10">
-                                            <AvatarImage src={getUserAvatar(user?.avatar)} />
-                                            <AvatarFallback className="h-7 w-7 text-xs">
-                                                {user?.name
-                                                    ?.split(' ')
-                                                    .map((name: string) => name[0])
-                                                    .join('')}
-                                            </AvatarFallback>
-                                        </Avatar>
+                                    <HoverCardTrigger asChild>
+                                        <button>
+                                            <Avatar className="h-10 w-10">
+                                                <AvatarImage src={getUserAvatar(user?.avatar)} />
+                                                <AvatarFallback className="h-7 w-7 text-xs">
+                                                    {user?.name
+                                                        ?.split(' ')
+                                                        .map((name: string) => name[0])
+                                                        .join('')}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </button>
                                     </HoverCardTrigger>
                                     <HoverCardContent>
                                         <div className="flex flex-col items-center gap-1.5">
@@ -81,7 +83,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ data }) => {
                                 </div>
                             </div>
                         </div>
-                        {data.length - 1 !== index && <Separator />}
+                        {data.length - 1 !== index && <Separator className="-mx-2 w-full" />}
                     </>
                 ))}
             </CardContent>
