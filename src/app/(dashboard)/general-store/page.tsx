@@ -30,7 +30,7 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
     }
     return (
         <Container>
-            <div className="flex items-center justify-between lg:items-start">
+            <div className="flex flex-col items-center justify-between lg:flex-row lg:items-start">
                 <PageHeading title={`General store - ${activeFinancialyear.name}`} />
                 <Link href="/general-store/new">
                     <Button>Add new item</Button>

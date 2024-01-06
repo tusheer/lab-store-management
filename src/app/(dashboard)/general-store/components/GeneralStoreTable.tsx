@@ -106,7 +106,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                     <div className="flex items-center gap-1.5 text-nowrap">
                                         <HoverCard>
                                             <HoverCardTrigger asChild>
-                                                <Button variant="link">
+                                                <button>
                                                     <Avatar className="h-7 w-7">
                                                         <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
                                                         <AvatarFallback className="h-7 w-7 text-xs">
@@ -116,7 +116,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                                 .join('')}
                                                         </AvatarFallback>
                                                     </Avatar>
-                                                </Button>
+                                                </button>
                                             </HoverCardTrigger>
                                             <HoverCardContent>
                                                 <div className="flex flex-col items-center gap-1.5">
