@@ -27,29 +27,42 @@ const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead>Unit name</TableHead>
+                            <TableHead>Brand Name</TableHead>
+                            <TableHead>Quantity</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Indent no</TableHead>
                             <TableHead>Created At</TableHead>
-                            <TableHead>Updated At</TableHead>
+                            <TableHead>Purchase At</TableHead>
                             <TableHead>Last updated by</TableHead>
                             <TableHead>Type</TableHead>
-
-                            <TableHead></TableHead>
+                            <TableHead>Final quantity</TableHead>
+                            <TableHead>Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data?.map((d) => (
                             <TableRow key={d.id} className="cursor-pointer">
                                 <TableCell>{d.name}</TableCell>
-                                <TableCell>{d.unitName}</TableCell>
+                                <TableCell>{d.brandName}</TableCell>
+                                <TableCell>{d.quantity + ' ' + d.unitName}</TableCell>
+                                <TableCell>
+                                    {d.totalPrice
+                                        ? new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT' }).format(
+                                              d.totalPrice
+                                          )
+                                        : 'N/A'}
+                                </TableCell>
+                                <TableCell>{d.indentNo}</TableCell>
                                 <TableCell>
                                     {new Intl.DateTimeFormat('en-US', {
                                         dateStyle: 'medium',
                                     }).format(d.createdAt)}
                                 </TableCell>
                                 <TableCell>
-                                    {new Intl.DateTimeFormat('en-US', {
-                                        dateStyle: 'medium',
-                                    }).format(d.updatedAt)}
+                                    {d.purchasedAt &&
+                                        new Intl.DateTimeFormat('en-US', {
+                                            dateStyle: 'medium',
+                                        }).format(d.purchasedAt)}
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-1.5">
@@ -98,7 +111,8 @@ const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
                                         {d.lastUpdatedBy?.name}
                                     </div>
                                 </TableCell>
-                                <TableCell>di</TableCell>
+                                <TableCell className="capitalize">{d.sourceType}</TableCell>
+                                <TableCell>{d.finalQuantity + ' ' + d.unitName}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

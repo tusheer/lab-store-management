@@ -1,12 +1,15 @@
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Suspense } from 'react';
-import { getItemDetails } from './action';
+import { getGeneralStoreDetails } from './action';
 import GeneralStoreItemDetailsCard from './components/DetailsCard';
+import NoteCardServer from './components/NoteCard.server';
 import SourchListserver from './components/SourchList.server';
 import StoreDetailsTab from './components/Tab';
 
-export type GeneralStoreItemDetails = Awaited<ReturnType<typeof getItemDetails>>;
+export type GeneralStoreItemDetails = Awaited<ReturnType<typeof getGeneralStoreDetails>>;
 
 type StoreDetailsPageProps = {
     params: {
@@ -20,7 +23,7 @@ type StoreDetailsPageProps = {
 const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps) => {
     // ??If fianancialyear isnot active then will veiw different view
 
-    const data = await getItemDetails(Number(params.id));
+    const data = await getGeneralStoreDetails(Number(params.id));
 
     if (data === null) {
         return <div>no found</div>;
@@ -30,9 +33,23 @@ const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps)
 
     return (
         <Container>
+            {data.alertWhenStockAmountIsLessThan !== null && data.alertWhenStockAmountIsLessThan > data.stockAmount && (
+                <Alert variant="destructive" className="mb-6">
+                    <ExclamationTriangleIcon className="h-4 w-4" />
+                    <AlertTitle>
+                        <span className="font-semibold">Alert!</span> {data.name} stock is less than{' '}
+                        {data.alertWhenStockAmountIsLessThan} {data.unitName}
+                    </AlertTitle>
+                    <AlertDescription>
+                        Please add more {data.name} to the stock. Otherwise, you will not be able to distribute it.
+                    </AlertDescription>
+                </Alert>
+            )}
+
             <PageHeading title={`Store item details | ${data?.financialYear.name}`} />
             <StoreDetailsTab />
             {tab === 'details' && <GeneralStoreItemDetailsCard data={data} />}
+            {tab === 'notes' && <NoteCardServer id={data.id} />}
             {tab === 'source' && (
                 <Suspense fallback={<div>Loading</div>}>
                     <SourchListserver id={Number(params.id)} />

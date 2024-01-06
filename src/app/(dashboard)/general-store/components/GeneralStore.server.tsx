@@ -15,6 +15,8 @@ const getGeneralStores = async (id: number) => {
             createdAt: true,
             updatedAt: true,
             type: true,
+            status: true,
+            alertWhenStockAmountIsLessThan: true,
         },
         orderBy: {
             createdAt: 'desc',

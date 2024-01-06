@@ -7,17 +7,18 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getUserAvatar } from '@/lib/utils';
+import { cn, getUserAvatar } from '@/lib/utils';
 import { Box, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import DistributationDialogForm from './DistributationDialogForm';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { GeneralStore } from './GeneralStore.server';
+import NoteAddModal from './NewNoteModal';
 
 type StockTableProps = {
     data: NonNullable<GeneralStore>;
@@ -25,14 +26,22 @@ type StockTableProps = {
 
 const StockTable: React.FC<StockTableProps> = ({ data }) => {
     const router = useRouter();
+    const [isNotMoalOpen, setIsNoteModalOpen] = useState(false);
+    const [updatedId, setUpdatedId] = useState<string | null>(null);
+    const [selectedStoreId, setSelectedStoreId] = useState<number | undefined>(undefined);
 
-    const [distributionModal, setDistributionModal] = useState(false);
-    const [selectedDistributionitem, setSelectedDistributionItem] = useState({
-        storeId: 0,
-        name: '',
-        unitName: '',
-        stock: 0,
-    });
+    const recentUpdated = useSearchParams().get('recentUpdated');
+
+    useEffect(() => {
+        if (recentUpdated) {
+            setUpdatedId(recentUpdated);
+        }
+        const timer = setTimeout(() => {
+            setUpdatedId(null);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [recentUpdated]);
 
     if (data?.length === 0)
         return (
@@ -57,43 +66,57 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                 <Table className="min-w-[800px] ">
                     <TableHeader>
                         <TableRow>
+                            <TableHead>ID</TableHead>
                             <TableHead>Name</TableHead>
-                            <TableHead>Total quantity</TableHead>
-                            <TableHead>Created At</TableHead>
-                            <TableHead>Updated At</TableHead>
-                            <TableHead>Last updated by</TableHead>
+                            <TableHead className="text-nowrap"> Total quantity</TableHead>
+                            <TableHead className="text-nowrap">Created At</TableHead>
+                            <TableHead className="text-nowrap">Updated At</TableHead>
+                            <TableHead className="text-nowrap">Last updated by</TableHead>
                             <TableHead>Type</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data?.map((d) => (
-                            <TableRow key={d.id} className="cursor-pointer">
-                                <TableCell>{d.name}</TableCell>
-                                <TableCell> {d.stockAmount + ' ' + d.unitName}</TableCell>
-                                <TableCell>
+                            <TableRow
+                                key={d.id}
+                                className={cn(
+                                    'cursor-pointer',
+                                    d.id.toString() === updatedId && 'bg-green-100',
+                                    d.alertWhenStockAmountIsLessThan &&
+                                        d.alertWhenStockAmountIsLessThan > d.stockAmount &&
+                                        'bg-red-100'
+                                )}
+                            >
+                                <TableCell>{d.id}</TableCell>
+                                <TableCell className="max-w-36 truncate text-nowrap">{d.name}</TableCell>
+                                <TableCell className="text-nowrap"> {d.stockAmount + ' ' + d.unitName}</TableCell>
+                                <TableCell className="text-nowrap">
                                     {new Intl.DateTimeFormat('en-US', {
                                         dateStyle: 'medium',
                                     }).format(d.createdAt)}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="text-nowrap">
                                     {new Intl.DateTimeFormat('en-US', {
                                         dateStyle: 'medium',
                                     }).format(d.updatedAt)}
                                 </TableCell>
                                 <TableCell>
-                                    <div className="flex items-center gap-1.5">
+                                    <div className="flex items-center gap-1.5 text-nowrap">
                                         <HoverCard>
-                                            <HoverCardTrigger>
-                                                <Avatar className="h-7 w-7">
-                                                    <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
-                                                    <AvatarFallback className="h-7 w-7 text-xs">
-                                                        {d.lastUpdatedBy?.name
-                                                            ?.split(' ')
-                                                            .map((name: string) => name[0])
-                                                            .join('')}
-                                                    </AvatarFallback>
-                                                </Avatar>
+                                            <HoverCardTrigger asChild>
+                                                <Button variant="link">
+                                                    <Avatar className="h-7 w-7">
+                                                        <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
+                                                        <AvatarFallback className="h-7 w-7 text-xs">
+                                                            {d.lastUpdatedBy?.name
+                                                                ?.split(' ')
+                                                                .map((name: string) => name[0])
+                                                                .join('')}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                </Button>
                                             </HoverCardTrigger>
                                             <HoverCardContent>
                                                 <div className="flex flex-col items-center gap-1.5">
@@ -128,7 +151,8 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                         {d.lastUpdatedBy?.name}
                                     </div>
                                 </TableCell>
-                                <TableCell>{d.type}</TableCell>
+                                <TableCell className="capitalize">{d.type}</TableCell>
+                                <TableCell className="capitalize">{d.status}</TableCell>
 
                                 <TableCell>
                                     <DropdownMenu>
@@ -145,37 +169,53 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                 onClick={() => router.push(`/general-store/${d.id}/view`)}
                                                 className="cursor-pointer"
                                             >
-                                                View Store Details
+                                                Store details
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() =>
+                                                    router.push(`/general-store/${d.id}/view?tab=distribution`)
+                                                }
+                                                className="cursor-pointer"
+                                            >
+                                                Distribution list
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => router.push(`/general-store/${d.id}/view?tab=source`)}
+                                                className="cursor-pointer"
+                                            >
+                                                View source list
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => router.push(`/general-store/${d.id}/view?tab=notes`)}
+                                                className="cursor-pointer"
+                                            >
+                                                Notes
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    router.push(`/general-store/${d.id}/distribution/create`);
+                                                }}
+                                                className="cursor-pointer hover:bg-gray-100"
+                                            >
+                                                Create dristributaion
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 onClick={() => {
-                                                    setSelectedDistributionItem({
-                                                        name: d.name,
-                                                        unitName: d.unitName,
-                                                        storeId: d.id,
-                                                        stock: d.stockAmount,
-                                                    });
-
-                                                    setDistributionModal(true);
+                                                    router.push(`/general-store/${d.id}/source/create`);
                                                 }}
                                                 className="cursor-pointer"
                                             >
-                                                Dristributaion from this item
+                                                Create source
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 onClick={() => {
-                                                    setSelectedDistributionItem({
-                                                        name: d.name,
-                                                        unitName: d.unitName,
-                                                        storeId: d.id,
-                                                        stock: d.stockAmount,
-                                                    });
-
-                                                    setDistributionModal(true);
+                                                    setIsNoteModalOpen(true);
+                                                    setSelectedStoreId(d.id);
                                                 }}
                                                 className="cursor-pointer"
                                             >
-                                                Add new source
+                                                Create note
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -185,12 +225,11 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                     </TableBody>
                 </Table>
             </div>
-
-            <DistributationDialogForm
-                key={selectedDistributionitem.storeId}
-                data={selectedDistributionitem}
-                setOpen={setDistributionModal}
-                open={distributionModal && !!selectedDistributionitem.storeId}
+            <NoteAddModal
+                key={selectedStoreId}
+                selectedStoreId={selectedStoreId}
+                isOpen={isNotMoalOpen}
+                onClose={() => setIsNoteModalOpen(false)}
             />
         </div>
     );

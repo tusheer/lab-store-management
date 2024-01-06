@@ -13,9 +13,16 @@ export const getSourchListByid = async (id: number) => {
             createdAt: true,
             updatedAt: true,
             brandName: true,
-            intendNumber: true,
+            indentNo: true,
             quantity: true,
             lastUpdatedBy: true,
+            totalPrice: true,
+            finalQuantity: true,
+            purchasedAt: true,
+            sourceType: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
         },
     });
 

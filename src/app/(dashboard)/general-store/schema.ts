@@ -14,7 +14,7 @@ export const generalStoreCreateSchema = z
         warrantyExpireDate: z.date().optional(),
         warrantyType: z.string().optional(),
         storageLocation: z.string().optional(),
-        intendNumber: zodStrng('error'),
+        indentNo: zodStrng('error'),
         cashMemoNo: z.string().optional(),
         cashMemoDate: z.date().optional(),
         sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
@@ -93,6 +93,7 @@ export const distributionCreateFormSchema = z
         unitName: z.string(),
         allocatedAt: z.date(),
         stock: z.number(),
+        indentNo: zodStrng('error'),
     })
     .refine(
         (data) => {
@@ -103,6 +104,69 @@ export const distributionCreateFormSchema = z
             path: ['quantity'],
         }
     );
+
+export const sourceCreateSchema = z
+    .object({
+        name: z.string().min(1),
+        storeId: z.number(),
+        quantity: zodStrng('error'),
+        purchasedAt: z.date().default(new Date()),
+        brandName: z.string().optional(),
+        sellerInformation: z.string().optional(),
+        warrantyExpireDate: z.date().optional(),
+        warrantyType: z.string().optional(),
+        indentNo: zodStrng('error'),
+        cashMemoNo: z.string().optional(),
+        unitName: z.string().min(1),
+        stock: z.number(),
+        cashMemoDate: z.date().optional(),
+        sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
+        cashMemoImage: z
+            .object({
+                url: z.string(),
+                key: z.string(),
+            })
+            .optional(),
+        totalPrice: zodStrng('error').optional(),
+        status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational').optional(),
+        note: z.string().optional(),
+        images: z
+            .array(
+                z.object({
+                    url: z.string(),
+                    key: z.string(),
+                })
+            )
+            .optional(),
+    })
+    .refine(
+        (data) => {
+            if (data.sourceType === 'purchase') {
+                return data.totalPrice !== undefined;
+            }
+            return true;
+        },
+        {
+            message: 'Total price is required for purchase type',
+            path: ['totalPrice'],
+        }
+    );
+
+export const noteCreateSchema = z.object({
+    note: z.string().min(1),
+    images: z
+        .array(
+            z.object({
+                url: z.string(),
+                key: z.string(),
+            })
+        )
+        .optional(),
+});
+
+export type NoteCreateSchemaType = z.infer<typeof noteCreateSchema>;
+
+export type SourceCreateSchemaType = z.infer<typeof sourceCreateSchema>;
 
 export type DistributionCreateSchemaType = z.infer<typeof distributionCreateFormSchema>;
 

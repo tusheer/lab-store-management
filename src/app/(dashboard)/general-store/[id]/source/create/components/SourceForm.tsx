@@ -1,11 +1,22 @@
 'use client';
 
-import PageHeading from '@/components/ui/PageHeading';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
+import useFileUpload from '@/hooks/useFileUpload';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon, Loader2, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { addNewSourceToGeneralStore } from '../../../../actions';
+import { SourceCreateSchemaType, sourceCreateSchema } from '../../../../schema';
+
 import {
     Select,
     SelectContent,
@@ -15,25 +26,36 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import useFileUpload from '@/hooks/useFileUpload';
-import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon, Loader2, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { createNewGeneralStoreItem } from '../actions';
-import { GeneralStoreCreateSchema, generalStoreCreateSchema } from '../schema';
 
-const CreateItemForm = () => {
-    const form = useForm<GeneralStoreCreateSchema>({
-        resolver: zodResolver(generalStoreCreateSchema),
-    });
+type DistributionFormProps = {
+    data: {
+        storeId: number;
+        name: string;
+        unitName: string;
+        stock: number;
+    };
+};
 
+const SourceForm: React.FC<DistributionFormProps> = ({ data }) => {
     const router = useRouter();
+    const form = useForm<SourceCreateSchemaType>({
+        resolver: zodResolver(sourceCreateSchema),
+        defaultValues: {
+            brandName: '',
+            quantity: '',
+            name: data.name,
+            storeId: data.storeId,
+            unitName: data.unitName,
+            note: '',
+            stock: data.stock,
+            cashMemoNo: '',
+            sellerInformation: '',
+            totalPrice: '',
+            warrantyType: '',
+            indentNo: '',
+        },
+    });
 
     const {
         onChange,
@@ -59,16 +81,13 @@ const CreateItemForm = () => {
 
     const [selectedSourceType, setSelectedSourceType] = useState('');
 
-    const onSubmit = async (data: GeneralStoreCreateSchema) => {
+    const handleSubmit = async (data: SourceCreateSchemaType) => {
         try {
             const cashMemoImages = await onCashmemoImageUpload();
             const noteImages = await noteOnUpload();
 
-            const resposen = await createNewGeneralStoreItem({
+            await addNewSourceToGeneralStore({
                 ...data,
-                quantity: Number(data.quantity),
-                totalPrice: data.totalPrice,
-                indentNo: data.indentNo,
                 cashMemoImage: cashMemoImages[0]
                     ? {
                           key: cashMemoImages[0].key,
@@ -78,48 +97,16 @@ const CreateItemForm = () => {
                 images: noteImages.map((file) => ({ url: file.url, key: file.key })),
             });
 
-            router.push(`/general-store?recentUpdated=${resposen.id}`);
-            toast.success('Created successful');
+            toast.success('Create successfully');
+            router.push(`/general-store?recentUpdated=${data.storeId}`);
         } catch (error) {
-            toast.error('error');
+            toast.error((error as Error).message);
         }
     };
-
     return (
-        <div className="max-w-3xl">
-            <div className="mb-5">
-                <PageHeading title={`Create general store item `} />
-            </div>
+        <div className="mt-6 w-full max-w-2xl pb-6">
             <Form {...form}>
-                <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="flex w-full gap-3">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter your name" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="unitName"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Unit name</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter your unit name " {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                <form className="w-full space-y-3" onSubmit={form.handleSubmit(handleSubmit)}>
                     <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
@@ -152,97 +139,12 @@ const CreateItemForm = () => {
                     <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
-                            name="storageLocation"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Storage location</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter storage location" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
                             name="indentNo"
                             render={({ field }) => (
                                 <FormItem className="w-6/12">
                                     <FormLabel>Indent number</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter indent Number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex w-full gap-3">
-                        <FormField
-                            control={form.control}
-                            name="type"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Select Type</FormLabel>
-                                    <FormControl>
-                                        <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select department" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectLabel>Departments</SelectLabel>
-                                                    <SelectItem value="machine">Machine</SelectItem>
-                                                    <SelectItem value="tools">Tools</SelectItem>
-                                                    <SelectItem value="rawmaterial">Raw material</SelectItem>
-                                                    <SelectItem value="electronics">Electronics</SelectItem>
-                                                    <SelectItem value="furniture">Furniture</SelectItem>
-                                                    <SelectItem value="vehicle">Vehicle</SelectItem>
-                                                    <SelectItem value="other">Other</SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Select status</FormLabel>
-                                    <FormControl>
-                                        <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select department" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectLabel>Departments</SelectLabel>
-                                                    <SelectItem value="operational">Operational</SelectItem>
-                                                    <SelectItem value="faulty">Faulty</SelectItem>
-                                                    <SelectItem value="underRepair">Under Repair</SelectItem>
-                                                    <SelectItem value="disposed">Disposed</SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <FormField
-                            control={form.control}
-                            name="alertWhenStockAmountIsLessThan"
-                            render={({ field }) => (
-                                <FormItem className="w-6/12">
-                                    <FormLabel>Alert when stock amount is less than </FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter number value" {...field} />
+                                        <Input placeholder="Enter Indent number" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -281,6 +183,7 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
+
                     <div>
                         <FormField
                             control={form.control}
@@ -296,7 +199,6 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-
                     <div>
                         <FormLabel className="mb-3 block">Images</FormLabel>
                         <Input
@@ -543,4 +445,4 @@ const CreateItemForm = () => {
     );
 };
 
-export default CreateItemForm;
+export default SourceForm;

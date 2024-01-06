@@ -20,6 +20,7 @@ const StoreDetailsTab = () => {
             }}
             defaultValue="details"
             className="mt-6 w-full"
+            value={tab as string}
         >
             <TabsList defaultValue={tab as string} className="inline-flex">
                 <TabsTrigger defaultChecked value="details">

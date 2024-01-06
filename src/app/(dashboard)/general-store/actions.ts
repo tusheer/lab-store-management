@@ -11,6 +11,9 @@ import {
     FinancialYearCreateSchema,
     generalStoreCreateSchema,
     GeneralStoreCreateSchema,
+    NoteCreateSchemaType,
+    sourceCreateSchema,
+    SourceCreateSchemaType,
 } from './schema';
 
 export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) => {
@@ -56,7 +59,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             sellerInformation: data.sellerInformation,
                             warrantyExpireDate: data.warrantyExpireDate,
                             warrantyType: data.warrantyType,
-                            intendNumber: Number(data.intendNumber),
+                            indentNo: Number(data.indentNo),
                             cashMemoNo: data.cashMemoNo,
                             cashMemoDate: data.cashMemoDate,
                             cashMemoImage: data.cashMemoImage,
@@ -90,6 +93,18 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                 },
             });
 
+            if (data.note || data.images) {
+                // Now create the generalStoreNotes entry
+                await prisma.generalStoreNote.create({
+                    data: {
+                        note: data.note || '',
+                        images: data.images, // Add this field only if your schema supports it
+                        generalStoreId: generalStore.id,
+                        userId: Number(userSession.user.id),
+                    },
+                });
+            }
+
             if (!generalStore) {
                 throw new Error('something wrong');
             }
@@ -103,11 +118,11 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
     }
 };
 
-export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchema, id: number) => {
+export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) => {
     try {
-        const validateData = generalStoreCreateSchema.safeParse(data);
+        const validateData = sourceCreateSchema.safeParse(data);
         if (validateData.success) {
-            const userAccount = await getServerSession();
+            const userAccount = await getServerSession(authOptions);
 
             if (!userAccount) {
                 throw new Error('User not found');
@@ -125,13 +140,13 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
 
             const generalStore = await prisma.generalStore.update({
                 where: {
-                    id,
+                    id: data.storeId,
                 },
                 data: {
-                    stockAmount: Number(data.quantity),
+                    stockAmount: Number(data.stock) + Number(data.quantity),
                     lastUpdatedBy: {
                         connect: {
-                            id: 1,
+                            id: Number(userAccount.user.id),
                         },
                     },
                     sources: {
@@ -142,7 +157,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                             sellerInformation: data.sellerInformation,
                             warrantyExpireDate: data.warrantyExpireDate,
                             warrantyType: data.warrantyType,
-                            intendNumber: Number(data.intendNumber),
+                            indentNo: Number(data.indentNo),
                             cashMemoNo: data.cashMemoNo,
                             cashMemoDate: data.cashMemoDate,
                             cashMemoImage: data.cashMemoImage,
@@ -152,7 +167,7 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                             finalQuantity: Number(data.quantity),
                             lastUpdatedBy: {
                                 connect: {
-                                    id: 1,
+                                    id: Number(userAccount.user.id),
                                 },
                             },
                             note: data.note,
@@ -176,12 +191,25 @@ export const addNewPurchaseToGeneralStore = async (data: GeneralStoreCreateSchem
                 },
             });
 
+            if (data.note || data.images) {
+                // Now create the generalStoreNotes entry
+                await prisma.generalStoreNote.create({
+                    data: {
+                        note: data.note || '',
+                        images: data.images, // Add this field only if your schema supports it
+                        generalStoreId: generalStore.id,
+                        userId: Number(userAccount.user.id),
+                    },
+                });
+            }
+
             if (!generalStore) {
                 throw new Error('General store create error');
             }
 
             return generalStore;
         } else {
+            console.log(validateData.error);
             throw new Error('something wrong');
         }
     } catch (error) {
@@ -322,6 +350,7 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                                 },
                             },
                             finalQuantity: data.stock - Number(data.quantity),
+                            indentNo: Number(data.indentNo),
                         },
                     },
                     financialYear: {
@@ -344,6 +373,33 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
         } else {
             throw new Error("Form data isn't valid");
         }
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+};
+
+export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: number) => {
+    try {
+        const userAccount = await getServerSession(authOptions);
+
+        if (!userAccount) {
+            throw new Error('User not found');
+        }
+
+        const generalStoreNote = await prisma.generalStoreNote.create({
+            data: {
+                note: data.note,
+                images: data.images,
+                generalStoreId: Number(id),
+                userId: Number(userAccount.user.id),
+            },
+        });
+
+        if (!generalStoreNote) {
+            throw new Error('General store note create error');
+        }
+
+        return generalStoreNote;
     } catch (error) {
         throw new Error((error as Error).message);
     }

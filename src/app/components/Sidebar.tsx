@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ avatar, name }) => {
     const pathname = usePathname();
 
     return (
-        <aside className="fixed bottom-0  z-30 h-auto  w-full  flex-row items-center  border-r bg-primary py-4 lg:sticky lg:top-0 lg:block lg:h-svh lg:w-[240px] lg:flex-col lg:justify-between lg:py-0  ">
+        <aside className="fixed bottom-0  z-30 h-auto  w-full  flex-row items-center  border-r bg-primary py-0 lg:sticky lg:top-0 lg:block lg:h-svh lg:w-[240px] lg:flex-col lg:justify-between lg:py-0  ">
             <div className="">
                 <div className="mt-4  hidden flex-col items-center lg:flex">
                     <Avatar className="h-16 w-16 flex-shrink-0">
@@ -69,9 +69,9 @@ const Sidebar: React.FC<SidebarProps> = ({ avatar, name }) => {
                             >
                                 <li
                                     className={cn(
-                                        'flex flex-shrink-0  cursor-pointer flex-col items-center gap-2  rounded-md px-2 py-2 text-[10px] font-medium text-white lg:w-full lg:flex-row lg:gap-3 lg:px-3 lg:text-sm ',
+                                        'flex flex-shrink-0  cursor-pointer flex-col items-center gap-2  rounded-md px-2 py-2 text-[10px] font-medium text-white/50 lg:w-full lg:flex-row lg:gap-3 lg:px-3 lg:text-sm lg:text-white ',
                                         isRouterPathnameMatched(link.link, pathname, link.exact) &&
-                                            'bg-white text-black'
+                                            'bg-transparent text-white lg:bg-white lg:text-black'
                                     )}
                                 >
                                     <link.icon className="h-4 w-4 lg:h-5 lg:w-5" />

@@ -42,7 +42,7 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
                     <GeneralStoreServer activeFinancialYearId={activeFinancialyear.id} />
                 </Suspense>
             )}
-            {tab === 'purchase' && (
+            {tab === 'source' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <PurchaseServerTable activeFinancialYearId={activeFinancialyear.id} />
                 </Suspense>

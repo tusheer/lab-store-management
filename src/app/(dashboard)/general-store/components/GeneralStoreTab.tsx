@@ -27,7 +27,7 @@ const GeneralStoreTab = () => {
                     <Package size={15} className="mr-1.5" />
                     Stock list
                 </TabsTrigger>
-                <TabsTrigger value="purchase" className="text-xs lg:text-sm">
+                <TabsTrigger value="source" className="text-xs lg:text-sm">
                     <FilePlus size={15} className="mr-1.5" />
                     Source list
                 </TabsTrigger>

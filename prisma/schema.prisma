@@ -30,10 +30,11 @@ model User {
   reportingBoss                       User?                      @relation("ReportingBoss", fields: [reportingBossId], references: [id])
   subordinates                        User[]                     @relation("ReportingBoss")
   registerID                          String?                    @unique
-  generalStoreNote                    GeneralStoreNote[]
   lastGeneralStoreSourceUpdates       GeneralStoreSource[]       @relation("LastUpdatedBy")
   lastGeneralStoreDistributionUpdates GeneralStoreDistribution[] @relation("LastUpdatedBy")
   lastGeneralUpdates                  GeneralStore[]             @relation("LastUpdatedBy")
+  generalStoreNote                    GeneralStoreNote[]
+  generalStoreHistory                 GeneralStoreHistory[]
 }
 
 model FinancialYear {
@@ -72,7 +73,7 @@ model GeneralStoreSource {
   note               String?
   images             Json[]
   finalQuantity      Int?
-  intendNumber       Int?
+  indentNo           Int?
   warrantyExpireDate DateTime?
   warrantyType       String?
   GeneralStore       GeneralStore? @relation(fields: [generalStoreId], references: [id])
@@ -99,11 +100,11 @@ model GeneralStoreDistribution {
   note            String?
   images          Json[]
   finalQuantity   Int?
-  intendNumber    Int?
   GeneralStore    GeneralStore? @relation(fields: [generalStoreId], references: [id])
   generalStoreId  Int?
   financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId Int
+  indentNo        Int?
 }
 
 model GeneralStore {
@@ -125,6 +126,7 @@ model GeneralStore {
   distributions                  GeneralStoreDistribution[]
   financialYear                  FinancialYear              @relation(fields: [financialYearId], references: [id])
   financialYearId                Int
+  generalStoreHistory            GeneralStoreHistory[]
 }
 
 model GeneralStoreNote {
@@ -132,11 +134,23 @@ model GeneralStoreNote {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   note           String
-  user           User         @relation(fields: [userId], references: [id])
-  userId         Int
   generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
   generalStoreId Int
   images         Json[]
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+}
+
+model GeneralStoreHistory {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  label          String
+  generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
+  generalStoreId Int
+  images         Json[]
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
 }
 
 enum ItemType {
