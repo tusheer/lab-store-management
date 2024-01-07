@@ -92,12 +92,12 @@ const CreateItemForm = () => {
             </div>
             <Form {...form}>
                 <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="flex w-full gap-3">
+                    <div className="flex w-full flex-col gap-3 lg:flex-row">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12 lg:w-full">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your name" {...field} />
@@ -110,7 +110,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="unitName"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12 lg:w-full">
                                     <FormLabel>Unit name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your unit name " {...field} />
@@ -120,12 +120,12 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex w-full gap-3">
+                    <div className="flex w-full flex-col gap-3 lg:flex-row">
                         <FormField
                             control={form.control}
                             name="brandName"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Brand Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter Brand  name" {...field} />
@@ -138,7 +138,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="quantity"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel> Quantity</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter quantity" {...field} />
@@ -149,12 +149,12 @@ const CreateItemForm = () => {
                         />
                     </div>
 
-                    <div className="flex w-full gap-3">
+                    <div className="flex w-full flex-col gap-3 lg:flex-row">
                         <FormField
                             control={form.control}
                             name="storageLocation"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Storage location</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter storage location" {...field} />
@@ -167,7 +167,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="indentNo"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Indent number</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter indent Number" {...field} />
@@ -177,12 +177,12 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex w-full gap-3">
+                    <div className="flex w-full flex-col gap-3 lg:flex-row">
                         <FormField
                             control={form.control}
                             name="type"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Select Type</FormLabel>
                                     <FormControl>
                                         <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
@@ -211,7 +211,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="status"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Select status</FormLabel>
                                     <FormControl>
                                         <Select value={field.value} onValueChange={(e) => field.onChange(e)}>
@@ -234,12 +234,12 @@ const CreateItemForm = () => {
                             )}
                         />
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex flex-col gap-3 lg:flex-row">
                         <FormField
                             control={form.control}
                             name="alertWhenStockAmountIsLessThan"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Alert when stock amount is less than </FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter number value" {...field} />
@@ -252,7 +252,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="sourceType"
                             render={({ field }) => (
-                                <FormItem className="w-6/12">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Select source type</FormLabel>
                                     <FormControl>
                                         <Select
@@ -323,12 +323,12 @@ const CreateItemForm = () => {
 
                     {selectedSourceType === 'purchase' && (
                         <div className="w-full space-y-3">
-                            <div className="flex w-full gap-3">
+                            <div className="flex w-full flex-col gap-3 lg:flex-row">
                                 <FormField
                                     control={form.control}
                                     name="totalPrice"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full lg:w-6/12">
                                             <FormLabel> Price</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="Enter total Price" {...field} />
@@ -341,7 +341,7 @@ const CreateItemForm = () => {
                                     control={form.control}
                                     name="purchasedAt"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full lg:w-6/12">
                                             <FormLabel className="mb-2 block"> Purchased At</FormLabel>
                                             <FormControl>
                                                 <Popover>
@@ -377,16 +377,16 @@ const CreateItemForm = () => {
                                 />
                             </div>
 
-                            <div className="flex w-full gap-3">
+                            <div className="flex w-full flex-col gap-3 lg:flex-row">
                                 <FormField
                                     control={form.control}
                                     name="warrantyExpireDate"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full lg:w-6/12">
                                             <FormLabel>Warranty expire date</FormLabel>
                                             <FormControl>
                                                 <Popover>
-                                                    <PopoverTrigger className='className="w-6/12"' asChild>
+                                                    <PopoverTrigger className='className="w-full lg:w-6/12"' asChild>
                                                         <Button
                                                             variant={'outline'}
                                                             className={cn(
@@ -420,7 +420,7 @@ const CreateItemForm = () => {
                                     control={form.control}
                                     name="warrantyType"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full lg:w-6/12">
                                             <FormLabel>Warranty type</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="Enter warranty Type" {...field} />
@@ -431,12 +431,12 @@ const CreateItemForm = () => {
                                 />
                             </div>
 
-                            <div className="flex gap-3">
+                            <div className="flex flex-col gap-3 lg:flex-row">
                                 <FormField
                                     control={form.control}
                                     name="cashMemoNo"
                                     render={({ field }) => (
-                                        <FormItem className="w-6/12">
+                                        <FormItem className="w-full lg:w-6/12">
                                             <FormLabel>Cashmemo number</FormLabel>
                                             <FormControl>
                                                 <Input placeholder="Enter cash Memo No" {...field} />
@@ -446,7 +446,7 @@ const CreateItemForm = () => {
                                     )}
                                 />
 
-                                <div className="w-6/12 space-y-3">
+                                <div className="w-full space-y-3 lg:w-6/12">
                                     <FormLabel className="mt-1 block" htmlFor="cashmemo_iamge">
                                         Cashmemo image
                                     </FormLabel>
@@ -476,7 +476,7 @@ const CreateItemForm = () => {
                                 </div>
                             </div>
 
-                            <div className="flex w-full gap-3">
+                            <div className="flex w-full flex-col gap-3 lg:flex-row">
                                 <FormField
                                     control={form.control}
                                     name="cashMemoDate"

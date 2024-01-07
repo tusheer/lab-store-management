@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { LogOut, User } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 type NavbarProps = {
@@ -25,24 +26,26 @@ const Navbar: React.FC<NavbarProps> = ({ avatar, name }) => {
     return (
         <nav className="sticky top-0 z-50 border-b bg-white">
             <Container className="z-50 flex h-16 items-center justify-between py-0">
-                <div className="flex w-full items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        height={40}
-                        width={40}
-                        className="rounded-full border"
-                        src="https://cumillapoly.gov.bd/wp-content/uploads/elementor/thumbs/300521_02_59_10-pw3wkuctbqgomd0rbugx0zkr2bqfu9m3bbalucmo0w.png"
-                        alt="Cumilla polytechnic institute"
-                    />
-                    <h2>
-                        <span className="hidden text-lg font-bold text-primary lg:block lg:text-base">
-                            Comilla Polytechnic Institute
-                        </span>
-                        <span className="block text-xl font-bold tracking-wider text-primary lg:hidden lg:text-base">
-                            CPI
-                        </span>
-                    </h2>
-                </div>
+                <Link href="/general-store">
+                    <div className="flex w-full items-center gap-3">
+                        <img
+                            height={40}
+                            width={40}
+                            className="rounded-full border"
+                            src="https://cumillapoly.gov.bd/wp-content/uploads/elementor/thumbs/300521_02_59_10-pw3wkuctbqgomd0rbugx0zkr2bqfu9m3bbalucmo0w.png"
+                            alt="Cumilla polytechnic institute"
+                        />
+                        <h2>
+                            <span className="hidden text-lg font-bold text-primary lg:block lg:text-base">
+                                Comilla Polytechnic Institute
+                            </span>
+                            <span className="block text-xl font-bold tracking-wider text-primary lg:hidden lg:text-base">
+                                CPI
+                            </span>
+                        </h2>
+                    </div>
+                </Link>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Avatar className="h-10 w-10 flex-shrink-0 cursor-pointer border">

@@ -30,10 +30,24 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
     }
     return (
         <Container>
-            <div className="flex flex-col items-center justify-between lg:flex-row lg:items-start">
+            <div className="flex  items-center justify-between lg:flex-row lg:items-start">
                 <PageHeading title={`General store - ${activeFinancialyear.name}`} />
-                <Link href="/general-store/new">
+                <Link href="/general-store/new" className="hidden lg:block">
                     <Button>Add new item</Button>
+                </Link>
+                <Link href="/general-store/new" className="fixed bottom-[76px] right-7 z-30 block lg:hidden">
+                    <div className="rounded-full bg-primary px-3 py-3 text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="#fff"
+                            className="h-5 w-5"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </div>
                 </Link>
             </div>
             <GeneralStoreTab />
