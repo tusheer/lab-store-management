@@ -19,10 +19,10 @@ const StoreDetailsTab = () => {
                 });
             }}
             defaultValue="details"
-            className="mt-6 w-full"
+            className="mt-6 w-full overflow-x-auto"
             value={tab as string}
         >
-            <TabsList defaultValue={tab as string} className="inline-flex">
+            <TabsList defaultValue={tab as string} className="inline-flex min-w-[550px]">
                 <TabsTrigger defaultChecked value="details">
                     <FileSpreadsheet size={15} className="mr-1.5" />
                     Details information
