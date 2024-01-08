@@ -12,7 +12,11 @@ import GeneralStoreTab from './components/GeneralStoreTab';
 import HistoryServer from './components/History.server';
 import PurchaseServerTable from './components/PurchaseTable.server';
 
-const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }) => {
+const GeneralStores = async ({
+    searchParams,
+}: {
+    searchParams: { tab: string; search: string; startDate: string; endDate: string };
+}) => {
     const activeFinancialyear = await getActiveFinancialYear();
     const tab = searchParams.tab || 'stock';
 
@@ -59,7 +63,12 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
             )}
             {tab === 'source' && (
                 <Suspense fallback={<LoaderSpinner />}>
-                    <PurchaseServerTable activeFinancialYearId={activeFinancialyear.id} />
+                    <PurchaseServerTable
+                        search={searchParams.search}
+                        activeFinancialYearId={activeFinancialyear.id}
+                        startDate={searchParams.startDate}
+                        endDate={searchParams.endDate}
+                    />
                 </Suspense>
             )}
             {tab === 'distribution' && (

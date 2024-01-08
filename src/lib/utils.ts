@@ -65,3 +65,16 @@ export const getUserAvatar = (avatar: any) => {
 
     return avatar?.url;
 };
+
+export function isNotNumber(value: string | number) {
+    // Check if the value is not a number or a string that can be converted to a number
+    return isNaN(Number(value.toString())) && isNaN(parseFloat(value.toString()));
+}
+
+export function toUTCDateString(date: Date) {
+    const d = new Date(date);
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth() + 1; // Months are zero-indexed
+    const day = d.getUTCDate();
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
