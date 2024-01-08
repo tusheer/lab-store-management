@@ -70,11 +70,11 @@ const NoteCard: React.FC<NoteCardProps> = ({ data }) => {
                                 <div className="mt-1.5">
                                     {images.map((image) => (
                                         <div
-                                            className="mt-2.5 h-40 w-40 rounded-lg border"
+                                            className="mt-2.5 h-40 w-40 overflow-hidden rounded-lg border"
                                             key={(image as { key: string }).key}
                                         >
                                             <img
-                                                className=" object-cover"
+                                                className="h-full w-full object-cover"
                                                 src={(image as { url: string }).url}
                                                 alt=""
                                             />

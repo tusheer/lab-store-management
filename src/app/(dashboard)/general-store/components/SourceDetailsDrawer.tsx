@@ -17,11 +17,11 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
     return (
         <Drawer open={isOpen} onOpenChange={onClose}>
             <DrawerContent>
-                <Container className="w-full p-0">
+                <Container className="w-full max-w-2xl p-0 px-0 py-0 lg:p-0">
                     <DrawerHeader className="px-0">
                         <DrawerTitle>Source details</DrawerTitle>
                     </DrawerHeader>
-                    <div>
+                    <div className="mt-2 max-h-[calc(100vh-200px)] overflow-y-auto pb-9">
                         {data && (
                             <div className="grid min-w-[550px] gap-3.5">
                                 <div className="grid grid-cols-12">
@@ -29,18 +29,6 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                     <p className="col-span-6  text-sm font-medium text-gray-700">{data.name}</p>
                                 </div>
 
-                                <div className="grid grid-cols-12 items-center">
-                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Type</p>
-                                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">
-                                        {data.type ? data.type : 'N/A'}
-                                    </p>
-                                </div>
-                                <div className="grid grid-cols-12 items-center">
-                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Status</p>
-                                    <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">
-                                        {data.finalQuantity}
-                                    </p>
-                                </div>
                                 <div className="grid grid-cols-12 items-center">
                                     <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
                                         Unit name
@@ -64,7 +52,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                     <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
                                         {new Intl.DateTimeFormat('en-US', {
                                             dateStyle: 'full',
-                                        }).format(new Date(data.purchasedAt))}
+                                        }).format(data.purchasedAt ? new Date(data.purchasedAt) : undefined)}
                                     </p>
                                 </div>
                                 <div className="grid grid-cols-12 items-center">
@@ -197,7 +185,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                         <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
                                             {new Intl.DateTimeFormat('en-US', {
                                                 dateStyle: 'full',
-                                            }).format(new Date(data.cashMemoDate))}
+                                            }).format(data.cashMemoDate ? new Date(data.cashMemoDate) : undefined)}
                                         </p>
                                     </p>
                                 </div>

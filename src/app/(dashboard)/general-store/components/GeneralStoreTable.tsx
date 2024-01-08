@@ -62,7 +62,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
         );
 
     return (
-        <div className="mt-10">
+        <div className="mt-6">
             <Filter
                 className="mb-6"
                 inputs={[
