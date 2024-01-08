@@ -36,7 +36,7 @@ const CreateItemForm = () => {
     const router = useRouter();
 
     const {
-        onChange,
+        onChange: onCashmemoChange,
         onUpload: onCashmemoImageUpload,
         onRemove: onCashmemoRemove,
         files: cashmemoFiles,
@@ -97,7 +97,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem className="w-full lg:w-6/12 lg:w-full">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your name" {...field} />
@@ -110,7 +110,7 @@ const CreateItemForm = () => {
                             control={form.control}
                             name="unitName"
                             render={({ field }) => (
-                                <FormItem className="w-full lg:w-6/12 lg:w-full">
+                                <FormItem className="w-full lg:w-6/12">
                                     <FormLabel>Unit name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter your unit name " {...field} />
@@ -451,7 +451,7 @@ const CreateItemForm = () => {
                                         Cashmemo image
                                     </FormLabel>
                                     <Input
-                                        onChange={onChange}
+                                        onChange={onCashmemoChange}
                                         id="cashmemo_iamge"
                                         type="file"
                                         accept="image/*"
