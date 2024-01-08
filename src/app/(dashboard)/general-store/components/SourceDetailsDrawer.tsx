@@ -18,7 +18,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
         <Drawer open={isOpen} onOpenChange={onClose}>
             <DrawerContent>
                 <Container className="w-full p-0">
-                    <DrawerHeader>
+                    <DrawerHeader className="px-0">
                         <DrawerTitle>Source details</DrawerTitle>
                     </DrawerHeader>
                     <div>
@@ -43,10 +43,28 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                 </div>
                                 <div className="grid grid-cols-12 items-center">
                                     <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Unit name
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.unitName}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
                                         Financial year
                                     </p>
                                     <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
                                         {data.financialYear.name}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Purchased at
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {new Intl.DateTimeFormat('en-US', {
+                                            dateStyle: 'full',
+                                        }).format(new Date(data.purchasedAt))}
                                     </p>
                                 </div>
                                 <div className="grid grid-cols-12 items-center">
@@ -121,6 +139,95 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                             {data.lastUpdatedBy?.name}
                                         </p>
                                     </div>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        quantity
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.quantity}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Final quantity
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.finalQuantity}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Source Type
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.sourceType}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Indent no
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.indentNo}
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Warranty type
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.warrantyType ? data.warrantyType : 'N/A'}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Cash memo no
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.cashMemoNo ? data.cashMemoNo : 'N/A'}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Cash memo date
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.cashMemoDate ? data.cashMemoDate : 'N/A'}
+                                    </p>
+                                </div>
+                                {/* <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Image</p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.cashMemoImage.map((image) => (
+                                            <div
+                                                className="mt-2.5 h-40 w-40 rounded-lg border"
+                                                key={(image as { key: string }).key}
+                                            >
+                                                <img
+                                                    className=" object-cover"
+                                                    src={(image as { url: string }).url}
+                                                    alt=""
+                                                />
+                                            </div>
+                                        ))}
+                                    </p>
+                                </div> */}
+
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Note</p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.note ? data.note : 'N/A'}
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Seller Info
+                                    </p>
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.sellerInformation ? data.sellerInformation : 'N/A'}
+                                    </p>
                                 </div>
                             </div>
                         )}

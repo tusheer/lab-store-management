@@ -1,5 +1,6 @@
 'use client';
 
+import Filter from '@/app/components/Filter';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -62,6 +63,23 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
 
     return (
         <div className="mt-10">
+            <Filter
+                className="mb-6"
+                inputs={[
+                    {
+                        queryKey: 'search',
+                        type: 'text',
+                        placeholder: 'Search by name',
+                    },
+                    {
+                        queryKey: 'date',
+                        type: 'date',
+                        placeholder: 'Pick date range',
+                        dateKey: ['startDate', 'endDate'],
+                    },
+                ]}
+                path="/general-store"
+            />
             <div className="overflow-x-auto rounded-md border">
                 <Table className="min-w-[800px] ">
                     <TableHeader>
