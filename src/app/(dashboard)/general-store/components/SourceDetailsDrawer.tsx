@@ -32,7 +32,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                 <div className="grid grid-cols-12 items-center">
                                     <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Type</p>
                                     <p className=" col-span-6 text-sm font-medium capitalize text-gray-700">
-                                        {data.type}
+                                        {data.type ? data.type : 'N/A'}
                                     </p>
                                 </div>
                                 <div className="grid grid-cols-12 items-center">
@@ -194,26 +194,29 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                         Cash memo date
                                     </p>
                                     <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
-                                        {data.cashMemoDate ? data.cashMemoDate : 'N/A'}
+                                        <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                            {new Intl.DateTimeFormat('en-US', {
+                                                dateStyle: 'full',
+                                            }).format(new Date(data.cashMemoDate))}
+                                        </p>
                                     </p>
                                 </div>
-                                {/* <div className="grid grid-cols-12 items-center">
-                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Image</p>
-                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
-                                        {data.cashMemoImage.map((image) => (
-                                            <div
-                                                className="mt-2.5 h-40 w-40 rounded-lg border"
-                                                key={(image as { key: string }).key}
-                                            >
-                                                <img
-                                                    className=" object-cover"
-                                                    src={(image as { url: string }).url}
-                                                    alt=""
-                                                />
-                                            </div>
-                                        ))}
+                                <div className="grid grid-cols-12 items-center">
+                                    <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">
+                                        Cash memo image
                                     </p>
-                                </div> */}
+                                    <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
+                                        {data.cashMemoImage ? (
+                                            <img
+                                                className=" h-28 w-28 object-cover"
+                                                src={(data.cashMemoImage as { url: string }).url}
+                                                alt=""
+                                            />
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </p>
+                                </div>
 
                                 <div className="grid grid-cols-12 items-center">
                                     <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Note</p>
