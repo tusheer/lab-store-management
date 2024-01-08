@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import DistributionTableServer from './components/DistributionTable.server';
 import GeneralStoreServer from './components/GeneralStore.server';
 import GeneralStoreTab from './components/GeneralStoreTab';
+import HistoryServer from './components/History.server';
 import PurchaseServerTable from './components/PurchaseTable.server';
 
 const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }) => {
@@ -64,6 +65,11 @@ const GeneralStores = async ({ searchParams }: { searchParams: { tab: string } }
             {tab === 'distribution' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <DistributionTableServer activeFinancialYearId={activeFinancialyear.id} />
+                </Suspense>
+            )}
+            {tab === 'history' && (
+                <Suspense fallback={<LoaderSpinner />}>
+                    <HistoryServer />
                 </Suspense>
             )}
         </Container>

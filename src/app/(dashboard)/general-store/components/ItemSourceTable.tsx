@@ -1,15 +1,29 @@
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getUserAvatar } from '@/lib/utils';
-import { Box } from 'lucide-react';
+import { Box, MoreHorizontal } from 'lucide-react';
+import { useState } from 'react';
 import { PurchaseData } from './PurchaseTable.server';
+import SourceDetailsDrawer from './SourceDetailsDrawer';
 
 type PurchaseTableProps = {
     data: NonNullable<PurchaseData>;
 };
 
 const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
+    const [open, setOpen] = useState(false);
+    const [sourceData, setSourceData] = useState<PurchaseData[0] | null>(null);
     if (data?.length === 0)
         return (
             <div className="mt-20">
@@ -113,11 +127,33 @@ const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
                                 </TableCell>
                                 <TableCell className="capitalize">{d.sourceType}</TableCell>
                                 <TableCell>{d.finalQuantity + ' ' + d.unitName}</TableCell>
+                                <TableCell>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <span className="sr-only">Open menu</span>
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    setOpen(true);
+                                                    setSourceData(d);
+                                                }}
+                                            >
+                                                View details
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </div>
+            <SourceDetailsDrawer data={data} isOpen={open} onClose={setOpen} />
         </div>
     );
 };

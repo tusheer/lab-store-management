@@ -35,6 +35,10 @@ const GeneralStoreTab = () => {
                     <FileMinus size={15} className="mr-1.5" />
                     Distribution list
                 </TabsTrigger>
+                <TabsTrigger value="history" className="text-xs lg:text-sm">
+                    <FileMinus size={15} className="mr-1.5" />
+                    History
+                </TabsTrigger>
             </TabsList>
         </Tabs>
     );

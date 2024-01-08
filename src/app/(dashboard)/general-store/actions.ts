@@ -81,6 +81,12 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             },
                         },
                     },
+                    generalStoreHistory: {
+                        create: {
+                            label: `${userSession.user.name} created a new item, initial quantity was ${data.quantity}`,
+                            userId: Number(userSession.user.id),
+                        },
+                    },
                     financialYear: {
                         connect: {
                             id: activeFinancialYear.id,
@@ -177,6 +183,12 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                                     id: activeFinancialYear.id,
                                 },
                             },
+                        },
+                    },
+                    generalStoreHistory: {
+                        create: {
+                            label: `${userAccount.user.name} added ${data.quantity} ${data.unitName} of ${data.name}`,
+                            userId: Number(userAccount.user.id),
                         },
                     },
                     financialYear: {
@@ -358,6 +370,14 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                             id: activeFinancialYear.id,
                         },
                     },
+                    generalStoreHistory: {
+                        create: {
+                            label: `${userAccount.user.name} distributed ${data.quantity} ${data.unitName} of ${
+                                data.name
+                            } to ${data.personName}, ${data.department} ${data.shopName && `(${data.shopName})`}`,
+                            userId: Number(userAccount.user.id),
+                        },
+                    },
                 },
                 include: {
                     lastUpdatedBy: true,
@@ -392,6 +412,20 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
                 images: data.images,
                 generalStoreId: Number(id),
                 userId: Number(userAccount.user.id),
+            },
+        });
+
+        await prisma.generalStore.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                generalStoreHistory: {
+                    create: {
+                        label: `${userAccount.user.name} added a note`,
+                        userId: Number(userAccount.user.id),
+                    },
+                },
             },
         });
 

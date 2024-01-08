@@ -1,3 +1,4 @@
+import LoaderSpinner from '@/app/components/LoaderSpinner';
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -48,8 +49,16 @@ const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps)
 
             <PageHeading title={`Store item details | ${data?.financialYear.name}`} />
             <StoreDetailsTab />
-            {tab === 'details' && <GeneralStoreItemDetailsCard data={data} />}
-            {tab === 'notes' && <NoteCardServer id={data.id} />}
+            {tab === 'details' && (
+                <Suspense fallback={<LoaderSpinner />}>
+                    <GeneralStoreItemDetailsCard data={data} />
+                </Suspense>
+            )}
+            {tab === 'notes' && (
+                <Suspense fallback={<LoaderSpinner />}>
+                    <NoteCardServer id={data.id} />
+                </Suspense>
+            )}
             {tab === 'source' && (
                 <Suspense fallback={<div>Loading</div>}>
                     <SourchListserver id={Number(params.id)} />

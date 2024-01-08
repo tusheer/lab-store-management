@@ -20,7 +20,7 @@ const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
     const [inactiveId, setInactiveId] = useState<null | number>(null);
 
     return (
-        <section className="mt-5 rounded-md border">
+        <section className="mt-5">
             <ConfirmInactiveFinalcialYear open={inactiveModal} setOpen={setInactiveModal} id={inactiveId} />
             <div className="overflow-x-auto rounded-md border">
                 <Table className="min-w-[650px] ">
@@ -79,9 +79,6 @@ const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
                                                     Close year
                                                 </DropdownMenuItem>
                                             )}
-                                            <DropdownMenuItem className="cursor-pointer">
-                                                Edit department
-                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
