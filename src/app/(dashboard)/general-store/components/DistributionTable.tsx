@@ -1,3 +1,6 @@
+'use client';
+
+import Filter from '@/app/components/Filter';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -21,6 +24,24 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
         );
     return (
         <div className="mt-10">
+            <Filter
+                className="mb-6"
+                inputs={[
+                    {
+                        queryKey: 'search',
+                        type: 'text',
+                        placeholder: 'Search by name',
+                    },
+                    {
+                        queryKey: 'date',
+                        type: 'date',
+                        placeholder: 'Pick date range',
+                        dateKey: ['startDate', 'endDate'],
+                    },
+                ]}
+                path="/general-store"
+            />
+
             <div className="overflow-x-auto rounded-md border ">
                 <Table className="min-w-[1200px] ">
                     <TableHeader>
@@ -35,7 +56,6 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                             <TableHead>Updated by</TableHead>
                             <TableHead>Distribution date</TableHead>
                             <TableHead>Updated by</TableHead>
-                            <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -105,7 +125,6 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                                         {d.lastUpdatedBy?.name}
                                     </div>
                                 </TableCell>
-                                <TableCell>di</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
