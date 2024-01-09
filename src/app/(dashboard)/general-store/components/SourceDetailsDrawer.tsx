@@ -21,7 +21,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                     <DrawerHeader className="px-0">
                         <DrawerTitle>Source details</DrawerTitle>
                     </DrawerHeader>
-                    <div className="mt-2 max-h-[calc(100vh-200px)] overflow-y-auto pb-9">
+                    <div className="mt-2 max-h-[calc(100vh-200px)] overflow-y-auto px-4 pb-9 lg:px-0">
                         {data && (
                             <div className="grid min-w-[550px] gap-3.5">
                                 <div className="grid grid-cols-12">
