@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { inActiveFinancialYear } from '../../general-store/actions';
+import { inActiveFinancialYear } from '../action';
 
 type ConfirmInactiveFinalcialYearProps = {
     open: boolean;
