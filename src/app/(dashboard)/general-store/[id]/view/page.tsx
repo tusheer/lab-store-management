@@ -6,6 +6,7 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Suspense } from 'react';
 import { getGeneralStoreDetails } from './action';
 import GeneralStoreItemDetailsCard from './components/DetailsCard';
+import DistributionTableServer from './components/DistributionTable.server';
 import NoteCardServer from './components/NoteCard.server';
 import SourchListserver from './components/SourchList.server';
 import StoreDetailsTab from './components/Tab';
@@ -62,6 +63,11 @@ const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps)
             {tab === 'source' && (
                 <Suspense fallback={<div>Loading</div>}>
                     <SourchListserver id={Number(params.id)} />
+                </Suspense>
+            )}
+            {tab === 'distribution' && (
+                <Suspense fallback={<div>Loading</div>}>
+                    <DistributionTableServer id={Number(params.id)} />
                 </Suspense>
             )}
         </Container>
