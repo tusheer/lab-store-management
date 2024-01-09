@@ -1,24 +1,14 @@
+import { getActiveFinancialYear } from '@/app/action';
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
-import prisma from '@/lib/prisma';
-import FinancialYearCreateDialog from '../general-store/components/FinancialYearCreateDialog';
-import FinancialYearTable from '../general-store/components/FinancialYearTable';
+import { getFinancialYears } from './action';
+import FinancialYearCreateDialog from './components/FinancialYearCreateDialog';
+import FinancialYearTable from './components/FinancialYearTable';
 
-async function getFinancialYearDate() {
-    const finalcialYear = await prisma.financialYear.findMany();
-    return finalcialYear;
-}
-
-export type FinancialYear = Awaited<ReturnType<typeof getFinancialYearDate>>;
+export type FinancialYear = Awaited<ReturnType<typeof getFinancialYears>>;
 
 const FinancialYearPage = async () => {
-    const finalcialYear = await getFinancialYearDate();
-
-    const activeFinancialYear = await prisma.financialYear.findFirst({
-        where: {
-            isActive: true,
-        },
-    });
+    const [finalcialYear, activeFinancialYear] = await Promise.all([getFinancialYears(), getActiveFinancialYear()]);
 
     return (
         <Container>

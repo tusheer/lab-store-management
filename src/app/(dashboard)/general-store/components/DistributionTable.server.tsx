@@ -63,7 +63,7 @@ const getDistributionData = async (id: number, searchParams?: SearchParams) => {
             note: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            updatedAt: 'desc',
         },
     });
 

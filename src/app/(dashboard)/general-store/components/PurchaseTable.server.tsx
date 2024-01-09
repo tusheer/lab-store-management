@@ -92,7 +92,7 @@ const getPurchaseData = async (id: number, searchParams?: SearchParams) => {
             warrantyExpireDate: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            updatedAt: 'desc',
         },
     });
 

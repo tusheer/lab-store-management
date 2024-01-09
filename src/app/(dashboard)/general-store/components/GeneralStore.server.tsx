@@ -61,7 +61,7 @@ const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
             alertWhenStockAmountIsLessThan: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            updatedAt: 'desc',
         },
     });
 

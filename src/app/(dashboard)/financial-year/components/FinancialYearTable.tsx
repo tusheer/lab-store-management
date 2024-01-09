@@ -10,9 +10,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
-import { FinancialYear } from '../../financial-year/page';
+import { FinancialYear } from '../page';
 import ConfirmInactiveFinalcialYear from './ConfirmInactiveFinalcialYear';
 
 const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
@@ -38,16 +39,8 @@ const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
                         {data.map((year) => (
                             <TableRow key={year.id} className="cursor-pointer">
                                 <TableCell>{year.name}</TableCell>
-                                <TableCell>
-                                    {new Intl.DateTimeFormat('en-US', {
-                                        dateStyle: 'medium',
-                                    }).format(year.startDate)}
-                                </TableCell>
-                                <TableCell>
-                                    {new Intl.DateTimeFormat('en-US', {
-                                        dateStyle: 'medium',
-                                    }).format(year.endDate)}
-                                </TableCell>
+                                <TableCell>{format(new Date(year?.startDate || ''), 'dd MMM yyyy')}</TableCell>
+                                <TableCell>{format(new Date(year?.endDate || ''), 'dd MMM yyyy')}</TableCell>
                                 <TableCell>
                                     <span
                                         className={cn('inline-flex rounded-full px-2 text-xs font-semibold leading-5', {

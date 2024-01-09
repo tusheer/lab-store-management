@@ -17,7 +17,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
     return (
         <Drawer open={isOpen} onOpenChange={onClose}>
             <DrawerContent>
-                <Container className="w-full max-w-2xl p-0 px-0 py-0 lg:p-0">
+                <Container className="w-full max-w-2xl p-0 px-4 py-0 lg:p-0 lg:px-0">
                     <DrawerHeader className="px-0">
                         <DrawerTitle>Source details</DrawerTitle>
                     </DrawerHeader>

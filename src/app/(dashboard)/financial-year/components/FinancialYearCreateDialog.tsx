@@ -15,8 +15,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { createNewActiveFinancialYear } from '../actions';
-import { FinancialYearCreateSchema, financialYearCreateSchema } from '../schema';
+import { createNewActiveFinancialYear } from '../../general-store/actions';
+import { FinancialYearCreateSchema, financialYearCreateSchema } from '../../general-store/schema';
 
 const FinancialYearCreateDialog = () => {
     const [open, setOpen] = useState(false);
