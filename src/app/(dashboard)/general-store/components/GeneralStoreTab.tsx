@@ -20,7 +20,7 @@ const GeneralStoreTab = () => {
                 });
             }}
             defaultValue={tab as string}
-            className="mt-6 w-full"
+            className="mt-6 w-full overflow-auto"
         >
             <TabsList defaultValue={tab as string} className="inline-flex ">
                 <TabsTrigger defaultChecked value="stock" className="text-xs lg:text-sm">
