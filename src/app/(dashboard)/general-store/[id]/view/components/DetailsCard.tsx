@@ -15,7 +15,7 @@ const GeneralStoreItemDetailsCard: React.FC<GeneralStoreItemDetailsCardProps> = 
                 <CardHeader>
                     <CardTitle>Details information</CardTitle>
                 </CardHeader>
-                <CardContent className="grid min-w-[550px] gap-3.5">
+                <CardContent className="grid min-w-[400px] gap-3.5">
                     <div className="grid grid-cols-12">
                         <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Name</p>
                         <p className="col-span-6  text-sm font-medium text-gray-700">{data.name}</p>
