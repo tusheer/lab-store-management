@@ -19,7 +19,6 @@ import ConfirmInactiveFinalcialYear from './ConfirmInactiveFinalcialYear';
 const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
     const [inactiveModal, setInactiveModal] = useState(false);
     const [inactiveId, setInactiveId] = useState<null | number>(null);
-
     return (
         <section className="mt-5">
             <ConfirmInactiveFinalcialYear open={inactiveModal} setOpen={setInactiveModal} id={inactiveId} />

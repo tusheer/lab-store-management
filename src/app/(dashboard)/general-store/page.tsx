@@ -12,6 +12,8 @@ import GeneralStoreTab from './components/GeneralStoreTab';
 import HistoryServer from './components/History.server';
 import PurchaseServerTable from './components/PurchaseTable.server';
 
+export const revalidate = 3600;
+
 const GeneralStores = async ({
     searchParams,
 }: {
