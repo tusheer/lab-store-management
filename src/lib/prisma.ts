@@ -1,21 +1,28 @@
-// lib/prisma.ts
 import { PrismaClient } from '@prisma/client';
 
-let prisma: PrismaClient;
-
-declare const global: {
+// This type definition will help with TypeScript understanding the global object.
+type CustomNodeJsGlobal = typeof globalThis & {
     prisma?: PrismaClient;
 };
 
+// Declare the global variable
+const globalNode = global as CustomNodeJsGlobal;
+
+// Initialize the prisma client with environment-specific settings
+let prisma: PrismaClient;
+
 if (process.env.NODE_ENV === 'production') {
-    prisma = new PrismaClient();
+    prisma = new PrismaClient({
+        log: ['query', 'info', 'warn', 'error'],
+    });
 } else {
-    if (!global.prisma) {
-        global.prisma = new PrismaClient({
+    // In non-production environments
+    if (!globalNode.prisma) {
+        globalNode.prisma = new PrismaClient({
             log: ['query', 'info', 'warn', 'error'],
         });
     }
-    prisma = global.prisma;
+    prisma = globalNode.prisma;
 }
 
 export default prisma;
