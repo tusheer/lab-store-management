@@ -1,6 +1,7 @@
 'use client';
 
 import Filter from '@/app/components/Filter';
+import ProfileHoverCard from '@/app/components/ProfileHoverCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +11,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getUserAvatar } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -88,48 +88,17 @@ const ItemSourceTable: React.FC<PurchaseTableProps> = ({ data }) => {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-1.5">
-                                            <HoverCard>
-                                                <HoverCardTrigger>
-                                                    <Avatar className="h-7 w-7">
-                                                        <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
-                                                        <AvatarFallback className="h-7 w-7 text-xs">
-                                                            {d.lastUpdatedBy?.name
-                                                                ?.split(' ')
-                                                                .map((name: string) => name[0])
-                                                                .join('')}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                </HoverCardTrigger>
-                                                <HoverCardContent>
-                                                    <div className="flex flex-col items-center gap-1.5">
-                                                        <Avatar className="h-16 w-16">
-                                                            <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
-                                                            <AvatarFallback className="h-16 w-16 text-xs">
-                                                                {d.lastUpdatedBy?.name
-                                                                    ?.split(' ')
-                                                                    .map((name: string) => name[0])
-                                                                    .join('')}
-                                                            </AvatarFallback>
-                                                        </Avatar>
-                                                        <div className="flex flex-col items-center gap-1">
-                                                            <h4 className="text-lg font-semibold text-gray-800">
-                                                                {d.lastUpdatedBy?.name}
-                                                            </h4>
-                                                            <p className="text-sm text-gray-500">
-                                                                {d.lastUpdatedBy?.email}
-                                                            </p>
-                                                            <p className="text-sm text-gray-800">
-                                                                <span className="font-semibold">Department: </span>
-                                                                {d.lastUpdatedBy?.department}
-                                                            </p>
-                                                            <p className="text-sm text-gray-800">
-                                                                <span className="font-semibold">Designation: </span>
-                                                                {d.lastUpdatedBy?.designation}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </HoverCardContent>
-                                            </HoverCard>
+                                            <ProfileHoverCard user={d.lastUpdatedBy}>
+                                                <Avatar className="h-7 w-7">
+                                                    <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />
+                                                    <AvatarFallback className="h-7 w-7 text-xs">
+                                                        {d.lastUpdatedBy?.name
+                                                            ?.split(' ')
+                                                            .map((name: string) => name[0])
+                                                            .join('')}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                            </ProfileHoverCard>
                                             {d.lastUpdatedBy?.name}
                                         </div>
                                     </TableCell>

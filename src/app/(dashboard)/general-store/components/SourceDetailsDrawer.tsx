@@ -1,9 +1,9 @@
 'use client';
 
+import ProfileHoverCard from '@/app/components/ProfileHoverCard';
 import Container from '@/components/ui/Container';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { getUserAvatar } from '@/lib/utils';
 import { PurchaseData } from './PurchaseTable.server';
 
@@ -81,48 +81,17 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                     </p>
 
                                     <div className="col-span-6 flex  items-center gap-1.5">
-                                        <HoverCard>
-                                            <HoverCardTrigger>
-                                                <Avatar className="h-7 w-7">
-                                                    <AvatarImage src={getUserAvatar(data.lastUpdatedBy?.avatar)} />
-                                                    <AvatarFallback className="h-7 w-7 text-xs">
-                                                        {data.lastUpdatedBy?.name
-                                                            ?.split(' ')
-                                                            .map((name: string) => name[0])
-                                                            .join('')}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                            </HoverCardTrigger>
-                                            <HoverCardContent>
-                                                <div className="flex flex-col items-center gap-1.5">
-                                                    <Avatar className="h-16 w-16">
-                                                        <AvatarImage src={getUserAvatar(data.lastUpdatedBy?.avatar)} />
-                                                        <AvatarFallback className="h-16 w-16 text-xs">
-                                                            {data.lastUpdatedBy?.name
-                                                                ?.split(' ')
-                                                                .map((name: string) => name[0])
-                                                                .join('')}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <div className="flex flex-col items-center gap-1">
-                                                        <h4 className="text-lg font-semibold text-gray-800">
-                                                            {data.lastUpdatedBy?.name}
-                                                        </h4>
-                                                        <p className="text-sm text-gray-500">
-                                                            {data.lastUpdatedBy?.email}
-                                                        </p>
-                                                        <p className="text-sm text-gray-800">
-                                                            <span className="font-semibold">Department: </span>
-                                                            {data.lastUpdatedBy?.department}
-                                                        </p>
-                                                        <p className="text-sm text-gray-800">
-                                                            <span className="font-semibold">Designation: </span>
-                                                            {data.lastUpdatedBy?.designation}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </HoverCardContent>
-                                        </HoverCard>
+                                        <ProfileHoverCard user={data.lastUpdatedBy}>
+                                            <Avatar className="h-7 w-7">
+                                                <AvatarImage src={getUserAvatar(data.lastUpdatedBy?.avatar)} />
+                                                <AvatarFallback className="h-7 w-7 text-xs">
+                                                    {data.lastUpdatedBy?.name
+                                                        ?.split(' ')
+                                                        .map((name: string) => name[0])
+                                                        .join('')}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </ProfileHoverCard>
                                         <p className="text-sm font-medium capitalize text-gray-700">
                                             {data.lastUpdatedBy?.name}
                                         </p>

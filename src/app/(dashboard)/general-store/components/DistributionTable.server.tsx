@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { isNotNumber } from '@/lib/utils';
+import { Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
 import DistributionTable from './DistributionTable';
 interface SearchParams {
@@ -8,44 +8,52 @@ interface SearchParams {
     endDate?: string;
 }
 const getDistributionData = async (id: number, searchParams?: SearchParams) => {
-    const response = await prisma.generalStoreDistribution.findMany({
-        where: {
-            financialYearId: id,
-            ...((searchParams?.startDate || searchParams?.endDate) && {
-                updatedAt: {
-                    ...(searchParams.startDate && {
-                        gte: formatISO(startOfDay(searchParams.startDate), { representation: 'complete' }) || undefined,
-                    }),
-                    ...(searchParams.endDate && {
-                        lte: formatISO(endOfDay(searchParams.endDate), { representation: 'complete' }) || undefined,
-                    }),
-                },
+    // Define the base where condition with TypeScript support
+    let whereConditions: Prisma.GeneralStoreDistributionWhereInput = {
+        financialYearId: id,
+    };
+    // Add date filters if provided
+    if (searchParams?.startDate || searchParams?.endDate) {
+        whereConditions.createdAt = {
+            ...(searchParams.startDate && {
+                gte: formatISO(startOfDay(searchParams.startDate), { representation: 'complete' }),
             }),
-            AND: searchParams?.search
-                ? [
-                      {
-                          OR: [
-                              { name: { contains: searchParams.search, mode: 'insensitive' } },
+            ...(searchParams.endDate && {
+                lte: formatISO(endOfDay(searchParams.endDate), { representation: 'complete' }),
+            }),
+        };
+    }
 
-                              {
-                                  lastUpdatedBy: {
-                                      email: { contains: searchParams.search, mode: 'insensitive' },
-                                      name: { contains: searchParams.search, mode: 'insensitive' },
-                                  },
-                              },
+    // Add search filters if provided
+    if (searchParams?.search) {
+        const searchORConditions: Prisma.GeneralStoreDistributionWhereInput = {
+            OR: [
+                { name: { contains: searchParams.search, mode: 'insensitive' } },
+                {
+                    lastUpdatedBy: {
+                        is: {
+                            OR: [
+                                { email: { contains: searchParams.search, mode: 'insensitive' } },
+                                { name: { contains: searchParams.search, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                },
+                {
+                    id: {
+                        equals: !isNaN(Number(searchParams.search)) ? Number(searchParams.search) : undefined,
+                    },
+                },
+            ],
+        };
 
-                              {
-                                  id: {
-                                      equals: !isNotNumber(searchParams.search)
-                                          ? Number(searchParams.search)
-                                          : undefined,
-                                  },
-                              },
-                          ],
-                      },
-                  ]
-                : undefined,
-        },
+        whereConditions = {
+            ...whereConditions,
+            AND: [searchORConditions],
+        };
+    }
+    const response = await prisma.generalStoreDistribution.findMany({
+        where: whereConditions,
         select: {
             lastUpdatedBy: true,
             name: true,
