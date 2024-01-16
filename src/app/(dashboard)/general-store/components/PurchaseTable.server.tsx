@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import { isNotNumber } from '@/lib/utils';
+import { Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
 import PurchaseTable from './ItemSourceTable';
 
@@ -10,63 +11,70 @@ interface SearchParams {
 }
 
 const getPurchaseData = async (id: number, searchParams?: SearchParams) => {
-    const response = await prisma.generalStoreSource.findMany({
-        where: {
-            financialYearId: id,
-            ...((searchParams?.startDate || searchParams?.endDate) && {
-                createdAt: {
-                    ...(searchParams.startDate && {
-                        gte: formatISO(startOfDay(searchParams.startDate), { representation: 'complete' }) || undefined,
-                    }),
-                    ...(searchParams.endDate && {
-                        lte: formatISO(endOfDay(searchParams.endDate), { representation: 'complete' }) || undefined,
-                    }),
-                },
+    // Define the base where condition with TypeScript support
+    let whereConditions: Prisma.GeneralStoreSourceWhereInput = {
+        financialYearId: id,
+    };
+
+    // Add date filters if provided
+    if (searchParams?.startDate || searchParams?.endDate) {
+        whereConditions.createdAt = {
+            ...(searchParams.startDate && {
+                gte: formatISO(startOfDay(searchParams.startDate), { representation: 'complete' }),
             }),
+            ...(searchParams.endDate && {
+                lte: formatISO(endOfDay(searchParams.endDate), { representation: 'complete' }),
+            }),
+        };
+    }
 
-            AND: searchParams?.search
-                ? [
-                      {
-                          OR: [
-                              { name: { contains: searchParams.search, mode: 'insensitive' } },
-                              { brandName: { contains: searchParams.search, mode: 'insensitive' } },
-                              {
-                                  brandName: { contains: searchParams.search, mode: 'insensitive' },
-                              },
+    // Add search filters if provided
+    if (searchParams?.search) {
+        const searchORConditions: Prisma.GeneralStoreSourceWhereInput = {
+            OR: [
+                { name: { contains: searchParams.search, mode: 'insensitive' } },
+                { brandName: { contains: searchParams.search, mode: 'insensitive' } },
+                {
+                    brandName: { contains: searchParams.search, mode: 'insensitive' },
+                },
+                {
+                    lastUpdatedBy: {
+                        is: {
+                            OR: [
+                                { email: { contains: searchParams.search, mode: 'insensitive' } },
+                                { name: { contains: searchParams.search, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
+                },
+                {
+                    cashMemoNo: { contains: searchParams.search, mode: 'insensitive' },
+                },
 
-                              {
-                                  lastUpdatedBy: {
-                                      email: { contains: searchParams.search, mode: 'insensitive' },
-                                      name: { contains: searchParams.search, mode: 'insensitive' },
-                                  },
-                              },
+                {
+                    cashMemoNo: { contains: searchParams.search, mode: 'insensitive' },
+                },
+                {
+                    indentNo: {
+                        equals: !isNotNumber(searchParams.search) ? Number(searchParams.search) : undefined,
+                    },
+                },
+                {
+                    id: {
+                        equals: !isNaN(Number(searchParams.search)) ? Number(searchParams.search) : undefined,
+                    },
+                },
+            ],
+        };
 
-                              {
-                                  cashMemoNo: { contains: searchParams.search, mode: 'insensitive' },
-                              },
+        whereConditions = {
+            ...whereConditions,
+            AND: [searchORConditions],
+        };
+    }
 
-                              {
-                                  cashMemoNo: { contains: searchParams.search, mode: 'insensitive' },
-                              },
-                              {
-                                  indentNo: {
-                                      equals: !isNotNumber(searchParams.search)
-                                          ? Number(searchParams.search)
-                                          : undefined,
-                                  },
-                              },
-                              {
-                                  id: {
-                                      equals: !isNotNumber(searchParams.search)
-                                          ? Number(searchParams.search)
-                                          : undefined,
-                                  },
-                              },
-                          ],
-                      },
-                  ]
-                : undefined,
-        },
+    const response = await prisma.generalStoreSource.findMany({
+        where: whereConditions,
         select: {
             name: true,
             id: true,

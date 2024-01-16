@@ -6,6 +6,7 @@ const getHistory = async () => {
         select: {
             user: {
                 select: {
+                    id: true,
                     name: true,
                     department: true,
                     designation: true,

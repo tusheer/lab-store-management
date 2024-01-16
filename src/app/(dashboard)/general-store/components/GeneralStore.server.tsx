@@ -32,6 +32,7 @@ const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
         const searchORConditions: Prisma.GeneralStoreWhereInput = {
             OR: [
                 { name: { contains: searchParams.search, mode: 'insensitive' } },
+                { storageLocation: { contains: searchParams.search, mode: 'insensitive' } },
                 {
                     lastUpdatedBy: {
                         is: {
