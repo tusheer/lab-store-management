@@ -21,8 +21,9 @@ import { z } from 'zod';
 import { createNewUser } from '../actions';
 import { registerUserSchema } from '../schema';
 
-export default function RegisterForm() {
+export default function RegisterForm({ institions }: { institions: { id: number; name: string }[] }) {
     const [registerID, setRegisterID] = useState<string | null>(null);
+    const [subdomain, setSubdomain] = useState<string | null>(null);
     const form = useForm<z.infer<typeof registerUserSchema>>({
         resolver: zodResolver(registerUserSchema),
         defaultValues: {
@@ -30,6 +31,7 @@ export default function RegisterForm() {
             name: '',
             department: '',
             designation: '',
+            institution: '',
         },
     });
     const onSubmit = async (data: z.infer<typeof registerUserSchema>) => {
@@ -37,7 +39,8 @@ export default function RegisterForm() {
             const res = await createNewUser(data);
 
             if (res) {
-                setRegisterID(res);
+                setRegisterID(res.registerID);
+                setSubdomain(res.subdomain);
             }
             toast.success('Login successful');
         } catch (error) {
@@ -45,12 +48,17 @@ export default function RegisterForm() {
         }
     };
     const handleCopy = async () => {
-        if (registerID) {
-            const fullPath = `${window.location.origin}/register/${registerID}`;
+        if (registerID && subdomain) {
+            const fullPath =
+                process.env.NODE_ENV === 'development'
+                    ? `${window.location.origin}/register/${registerID}`
+                    : `https://${subdomain}.manage-institute.store/register/${registerID}`;
+
             navigator.clipboard.writeText(fullPath);
             toast.success('link copied');
         }
     };
+
     return (
         <div>
             <Form {...form}>
@@ -82,6 +90,34 @@ export default function RegisterForm() {
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name="institution"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Institution</FormLabel>
+                                <FormControl>
+                                    <Select onValueChange={(e) => field.onChange(e)}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select institution" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {institions.map((item) => (
+                                                    <SelectItem key={item.id} value={item.id.toString()}>
+                                                        {item.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={form.control}
                         name="department"

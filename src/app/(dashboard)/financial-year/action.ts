@@ -1,15 +1,23 @@
 'use server';
 
+import { getServerSubdomain } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { FinancialYearCreateSchema, financialYearCreateSchema } from '../general-store/schema';
 
-export const getFinancialYears = unstable_cache(async () => {
-    const finalcialYear = await prisma.financialYear.findMany();
+export const getFinancialYears = async () => {
+    const subdomain = getServerSubdomain();
+    const finalcialYear = await prisma.financialYear.findMany({
+        where: {
+            institution: {
+                subdomain,
+            },
+        },
+    });
     return finalcialYear;
-}, ['financialYear']);
+};
 
 export const createNewActiveFinancialYear = async (data: FinancialYearCreateSchema) => {
     try {
@@ -42,6 +50,7 @@ export const createNewActiveFinancialYear = async (data: FinancialYearCreateSche
                     startDate: data.date[0],
                     endDate: data.date[1],
                     isActive: true,
+                    institutionId: Number(userSession.user.institution.id),
                 },
             });
 

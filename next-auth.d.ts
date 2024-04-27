@@ -8,6 +8,10 @@ declare module 'next-auth' {
             name?: string;
             email?: string;
             image?: string;
+            institution: {
+                subdomain: string;
+                id: string;
+            };
         } & DefaultSession['user'];
     }
 

@@ -22,7 +22,6 @@ const page = async ({ params }: { params: { registerID: string } }) => {
                         <h1 className="text-2xl font-semibold tracking-tight">Set your password</h1>
                         <p className="text-sm text-muted-foreground">To acsses your account</p>
                     </div>
-
                     <RegisterPasswordForm registerID={params.registerID} email={res.email} />
                 </div>
             </div>

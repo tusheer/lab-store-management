@@ -29,7 +29,6 @@ export function UserAuthForm({}: UserAuthFormProps) {
     });
     const onSubmit = async (data: z.infer<typeof loginSchecma>) => {
         const { email, password } = data;
-
         try {
             const response = await signIn('credentials', {
                 redirect: false,

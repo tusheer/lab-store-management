@@ -8,14 +8,28 @@ import { passwordSetSchema, registerUserSchema } from './schema';
 export async function createNewUser(data: z.infer<typeof registerUserSchema>) {
     try {
         const validetedData = registerUserSchema.safeParse(data);
+
+        const findInstitution = await prisma.institution.findUnique({
+            where: {
+                id: Number(data.institution),
+            },
+        });
+
+        if (!findInstitution) {
+            throw new Error('Institution not found');
+        }
+
         if (validetedData.success) {
             const registerID = nanoid();
 
             await prisma.user.create({
-                data: { ...data, registerID },
+                data: { ...data, registerID, institution: { connect: { id: Number(data.institution) } } },
             });
 
-            return registerID;
+            return {
+                registerID,
+                subdomain: findInstitution.subdomain,
+            };
         } else {
             throw new Error('User already exist');
         }

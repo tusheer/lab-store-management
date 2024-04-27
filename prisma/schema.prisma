@@ -35,6 +35,40 @@ model User {
   lastGeneralUpdates                  GeneralStore[]             @relation("LastUpdatedBy")
   generalStoreNote                    GeneralStoreNote[]
   generalStoreHistory                 GeneralStoreHistory[]
+  institution                         Institution                @relation(fields: [institutionId], references: [id])
+  institutionId                       Int
+  permissions                         Json?
+  assignedShops                       Shop[]
+  assigedDepartments                  Department[]
+}
+
+model Institution {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  logo                     Json?
+  subdomain                String                     @unique
+  colorTheme               String?
+  tag                      String?
+  title                    String?
+  address                  String
+  phone                    String
+  email                    String
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  isDeleted                Boolean                    @default(false)
+  FinancialYear            FinancialYear[]
+  GeneralStoreSource       GeneralStoreSource[]
+  GeneralStoreDistribution GeneralStoreDistribution[]
+  GeneralStore             GeneralStore[]
+  GeneralStoreNote         GeneralStoreNote[]
+  GeneralStoreHistory      GeneralStoreHistory[]
+  User                     User[]
+  Department               Department[]
+  Shop                     Shop[]
+  onlyGeneralStore         Boolean                    @default(false)
+  permissions              Json?
+  shopWithoutDepartment    Boolean                    @default(false)
+  onlyDepartment           Boolean                    @default(false)
 }
 
 model FinancialYear {
@@ -49,6 +83,8 @@ model FinancialYear {
   GeneralStore             GeneralStore[]
   GeneralStoreSource       GeneralStoreSource[]
   GeneralStoreDistribution GeneralStoreDistribution[]
+  institution              Institution                @relation(fields: [institutionId], references: [id])
+  institutionId            Int
 }
 
 model GeneralStoreSource {
@@ -81,6 +117,8 @@ model GeneralStoreSource {
   financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId    Int
   sourceType         SourceType    @default(others)
+  institution        Institution   @relation(fields: [institutionId], references: [id])
+  institutionId      Int
 }
 
 model GeneralStoreDistribution {
@@ -105,6 +143,8 @@ model GeneralStoreDistribution {
   financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId Int
   indentNo        Int?
+  institution     Institution   @relation(fields: [institutionId], references: [id])
+  institutionId   Int
 }
 
 model GeneralStore {
@@ -127,6 +167,13 @@ model GeneralStore {
   financialYear                  FinancialYear              @relation(fields: [financialYearId], references: [id])
   financialYearId                Int
   generalStoreHistory            GeneralStoreHistory[]
+  institution                    Institution                @relation(fields: [institutionId], references: [id])
+  institutionId                  Int
+  Shop                           Shop?                      @relation(fields: [shopId], references: [id])
+  shopId                         Int?
+  Department                     Department?                @relation(fields: [departmentId], references: [id])
+  departmentId                   Int?
+  inGeneralStore                 Boolean                    @default(true)
 }
 
 model GeneralStoreNote {
@@ -139,6 +186,8 @@ model GeneralStoreNote {
   images         Json[]
   user           User         @relation(fields: [userId], references: [id])
   userId         Int
+  institution    Institution  @relation(fields: [institutionId], references: [id])
+  institutionId  Int
 }
 
 model GeneralStoreHistory {
@@ -151,6 +200,31 @@ model GeneralStoreHistory {
   images         Json[]
   user           User         @relation(fields: [userId], references: [id])
   userId         Int
+  institution    Institution  @relation(fields: [institutionId], references: [id])
+  institutionId  Int
+}
+
+model Department {
+  id            Int            @id @default(autoincrement())
+  name          String
+  institution   Institution    @relation(fields: [institutionId], references: [id])
+  institutionId Int
+  Shop          Shop[]
+  generalStore  GeneralStore[]
+  User          User?          @relation(fields: [userId], references: [id])
+  userId        Int?
+}
+
+model Shop {
+  id            Int            @id @default(autoincrement())
+  name          String
+  institution   Institution    @relation(fields: [institutionId], references: [id])
+  institutionId Int
+  department    Department     @relation(fields: [departmentId], references: [id])
+  departmentId  Int
+  generalStore  GeneralStore[]
+  User          User?          @relation(fields: [userId], references: [id])
+  userId        Int?
 }
 
 enum ItemType {

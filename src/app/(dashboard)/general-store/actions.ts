@@ -77,17 +77,28 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                                     id: activeFinancialYear.id,
                                 },
                             },
+                            institution: {
+                                connect: {
+                                    id: Number(userSession.user.institution.id),
+                                },
+                            },
                         },
                     },
                     generalStoreHistory: {
                         create: {
                             label: `${userSession.user.name} created a new item, initial quantity was ${data.quantity}`,
                             userId: Number(userSession.user.id),
+                            institutionId: Number(userSession.user.institution.id),
                         },
                     },
                     financialYear: {
                         connect: {
                             id: activeFinancialYear.id,
+                        },
+                    },
+                    institution: {
+                        connect: {
+                            id: Number(userSession.user.institution.id),
                         },
                     },
                 },
@@ -105,6 +116,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                         images: data.images, // Add this field only if your schema supports it
                         generalStoreId: generalStore.id,
                         userId: Number(userSession.user.id),
+                        institutionId: Number(userSession.user.institution.id),
                     },
                 });
             }
@@ -181,12 +193,18 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                                     id: activeFinancialYear.id,
                                 },
                             },
+                            institution: {
+                                connect: {
+                                    id: Number(userAccount.user.institution.id),
+                                },
+                            },
                         },
                     },
                     generalStoreHistory: {
                         create: {
                             label: `${userAccount.user.name} added ${data.quantity} ${data.unitName} of ${data.name}`,
                             userId: Number(userAccount.user.id),
+                            institutionId: Number(userAccount.user.institution.id),
                         },
                     },
                     financialYear: {
@@ -209,6 +227,7 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                         images: data.images, // Add this field only if your schema supports it
                         generalStoreId: generalStore.id,
                         userId: Number(userAccount.user.id),
+                        institutionId: Number(userAccount.user.institution.id),
                     },
                 });
             }
@@ -276,6 +295,11 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                             },
                             finalQuantity: data.stock - Number(data.quantity),
                             indentNo: Number(data.indentNo),
+                            institution: {
+                                connect: {
+                                    id: Number(userAccount.user.institution.id),
+                                },
+                            },
                         },
                     },
                     financialYear: {
@@ -289,6 +313,7 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                                 data.name
                             } to ${data.personName}, ${data.department} ${data.shopName && `(${data.shopName})`}`,
                             userId: Number(userAccount.user.id),
+                            institutionId: Number(userAccount.user.institution.id),
                         },
                     },
                 },
@@ -325,6 +350,7 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
                 images: data.images,
                 generalStoreId: Number(id),
                 userId: Number(userAccount.user.id),
+                institutionId: Number(userAccount.user.institution.id),
             },
         });
 
@@ -337,6 +363,7 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
                     create: {
                         label: `${userAccount.user.name} added a note`,
                         userId: Number(userAccount.user.id),
+                        institutionId: Number(userAccount.user.institution.id),
                     },
                 },
             },

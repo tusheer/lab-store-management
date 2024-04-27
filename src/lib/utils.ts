@@ -78,3 +78,14 @@ export function toUTCDateString(date: Date) {
     const day = d.getUTCDate();
     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 }
+
+export function getSubdomain(url: string) {
+    let subdomain = '';
+    const match = url.match(/^(?:https?:\/\/)?((?:[\w\d-]+\.)*)?([\w\d-]+\.[\w\d]+)/i);
+
+    if (match && match[1]) {
+        subdomain = match[1].slice(0, -1); // Remove the trailing dot
+    }
+
+    return subdomain;
+}

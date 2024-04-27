@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { getSubdomain } from '@/lib/utils';
 import { compare } from 'bcrypt';
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -10,14 +11,20 @@ export const authOptions: NextAuthOptions = {
                 email: { label: 'Email', type: 'email' },
                 password: { label: 'Password', type: 'password' },
             },
-            authorize: async (credentials) => {
+            authorize: async (credentials, req) => {
                 const { email, password } = credentials ?? {};
                 if (!email || !password) {
                     throw new Error('Missing username or password');
                 }
+
+                const subdomain =
+                    process.env.NODE_ENV === 'development' ? 'cpi' : getSubdomain(req.headers?.origin || '') || '';
                 const user = await prisma.user.findUnique({
                     where: {
                         email,
+                        institution: {
+                            subdomain: subdomain,
+                        },
                     },
                     select: {
                         email: true,
@@ -28,6 +35,14 @@ export const authOptions: NextAuthOptions = {
                     },
                 });
 
+                const institution = await prisma.institution.findUnique({
+                    where: {
+                        subdomain,
+                    },
+                });
+
+                if (!institution) throw new Error('Institution not found');
+
                 // if user doesn't exist or password doesn't match
                 if (!user || !(await compare(password, user?.password || ''))) {
                     throw new Error('Invalid username or password');
@@ -37,7 +52,13 @@ export const authOptions: NextAuthOptions = {
                     key: string;
                 };
 
-                return { email: user.email, id: user.id.toString(), name: user.name, avatar: avatar?.url || null };
+                return {
+                    email: user.email,
+                    id: user.id.toString(),
+                    name: user.name,
+                    avatar: avatar?.url || null,
+                    institution: { subdomain, id: institution?.id.toString() || '' },
+                };
             },
         }),
     ],

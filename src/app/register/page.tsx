@@ -1,13 +1,18 @@
-import { getServerSession } from 'next-auth';
+import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import RegisterForm from './components/RegisterForm';
 
 const RegisterUserPage = async () => {
-    const res = await getServerSession();
-    if (!res) {
+    if (process.env.NODE_ENV !== 'development') {
         redirect('/login');
     }
 
+    const institions = await prisma.institution.findMany({
+        select: {
+            id: true,
+            name: true,
+        },
+    });
     return (
         <div className="relative flex h-svh  items-center justify-center lg:px-0">
             <div className="w-full">
@@ -18,8 +23,7 @@ const RegisterUserPage = async () => {
                             To create a new account, you need to fill out the form below.
                         </p>
                     </div>
-
-                    <RegisterForm />
+                    <RegisterForm institions={institions} />
                 </div>
             </div>
         </div>
