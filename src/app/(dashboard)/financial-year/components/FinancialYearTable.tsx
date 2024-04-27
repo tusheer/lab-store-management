@@ -30,7 +30,6 @@ const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
                             <TableHead>Start date</TableHead>
                             <TableHead>End date</TableHead>
                             <TableHead>Is closed</TableHead>
-
                             <TableHead>Action</TableHead>
                         </TableRow>
                     </TableHeader>
