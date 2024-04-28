@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 
 const institutionMap = new Map();
 
-export const getServerSubdomain = () => {
+export const getServerSubdomain = async () => {
     const _headers = headers();
     const host = _headers.get('host');
     const subdomain = process.env.NODE_ENV == 'development' ? 'cpi' : getSubdomain(host || '');
@@ -13,7 +13,7 @@ export const getServerSubdomain = () => {
 };
 
 export const getActiveFinancialYear = async () => {
-    const subdomain = getServerSubdomain();
+    const subdomain = await getServerSubdomain();
     const activeFinancialYear = await prisma.financialYear.findFirst({
         where: {
             isActive: true,
@@ -34,7 +34,7 @@ export const getActiveFinancialYear = async () => {
 };
 
 export const getInstitution = async () => {
-    const subdomain = getServerSubdomain();
+    const subdomain = await getServerSubdomain();
     if (institutionMap.has(subdomain)) {
         return institutionMap.get(subdomain);
     }

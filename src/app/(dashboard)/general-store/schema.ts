@@ -87,9 +87,13 @@ export const distributionCreateFormSchema = z
                 })
             )
             .optional(),
-        quantity: zodStrng('Quantity requred').refine((data) => data !== '', {
-            message: 'Quantity requred',
-        }),
+        quantity: zodStrng('Quantity requred')
+            .refine((data) => data !== '', {
+                message: 'Quantity requred',
+            })
+            .refine((data) => data.toString() !== '0', {
+                message: 'The quantity should be greater than 0',
+            }),
         unitName: z.string(),
         allocatedAt: z.date(),
         stock: z.number(),

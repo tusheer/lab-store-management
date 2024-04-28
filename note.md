@@ -2,4 +2,8 @@
 
 ## pagingation need to add in every table
 
-## Add tanent option
+## If no note in the store item then note will not be add
+
+## Add seperate item action to the general store item list
+
+## user note able to seperate or distribute item as 0

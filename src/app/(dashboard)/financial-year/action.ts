@@ -8,7 +8,7 @@ import { revalidateTag } from 'next/cache';
 import { FinancialYearCreateSchema, financialYearCreateSchema } from '../general-store/schema';
 
 export const getFinancialYears = async () => {
-    const subdomain = getServerSubdomain();
+    const subdomain = await getServerSubdomain();
     const finalcialYear = await prisma.financialYear.findMany({
         where: {
             institution: {
