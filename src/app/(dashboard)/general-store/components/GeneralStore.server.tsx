@@ -1,6 +1,8 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
+import { getServerSession } from 'next-auth';
 import GeneralStoreTable from './GeneralStoreTable';
 
 interface SearchParams {
@@ -9,10 +11,22 @@ interface SearchParams {
     endDate?: string;
 }
 
-const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
+const getGeneralStoreItems = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
+    const userSession = await getServerSession(authOptions);
+
+    if (!userSession) {
+        throw Error('User not found');
+    }
+
     // Define the base where condition with TypeScript support
-    let whereConditions: Prisma.GeneralStoreWhereInput = {
+    let whereConditions: Prisma.StoreItemWhereInput = {
         financialYearId: id,
+        institution: {
+            id: Number(userSession.user.institution.id),
+        },
+        Store: {
+            id: generalStoreId,
+        },
     };
 
     // Add date filters if provided
@@ -29,7 +43,7 @@ const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
 
     // Add search filters if provided
     if (searchParams?.search) {
-        const searchORConditions: Prisma.GeneralStoreWhereInput = {
+        const searchORConditions: Prisma.StoreItemWhereInput = {
             OR: [
                 { name: { contains: searchParams.search, mode: 'insensitive' } },
                 { storageLocation: { contains: searchParams.search, mode: 'insensitive' } },
@@ -57,7 +71,7 @@ const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
         };
     }
 
-    const response = await prisma.generalStore.findMany({
+    const response = await prisma.storeItem.findMany({
         where: whereConditions,
         select: {
             lastUpdatedBy: true,
@@ -78,20 +92,22 @@ const getGeneralStores = async (id: number, searchParams?: SearchParams) => {
 
     return response;
 };
-export type GeneralStore = Awaited<ReturnType<typeof getGeneralStores>>;
+export type GeneralStoreItem = Awaited<ReturnType<typeof getGeneralStoreItems>>;
 
 const GeneralStoreServer = async ({
+    generalStoreId,
     activeFinancialYearId,
     search,
     startDate,
     endDate,
 }: {
     activeFinancialYearId: number;
+    generalStoreId: number;
     search: string;
     startDate: string;
     endDate: string;
 }) => {
-    const response = await getGeneralStores(activeFinancialYearId, {
+    const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, {
         endDate,
         search,
         startDate,

@@ -35,6 +35,8 @@ export const authOptions: NextAuthOptions = {
                     },
                 });
 
+                console.log('user', user, subdomain);
+
                 const institution = await prisma.institution.findUnique({
                     where: {
                         subdomain,

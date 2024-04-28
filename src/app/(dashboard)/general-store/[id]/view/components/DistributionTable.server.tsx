@@ -3,9 +3,9 @@ import prisma from '@/lib/prisma';
 import DistributionTable from './DistributionTable';
 
 const getDistributionData = async (id: number) => {
-    const response = await prisma.generalStoreDistribution.findMany({
+    const response = await prisma.storeItemDistribution.findMany({
         where: {
-            generalStoreId: id,
+            storeItemId: id,
         },
         select: {
             lastUpdatedBy: true,

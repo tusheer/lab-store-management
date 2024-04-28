@@ -1,7 +1,9 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
 import { isNotNumber } from '@/lib/utils';
 import { Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
+import { getServerSession } from 'next-auth';
 import PurchaseTable from './ItemSourceTable';
 
 interface SearchParams {
@@ -10,10 +12,22 @@ interface SearchParams {
     endDate?: string;
 }
 
-const getPurchaseData = async (id: number, searchParams?: SearchParams) => {
+const getPurchaseData = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
+    const userSession = await getServerSession(authOptions);
+
+    if (!userSession) {
+        throw Error('User not found');
+    }
+
     // Define the base where condition with TypeScript support
-    let whereConditions: Prisma.GeneralStoreSourceWhereInput = {
+    let whereConditions: Prisma.StoreItemSourceWhereInput = {
         financialYearId: id,
+        institution: {
+            id: Number(userSession.user.institution.id),
+        },
+        Store: {
+            id: generalStoreId,
+        },
     };
 
     // Add date filters if provided
@@ -30,7 +44,7 @@ const getPurchaseData = async (id: number, searchParams?: SearchParams) => {
 
     // Add search filters if provided
     if (searchParams?.search) {
-        const searchORConditions: Prisma.GeneralStoreSourceWhereInput = {
+        const searchORConditions: Prisma.StoreItemSourceWhereInput = {
             OR: [
                 { name: { contains: searchParams.search, mode: 'insensitive' } },
                 { brandName: { contains: searchParams.search, mode: 'insensitive' } },
@@ -73,7 +87,7 @@ const getPurchaseData = async (id: number, searchParams?: SearchParams) => {
         };
     }
 
-    const response = await prisma.generalStoreSource.findMany({
+    const response = await prisma.storeItemSource.findMany({
         where: whereConditions,
         select: {
             name: true,
@@ -111,16 +125,18 @@ export type PurchaseData = Awaited<ReturnType<typeof getPurchaseData>>;
 
 const PurchaseServerTable = async ({
     activeFinancialYearId,
+    generalStoreId,
     search,
     startDate,
     endDate,
 }: {
     activeFinancialYearId: number;
+    generalStoreId: number;
     search: string;
     startDate?: string;
     endDate?: string;
 }) => {
-    const response = await getPurchaseData(activeFinancialYearId, { search, startDate, endDate });
+    const response = await getPurchaseData(activeFinancialYearId, generalStoreId, { search, startDate, endDate });
 
     return <PurchaseTable data={response} />;
 };

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Box } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { getGeneralStore } from './actions';
 import DistributionTableServer from './components/DistributionTable.server';
 import GeneralStoreServer from './components/GeneralStore.server';
 import GeneralStoreTab from './components/GeneralStoreTab';
@@ -17,9 +18,8 @@ const GeneralStores = async ({
 }: {
     searchParams: { tab: string; search: string; startDate: string; endDate: string };
 }) => {
-    const activeFinancialyear = await getActiveFinancialYear();
+    const [activeFinancialyear, generalStore] = await Promise.all([getActiveFinancialYear(), getGeneralStore()]);
     const tab = searchParams.tab || 'stock';
-
     if (!activeFinancialyear) {
         return (
             <Container>
@@ -33,6 +33,18 @@ const GeneralStores = async ({
             </Container>
         );
     }
+
+    if (!generalStore) {
+        return (
+            <Container>
+                <div className="mt-10 flex flex-col items-center justify-center gap-4">
+                    <Box size={100} color="gray" strokeWidth={0.7} />
+                    <h4 className="text-xl font-medium text-gray-500">General store not created yet</h4>
+                </div>
+            </Container>
+        );
+    }
+
     return (
         <Container>
             <div className="flex  items-center justify-between lg:flex-row lg:items-start">
@@ -59,6 +71,7 @@ const GeneralStores = async ({
             {tab === 'stock' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <GeneralStoreServer
+                        generalStoreId={generalStore?.id}
                         search={searchParams.search}
                         activeFinancialYearId={activeFinancialyear.id}
                         startDate={searchParams.startDate}
@@ -69,6 +82,7 @@ const GeneralStores = async ({
             {tab === 'source' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <PurchaseServerTable
+                        generalStoreId={generalStore?.id}
                         search={searchParams.search}
                         activeFinancialYearId={activeFinancialyear.id}
                         startDate={searchParams.startDate}
@@ -79,6 +93,7 @@ const GeneralStores = async ({
             {tab === 'distribution' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <DistributionTableServer
+                        generalStoreId={generalStore?.id}
                         search={searchParams.search}
                         activeFinancialYearId={activeFinancialyear.id}
                         startDate={searchParams.startDate}

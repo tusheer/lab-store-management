@@ -18,11 +18,11 @@ import { Box, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { GeneralStore } from './GeneralStore.server';
+import { GeneralStoreItem } from './GeneralStore.server';
 import NoteAddModal from './NewNoteModal';
 
 type StockTableProps = {
-    data: NonNullable<GeneralStore>;
+    data: NonNullable<GeneralStoreItem>;
 };
 
 const StockTable: React.FC<StockTableProps> = ({ data }) => {

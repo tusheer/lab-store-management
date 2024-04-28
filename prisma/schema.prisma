@@ -12,82 +12,99 @@ datasource db {
 }
 
 model User {
-  id                                  Int                        @id @default(autoincrement())
-  email                               String                     @unique @map("email")
-  password                            String?
-  name                                String?
-  access                              Json                       @default("{}")
-  isActive                            Boolean                    @default(true)
-  isDeleted                           Boolean                    @default(false)
-  createdAt                           DateTime                   @default(now())
-  updatedAt                           DateTime                   @updatedAt
-  phone                               String?
-  address                             String?
-  avatar                              Json?
-  designation                         String?
-  department                          String?
-  reportingBossId                     Int? // Nullable
-  reportingBoss                       User?                      @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates                        User[]                     @relation("ReportingBoss")
-  registerID                          String?                    @unique
-  lastGeneralStoreSourceUpdates       GeneralStoreSource[]       @relation("LastUpdatedBy")
-  lastGeneralStoreDistributionUpdates GeneralStoreDistribution[] @relation("LastUpdatedBy")
-  lastGeneralUpdates                  GeneralStore[]             @relation("LastUpdatedBy")
-  generalStoreNote                    GeneralStoreNote[]
-  generalStoreHistory                 GeneralStoreHistory[]
-  institution                         Institution                @relation(fields: [institutionId], references: [id])
-  institutionId                       Int
-  permissions                         Json?
-  assignedShops                       Shop[]
-  assigedDepartments                  Department[]
+  id                           Int                     @id @default(autoincrement())
+  email                        String                  @unique @map("email")
+  password                     String?
+  name                         String?
+  access                       Json                    @default("{}")
+  isActive                     Boolean                 @default(true)
+  isDeleted                    Boolean                 @default(false)
+  createdAt                    DateTime                @default(now())
+  updatedAt                    DateTime                @updatedAt
+  phone                        String?
+  address                      String?
+  avatar                       Json?
+  designation                  String?
+  department                   String?
+  reportingBossId              Int? // Nullable
+  reportingBoss                User?                   @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+  subordinates                 User[]                  @relation("ReportingBoss")
+  registerID                   String?                 @unique
+  lastStoreSourceUpdates       StoreItemSource[]       @relation("LastUpdatedBy")
+  lastStoreDistributionUpdates StoreItemDistribution[] @relation("LastUpdatedBy")
+  lastStoreItemlUpdates        StoreItem[]             @relation("LastUpdatedBy")
+  StoreNote                    StoreItemNote[]
+  StoreHistory                 StoreItemHistory[]
+  institution                  Institution             @relation(fields: [institutionId], references: [id])
+  institutionId                Int
+  permissions                  Json?
+  assigedDepartments           Department[]
+  Store                        Store?                  @relation(fields: [storeId], references: [id])
+  storeId                      Int?
+  isSuperAdmin                 Boolean                 @default(false)
 }
 
 model Institution {
-  id                       Int                        @id @default(autoincrement())
-  name                     String
-  logo                     Json?
-  subdomain                String                     @unique
-  colorTheme               String?
-  tag                      String?
-  title                    String?
-  address                  String
-  phone                    String
-  email                    String
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt
-  isDeleted                Boolean                    @default(false)
-  FinancialYear            FinancialYear[]
-  GeneralStoreSource       GeneralStoreSource[]
-  GeneralStoreDistribution GeneralStoreDistribution[]
-  GeneralStore             GeneralStore[]
-  GeneralStoreNote         GeneralStoreNote[]
-  GeneralStoreHistory      GeneralStoreHistory[]
-  User                     User[]
-  Department               Department[]
-  Shop                     Shop[]
-  onlyGeneralStore         Boolean                    @default(false)
-  permissions              Json?
-  shopWithoutDepartment    Boolean                    @default(false)
-  onlyDepartment           Boolean                    @default(false)
+  id                Int                     @id @default(autoincrement())
+  name              String
+  logo              Json?
+  subdomain         String                  @unique
+  title             String?
+  address           String
+  phone             String
+  email             String
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  isDeleted         Boolean                 @default(false)
+  FinancialYear     FinancialYear[]
+  StoreSource       StoreItemSource[]
+  StoreDistribution StoreItemDistribution[]
+  StoreItem         StoreItem[]
+  StoreNote         StoreItemNote[]
+  StoreHistory      StoreItemHistory[]
+  User              User[]
+  Department        Department[]
+  permissions       Json?
+  meta              Json?
+  Store             Store[]
 }
 
 model FinancialYear {
-  id                       Int                        @id @default(autoincrement())
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt
-  isDeleted                Boolean                    @default(false)
-  name                     String
-  startDate                DateTime
-  endDate                  DateTime
-  isActive                 Boolean                    @default(true)
-  GeneralStore             GeneralStore[]
-  GeneralStoreSource       GeneralStoreSource[]
-  GeneralStoreDistribution GeneralStoreDistribution[]
-  institution              Institution                @relation(fields: [institutionId], references: [id])
-  institutionId            Int
+  id                Int                     @id @default(autoincrement())
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  isDeleted         Boolean                 @default(false)
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  isActive          Boolean                 @default(true)
+  StoreItem         StoreItem[]
+  StoreSource       StoreItemSource[]
+  StoreDistribution StoreItemDistribution[]
+  institution       Institution             @relation(fields: [institutionId], references: [id])
+  institutionId     Int
 }
 
-model GeneralStoreSource {
+model Store {
+  id                Int                     @id @default(autoincrement())
+  name              String
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  isDeleted         Boolean                 @default(false)
+  institution       Institution             @relation(fields: [institutionId], references: [id])
+  institutionId     Int
+  StoreSource       StoreItemSource[]
+  StoreItem         StoreItem[]
+  StoreNote         StoreItemNote[]
+  StoreHistory      StoreItemHistory[]
+  StoreDistribution StoreItemDistribution[]
+  department        Department?             @relation(fields: [departmentId], references: [id])
+  departmentId      Int?
+  isGeneralStore    Boolean                 @default(false)
+  permissions       User[]
+}
+
+model StoreItemSource {
   id                 Int           @id @default(autoincrement())
   purchasedAt        DateTime?
   createdAt          DateTime      @default(now())
@@ -112,16 +129,18 @@ model GeneralStoreSource {
   indentNo           Int?
   warrantyExpireDate DateTime?
   warrantyType       String?
-  GeneralStore       GeneralStore? @relation(fields: [generalStoreId], references: [id])
+  GeneralStore       StoreItem?    @relation(fields: [generalStoreId], references: [id])
   generalStoreId     Int?
   financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId    Int
   sourceType         SourceType    @default(others)
   institution        Institution   @relation(fields: [institutionId], references: [id])
   institutionId      Int
+  Store              Store         @relation(fields: [storeId], references: [id])
+  storeId            Int
 }
 
-model GeneralStoreDistribution {
+model StoreItemDistribution {
   id              Int           @id @default(autoincrement())
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -138,93 +157,83 @@ model GeneralStoreDistribution {
   note            String?
   images          Json[]
   finalQuantity   Int?
-  GeneralStore    GeneralStore? @relation(fields: [generalStoreId], references: [id])
-  generalStoreId  Int?
+  StoreItem       StoreItem?    @relation(fields: [storeItemId], references: [id])
+  storeItemId     Int?
   financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
   financialYearId Int
   indentNo        Int?
   institution     Institution   @relation(fields: [institutionId], references: [id])
   institutionId   Int
+  Store           Store         @relation(fields: [storeId], references: [id])
+  storeId         Int
 }
 
-model GeneralStore {
-  id                             Int                        @id @default(autoincrement())
-  createdAt                      DateTime                   @default(now())
-  updatedAt                      DateTime                   @updatedAt
-  isDeleted                      Boolean                    @default(false)
+model StoreItem {
+  id                             Int                     @id @default(autoincrement())
+  createdAt                      DateTime                @default(now())
+  updatedAt                      DateTime                @updatedAt
+  isDeleted                      Boolean                 @default(false)
   name                           String
   stockAmount                    Int
   unitName                       String
   lastUpdatedById                Int? // Nullable
-  lastUpdatedBy                  User?                      @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
-  generalStoreNotes              GeneralStoreNote[]
+  lastUpdatedBy                  User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+  storeItemNotes                 StoreItemNote[]
   alertWhenStockAmountIsLessThan Int?
-  type                           ItemType                   @default(other)
-  status                         MachineStatus              @default(operational)
+  type                           ItemType                @default(other)
+  status                         MachineStatus           @default(operational)
   storageLocation                String?
-  sources                        GeneralStoreSource[]
-  distributions                  GeneralStoreDistribution[]
-  financialYear                  FinancialYear              @relation(fields: [financialYearId], references: [id])
+  sources                        StoreItemSource[]
+  distributions                  StoreItemDistribution[]
+  financialYear                  FinancialYear           @relation(fields: [financialYearId], references: [id])
   financialYearId                Int
-  generalStoreHistory            GeneralStoreHistory[]
-  institution                    Institution                @relation(fields: [institutionId], references: [id])
+  storeItemHistory               StoreItemHistory[]
+  institution                    Institution             @relation(fields: [institutionId], references: [id])
   institutionId                  Int
-  Shop                           Shop?                      @relation(fields: [shopId], references: [id])
-  shopId                         Int?
-  Department                     Department?                @relation(fields: [departmentId], references: [id])
-  departmentId                   Int?
-  inGeneralStore                 Boolean                    @default(true)
+  Store                          Store                   @relation(fields: [storeId], references: [id])
+  storeId                        Int
 }
 
-model GeneralStoreNote {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  note           String
-  generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
-  generalStoreId Int
-  images         Json[]
-  user           User         @relation(fields: [userId], references: [id])
-  userId         Int
-  institution    Institution  @relation(fields: [institutionId], references: [id])
-  institutionId  Int
+model StoreItemNote {
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  note          String
+  storeItem     StoreItem   @relation(fields: [storeItemId], references: [id])
+  storeItemId   Int
+  images        Json[]
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  institutionId Int
+  Store         Store       @relation(fields: [storeId], references: [id])
+  storeId       Int
 }
 
-model GeneralStoreHistory {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  label          String
-  generalStore   GeneralStore @relation(fields: [generalStoreId], references: [id])
-  generalStoreId Int
-  images         Json[]
-  user           User         @relation(fields: [userId], references: [id])
-  userId         Int
-  institution    Institution  @relation(fields: [institutionId], references: [id])
-  institutionId  Int
+model StoreItemHistory {
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  label         String
+  storeIten     StoreItem   @relation(fields: [storeItemId], references: [id])
+  storeItemId   Int
+  images        Json[]
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  institutionId Int
+  Store         Store?      @relation(fields: [storeId], references: [id])
+  storeId       Int?
 }
 
 model Department {
-  id            Int            @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   name          String
-  institution   Institution    @relation(fields: [institutionId], references: [id])
+  institution   Institution @relation(fields: [institutionId], references: [id])
   institutionId Int
-  Shop          Shop[]
-  generalStore  GeneralStore[]
-  User          User?          @relation(fields: [userId], references: [id])
+  User          User?       @relation(fields: [userId], references: [id])
   userId        Int?
-}
-
-model Shop {
-  id            Int            @id @default(autoincrement())
-  name          String
-  institution   Institution    @relation(fields: [institutionId], references: [id])
-  institutionId Int
-  department    Department     @relation(fields: [departmentId], references: [id])
-  departmentId  Int
-  generalStore  GeneralStore[]
-  User          User?          @relation(fields: [userId], references: [id])
-  userId        Int?
+  Store         Store[]
 }
 
 enum ItemType {

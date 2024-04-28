@@ -44,11 +44,11 @@ export const getInstitution = async () => {
             subdomain,
         },
         select: {
-            colorTheme: true,
             logo: true,
             name: true,
             subdomain: true,
             id: true,
+            meta: true,
         },
     });
 

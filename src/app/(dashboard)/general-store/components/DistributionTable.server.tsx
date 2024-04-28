@@ -1,16 +1,30 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
+import { getServerSession } from 'next-auth';
 import DistributionTable from './DistributionTable';
 interface SearchParams {
     search?: string;
     startDate?: string;
     endDate?: string;
 }
-const getDistributionData = async (id: number, searchParams?: SearchParams) => {
+const getDistributionData = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
+    const userSession = await getServerSession(authOptions);
+
+    if (!userSession) {
+        throw Error('User not found');
+    }
+
     // Define the base where condition with TypeScript support
-    let whereConditions: Prisma.GeneralStoreDistributionWhereInput = {
+    let whereConditions: Prisma.StoreItemDistributionWhereInput = {
         financialYearId: id,
+        institution: {
+            id: Number(userSession.user.institution.id),
+        },
+        Store: {
+            id: generalStoreId,
+        },
     };
     // Add date filters if provided
     if (searchParams?.startDate || searchParams?.endDate) {
@@ -26,7 +40,7 @@ const getDistributionData = async (id: number, searchParams?: SearchParams) => {
 
     // Add search filters if provided
     if (searchParams?.search) {
-        const searchORConditions: Prisma.GeneralStoreDistributionWhereInput = {
+        const searchORConditions: Prisma.StoreItemDistributionWhereInput = {
             OR: [
                 { name: { contains: searchParams.search, mode: 'insensitive' } },
                 {
@@ -52,7 +66,7 @@ const getDistributionData = async (id: number, searchParams?: SearchParams) => {
             AND: [searchORConditions],
         };
     }
-    const response = await prisma.generalStoreDistribution.findMany({
+    const response = await prisma.storeItemDistribution.findMany({
         where: whereConditions,
         select: {
             lastUpdatedBy: true,
@@ -82,16 +96,18 @@ export type DistributionData = Awaited<ReturnType<typeof getDistributionData>>;
 
 const DistributionTableServer = async ({
     activeFinancialYearId,
+    generalStoreId,
     search,
     startDate,
     endDate,
 }: {
     activeFinancialYearId: number;
     search: string;
+    generalStoreId: number;
     startDate: string;
     endDate: string;
 }) => {
-    const response = await getDistributionData(activeFinancialYearId, {
+    const response = await getDistributionData(activeFinancialYearId, generalStoreId, {
         search,
         startDate,
         endDate,

@@ -2,7 +2,7 @@
 import prisma from '@/lib/prisma';
 
 export const getGeneralStoreDetails = async (id: number) => {
-    const response = await prisma.generalStore.findUnique({
+    const response = await prisma.storeItem.findUnique({
         where: {
             id,
             isDeleted: false,
@@ -30,7 +30,7 @@ export const getGeneralStoreDetails = async (id: number) => {
                 select: {
                     sources: true,
                     distributions: true,
-                    generalStoreNotes: true,
+                    storeItemNotes: true,
                 },
             },
         },
@@ -40,9 +40,9 @@ export const getGeneralStoreDetails = async (id: number) => {
 };
 
 export const getGeneralStoreNotes = async (id: number) => {
-    const response = await prisma.generalStoreNote.findMany({
+    const response = await prisma.storeItemNote.findMany({
         where: {
-            generalStoreId: id,
+            storeItemId: id,
         },
         select: {
             id: true,

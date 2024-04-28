@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 import ItemSourceTable from '../../../components/ItemSourceTable';
 
 export const getSourchListByid = async (id: number) => {
-    const response = await prisma.generalStoreSource.findMany({
+    const response = await prisma.storeItemSource.findMany({
         where: {
             generalStoreId: id,
         },

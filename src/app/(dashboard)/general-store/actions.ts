@@ -14,6 +14,31 @@ import {
     SourceCreateSchemaType,
 } from './schema';
 
+export const getGeneralStore = async () => {
+    try {
+        const userSession = await getServerSession(authOptions);
+        if (!userSession) {
+            throw new Error('user not found');
+        }
+        const generalStore = prisma.store.findFirst({
+            where: {
+                institution: {
+                    id: Number(userSession.user.institution.id),
+                },
+                isGeneralStore: true,
+            },
+        });
+
+        if (!generalStore) {
+            throw new Error('General store not found');
+        }
+
+        return generalStore;
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+};
+
 export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) => {
     try {
         const validateData = generalStoreCreateSchema.safeParse(data);
@@ -25,9 +50,18 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                 throw new Error('user not found');
             }
 
+            const store = await getGeneralStore();
+
+            if (!store) {
+                throw new Error('General store not found');
+            }
+
             const activeFinancialYear = await prisma.financialYear.findFirst({
                 where: {
                     isActive: true,
+                    institution: {
+                        id: Number(userSession.user.institution.id),
+                    },
                 },
             });
 
@@ -35,7 +69,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                 throw new Error('financial year not found');
             }
 
-            const generalStore = await prisma.generalStore.create({
+            const generalStore = await prisma.storeItem.create({
                 data: {
                     name: data.name,
                     alertWhenStockAmountIsLessThan: Number(data.alertWhenStockAmountIsLessThan),
@@ -82,13 +116,20 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                                     id: Number(userSession.user.institution.id),
                                 },
                             },
+
+                            Store: {
+                                connect: {
+                                    id: store.id,
+                                },
+                            },
                         },
                     },
-                    generalStoreHistory: {
+                    storeItemHistory: {
                         create: {
                             label: `${userSession.user.name} created a new item, initial quantity was ${data.quantity}`,
                             userId: Number(userSession.user.id),
                             institutionId: Number(userSession.user.institution.id),
+                            storeId: store.id,
                         },
                     },
                     financialYear: {
@@ -101,6 +142,11 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             id: Number(userSession.user.institution.id),
                         },
                     },
+                    Store: {
+                        connect: {
+                            id: store?.id,
+                        },
+                    },
                 },
                 include: {
                     lastUpdatedBy: true,
@@ -110,13 +156,14 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
 
             if (data.note || data.images) {
                 // Now create the generalStoreNotes entry
-                await prisma.generalStoreNote.create({
+                await prisma.storeItemNote.create({
                     data: {
                         note: data.note || '',
                         images: data.images, // Add this field only if your schema supports it
-                        generalStoreId: generalStore.id,
+                        storeItemId: generalStore.id,
                         userId: Number(userSession.user.id),
                         institutionId: Number(userSession.user.institution.id),
+                        storeId: store.id,
                     },
                 });
             }
@@ -144,6 +191,12 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                 throw new Error('User not found');
             }
 
+            const store = await getGeneralStore();
+
+            if (!store) {
+                throw new Error('General store not found');
+            }
+
             const activeFinancialYear = await prisma.financialYear.findFirst({
                 where: {
                     isActive: true,
@@ -154,7 +207,7 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                 throw new Error('Financial year not found');
             }
 
-            const generalStore = await prisma.generalStore.update({
+            const generalStore = await prisma.storeItem.update({
                 where: {
                     id: data.storeId,
                 },
@@ -198,13 +251,19 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                                     id: Number(userAccount.user.institution.id),
                                 },
                             },
+                            Store: {
+                                connect: {
+                                    id: store.id,
+                                },
+                            },
                         },
                     },
-                    generalStoreHistory: {
+                    storeItemHistory: {
                         create: {
                             label: `${userAccount.user.name} added ${data.quantity} ${data.unitName} of ${data.name}`,
                             userId: Number(userAccount.user.id),
                             institutionId: Number(userAccount.user.institution.id),
+                            storeId: store.id,
                         },
                     },
                     financialYear: {
@@ -221,13 +280,14 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
 
             if (data.note || data.images) {
                 // Now create the generalStoreNotes entry
-                await prisma.generalStoreNote.create({
+                await prisma.storeItemNote.create({
                     data: {
                         note: data.note || '',
                         images: data.images, // Add this field only if your schema supports it
-                        generalStoreId: generalStore.id,
+                        storeItemId: generalStore.id,
                         userId: Number(userAccount.user.id),
                         institutionId: Number(userAccount.user.institution.id),
+                        storeId: store.id,
                     },
                 });
             }
@@ -255,13 +315,19 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                 throw new Error('User not found');
             }
 
+            const store = await getGeneralStore();
+
+            if (!store) {
+                throw new Error('General store not found');
+            }
+
             const activeFinancialYear = await getActiveFinancialYear();
 
             if (!activeFinancialYear) {
                 throw new Error('Financial year not found');
             }
 
-            const generalStore = await prisma.generalStore.update({
+            const generalStore = await prisma.storeItem.update({
                 where: {
                     id: Number(id),
                 },
@@ -300,6 +366,11 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                                     id: Number(userAccount.user.institution.id),
                                 },
                             },
+                            Store: {
+                                connect: {
+                                    id: store.id,
+                                },
+                            },
                         },
                     },
                     financialYear: {
@@ -307,13 +378,14 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                             id: activeFinancialYear.id,
                         },
                     },
-                    generalStoreHistory: {
+                    storeItemHistory: {
                         create: {
                             label: `${userAccount.user.name} distributed ${data.quantity} ${data.unitName} of ${
                                 data.name
                             } to ${data.personName}, ${data.department} ${data.shopName && `(${data.shopName})`}`,
                             userId: Number(userAccount.user.id),
                             institutionId: Number(userAccount.user.institution.id),
+                            storeId: store.id,
                         },
                     },
                 },
@@ -344,26 +416,34 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
             throw new Error('User not found');
         }
 
-        const generalStoreNote = await prisma.generalStoreNote.create({
+        const store = await getGeneralStore();
+
+        if (!store) {
+            throw new Error('General store not found');
+        }
+
+        const generalStoreNote = await prisma.storeItemNote.create({
             data: {
                 note: data.note,
                 images: data.images,
-                generalStoreId: Number(id),
+                storeItemId: Number(id),
                 userId: Number(userAccount.user.id),
                 institutionId: Number(userAccount.user.institution.id),
+                storeId: store.id,
             },
         });
 
-        await prisma.generalStore.update({
+        await prisma.storeItem.update({
             where: {
                 id: Number(id),
             },
             data: {
-                generalStoreHistory: {
+                storeItemHistory: {
                     create: {
                         label: `${userAccount.user.name} added a note`,
                         userId: Number(userAccount.user.id),
                         institutionId: Number(userAccount.user.institution.id),
+                        storeId: store.id,
                     },
                 },
             },

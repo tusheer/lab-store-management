@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 import HistoryTable from './History.client';
 
 const getHistory = async () => {
-    const response = await prisma.generalStoreHistory.findMany({
+    const response = await prisma.storeItemHistory.findMany({
         select: {
             user: {
                 select: {
