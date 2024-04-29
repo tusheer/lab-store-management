@@ -20,6 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GeneralStoreItem } from './GeneralStore.server';
 import NoteAddModal from './NewNoteModal';
+import SeperateItemModal from './SeperateItemModal';
 
 type StockTableProps = {
     data: NonNullable<GeneralStoreItem>;
@@ -29,7 +30,8 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
     const router = useRouter();
     const [isNotMoalOpen, setIsNoteModalOpen] = useState(false);
     const [updatedId, setUpdatedId] = useState<string | null>(null);
-    const [selectedStoreId, setSelectedStoreId] = useState<number | undefined>(undefined);
+    const [selectedStore, setSelectedStore] = useState<NonNullable<GeneralStoreItem[0]> | undefined>(undefined);
+    const [separateItemModal, setSeparateItemModal] = useState(false);
 
     const recentUpdated = useSearchParams().get('recentUpdated');
 
@@ -187,8 +189,17 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() => {
+                                                            setSelectedStore(d);
+                                                            setSeparateItemModal(true);
+                                                        }}
+                                                        className="cursor-pointer"
+                                                    >
+                                                        Separate item
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
                                                             setIsNoteModalOpen(true);
-                                                            setSelectedStoreId(d.id);
+                                                            setSelectedStore(d);
                                                         }}
                                                         className="cursor-pointer"
                                                     >
@@ -202,12 +213,25 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                             </TableBody>
                         </Table>
                     </div>
+
                     <NoteAddModal
-                        key={selectedStoreId}
-                        selectedStoreId={selectedStoreId}
+                        key={selectedStore?.id}
+                        selectedStoreId={selectedStore?.id}
                         isOpen={isNotMoalOpen}
                         onClose={() => setIsNoteModalOpen(false)}
                     />
+
+                    {selectedStore?.id && (
+                        <SeperateItemModal
+                            key={selectedStore?.id}
+                            data={{
+                                itemId: selectedStore?.id,
+                                stock: selectedStore?.stockAmount,
+                            }}
+                            isOpen={separateItemModal}
+                            onClose={() => setSeparateItemModal(false)}
+                        />
+                    )}
                 </>
             ) : (
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">

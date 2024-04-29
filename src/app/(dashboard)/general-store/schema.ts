@@ -168,6 +168,40 @@ export const noteCreateSchema = z.object({
         .optional(),
 });
 
+export const separateItemSchema = z
+    .object({
+        stock: z.number(),
+        quantity: zodStrng('Quantity requred')
+            .refine((data) => data !== '', {
+                message: 'Quantity requred',
+            })
+            .refine((data) => data.toString() !== '0', {
+                message: 'The quantity should be greater than 0',
+            }),
+        note: z.string().optional(),
+        status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']).default('operational').optional(),
+        brandName: z.string().optional(),
+        indentNo: zodStrng('error'),
+        location: z.string(),
+        images: z
+            .array(
+                z.object({
+                    url: z.string(),
+                    key: z.string(),
+                })
+            )
+            .optional(),
+    })
+    .refine(
+        (data) => {
+            return data.stock >= Number(data.quantity);
+        },
+        {
+            message: 'Quantity must be less than or equal to stock',
+            path: ['quantity'],
+        }
+    );
+
 export type NoteCreateSchemaType = z.infer<typeof noteCreateSchema>;
 
 export type SourceCreateSchemaType = z.infer<typeof sourceCreateSchema>;
@@ -177,3 +211,5 @@ export type DistributionCreateSchemaType = z.infer<typeof distributionCreateForm
 export type FinancialYearCreateSchema = z.infer<typeof financialYearCreateSchema>;
 
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;
+
+export type SeparateItemSchemaType = z.infer<typeof separateItemSchema>;

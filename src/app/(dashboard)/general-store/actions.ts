@@ -10,6 +10,7 @@ import {
     generalStoreCreateSchema,
     GeneralStoreCreateSchema,
     NoteCreateSchemaType,
+    SeparateItemSchemaType,
     sourceCreateSchema,
     SourceCreateSchemaType,
 } from './schema';
@@ -454,6 +455,144 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
         }
 
         return generalStoreNote;
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+};
+
+export const separateStoreItem = async (data: SeparateItemSchemaType, id: number) => {
+    try {
+        const userAccount = await getServerSession(authOptions);
+        const storeItem = await prisma.storeItem.findFirst({
+            where: {
+                id,
+            },
+        });
+
+        if (!storeItem) {
+            throw new Error('Store item not found');
+        }
+
+        if (!userAccount) {
+            throw new Error('User not found');
+        }
+
+        const store = await getGeneralStore();
+
+        if (!store) {
+            throw new Error('General store not found');
+        }
+
+        const activeFinancialYear = await getActiveFinancialYear();
+
+        if (!activeFinancialYear) {
+            throw new Error('Financial year not found');
+        }
+
+        const generalStore = await prisma.storeItem.create({
+            data: {
+                name: storeItem.name,
+                alertWhenStockAmountIsLessThan: storeItem.alertWhenStockAmountIsLessThan,
+                status: storeItem.status,
+                unitName: storeItem.unitName,
+                type: storeItem.type,
+                lastUpdatedBy: {
+                    connect: {
+                        id: Number(userAccount.user.id),
+                    },
+                },
+                stockAmount: Number(data.quantity),
+                storageLocation: data.location,
+
+                financialYear: {
+                    connect: {
+                        id: activeFinancialYear.id,
+                    },
+                },
+                sources: {
+                    create: {
+                        name: storeItem.name,
+                        Store: {
+                            connect: {
+                                id: store.id,
+                            },
+                        },
+                        financialYear: {
+                            connect: {
+                                id: activeFinancialYear.id,
+                            },
+                        },
+                        institution: {
+                            connect: {
+                                id: Number(userAccount.user.institution.id),
+                            },
+                        },
+                        lastUpdatedBy: {
+                            connect: {
+                                id: Number(userAccount.user.id),
+                            },
+                        },
+                        note: data.note,
+                        images: data.images,
+                        sourceType: 'separation',
+                        brandName: data.brandName,
+                        indentNo: Number(data.indentNo),
+                        quantity: Number(data.quantity),
+                        unitName: storeItem.unitName,
+                        finalQuantity: Number(data.quantity),
+                    },
+                },
+                institution: {
+                    connect: {
+                        id: Number(userAccount.user.institution.id),
+                    },
+                },
+                Store: {
+                    connect: {
+                        id: store.id,
+                    },
+                },
+                storeItemHistory: {
+                    create: {
+                        label: `${userAccount.user.name} separated ${data.quantity} ${storeItem.unitName} of ${storeItem.name} to ${data.location}`,
+                        userId: Number(userAccount.user.id),
+                        institutionId: Number(userAccount.user.institution.id),
+                        storeId: store.id,
+                    },
+                },
+            },
+
+            include: {
+                lastUpdatedBy: true,
+            },
+        });
+
+        if (!generalStore) {
+            throw new Error('General store create error');
+        }
+
+        prisma.storeItem.update({
+            where: {
+                id,
+            },
+            data: {
+                stockAmount: storeItem.stockAmount - Number(data.quantity),
+                storeItemHistory: {
+                    create: {
+                        label: `${userAccount.user.name} separated ${data.quantity} ${storeItem.unitName} of ${storeItem.name} to ${data.location}`,
+                        userId: Number(userAccount.user.id),
+                        institutionId: Number(userAccount.user.institution.id),
+                        storeId: store.id,
+                    },
+                },
+            },
+        });
+
+        if (!generalStore) {
+            throw new Error('General store create error');
+        }
+
+        return generalStore;
     } catch (error) {
         throw new Error((error as Error).message);
     }

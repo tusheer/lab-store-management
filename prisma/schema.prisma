@@ -272,4 +272,5 @@ enum SourceType {
   donation
   others
   restock
+  separation
 }

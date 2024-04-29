@@ -7,3 +7,5 @@
 ## Add seperate item action to the general store item list
 
 ## user note able to seperate or distribute item as 0
+
+## Add history in specific item
