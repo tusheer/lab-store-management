@@ -36,6 +36,9 @@ export const updateProfile = async (data: UpdateUserSchema) => {
 
 export const getMyProfile = async () => {
     const session = await getServerSession(authOptions);
+    if (!session) {
+        return null;
+    }
     const response = await prisma.user.findUnique({
         select: {
             email: true,

@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { getGeneralStoreDetails } from './action';
 import GeneralStoreItemDetailsCard from './components/DetailsCard';
 import DistributionTableServer from './components/DistributionTable.server';
+import HistoryTableServer from './components/HistoryTable.server';
 import NoteCardServer from './components/NoteCard.server';
 import SourchListserver from './components/SourchList.server';
 import StoreDetailsTab from './components/Tab';
@@ -61,13 +62,18 @@ const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps)
                 </Suspense>
             )}
             {tab === 'source' && (
-                <Suspense fallback={<div>Loading</div>}>
+                <Suspense fallback={<LoaderSpinner />}>
                     <SourchListserver id={Number(params.id)} />
                 </Suspense>
             )}
             {tab === 'distribution' && (
-                <Suspense fallback={<div>Loading</div>}>
+                <Suspense fallback={<LoaderSpinner />}>
                     <DistributionTableServer id={Number(params.id)} />
+                </Suspense>
+            )}
+            {tab === 'history' && (
+                <Suspense fallback={<LoaderSpinner />}>
+                    <HistoryTableServer id={Number(params.id)} />
                 </Suspense>
             )}
         </Container>

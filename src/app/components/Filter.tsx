@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'; // assuming these are your components
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, debounce } from '@/lib/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useTransition } from 'react';
@@ -131,7 +131,7 @@ const Filter: React.FC<ShopFilterProps> = ({ path, inputs, className }) => {
                             {input.label && <Label htmlFor={input.queryKey}>{input.label}</Label>}
                             {input.type === 'text' && (
                                 <Input
-                                    className={cn(input.className, 'w-72')}
+                                    className={cn(input.className, 'w-64')}
                                     id={input.queryKey}
                                     placeholder={input.placeholder || `Search by ${input.queryKey}`}
                                     {...form.register(input.queryKey)}
@@ -150,7 +150,7 @@ const Filter: React.FC<ShopFilterProps> = ({ path, inputs, className }) => {
                                                             id="date"
                                                             variant={'outline'}
                                                             className={cn(
-                                                                'w-72 justify-start text-left font-normal',
+                                                                'w-64 justify-start text-left font-normal',
                                                                 !field.value[0] && 'text-muted-foreground'
                                                             )}
                                                         >
@@ -186,8 +186,6 @@ const Filter: React.FC<ShopFilterProps> = ({ path, inputs, className }) => {
                                                             }}
                                                             defaultMonth={new Date()}
                                                             onSelect={(date) => {
-                                                                console.log('startDate', date || '');
-
                                                                 field.onChange([date?.from, date?.to]);
                                                             }}
                                                             numberOfMonths={2}
@@ -199,7 +197,36 @@ const Filter: React.FC<ShopFilterProps> = ({ path, inputs, className }) => {
                                     )}
                                 />
                             )}
-                            {input.type === 'select' && <Select {...form.register(input.queryKey)}></Select>}
+                            {input.type === 'select' && (
+                                <FormField
+                                    control={form.control}
+                                    name={input.queryKey}
+                                    render={({ field }) => {
+                                        return (
+                                            <>
+                                                {input.label && <Label htmlFor={input.queryKey}>{input.label}</Label>}
+                                                <Select
+                                                    value={field.value as string}
+                                                    onValueChange={(value) => field.onChange(value)}
+                                                >
+                                                    <SelectTrigger className={cn('w-[180px]', input.className)}>
+                                                        <SelectValue placeholder={input.placeholder} />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            {input.options!.map((option) => (
+                                                                <SelectItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </>
+                                        );
+                                    }}
+                                ></FormField>
+                            )}
                         </div>
                     ))}
                 </div>

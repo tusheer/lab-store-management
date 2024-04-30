@@ -10,6 +10,7 @@ type HistoryTableProps = {
 };
 
 const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
+    // need to add tag here based on the history type
     if (data?.length === 0)
         return (
             <div className="mt-20">

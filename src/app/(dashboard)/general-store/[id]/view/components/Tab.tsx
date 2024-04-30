@@ -40,6 +40,10 @@ const StoreDetailsTab = () => {
                     <FileMinus size={15} className="mr-1.5" />
                     Distribution list
                 </TabsTrigger>
+                <TabsTrigger value="history">
+                    <FileMinus size={15} className="mr-1.5" />
+                    History
+                </TabsTrigger>
             </TabsList>
         </Tabs>
     );

@@ -56,7 +56,74 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                     {
                         queryKey: 'search',
                         type: 'text',
-                        placeholder: 'Search by name',
+                        placeholder: 'Search by name, location, user',
+                    },
+                    {
+                        queryKey: 'type',
+                        type: 'select',
+                        options: [
+                            {
+                                label: 'Machine',
+                                value: 'machine',
+                            },
+                            {
+                                label: 'Tools',
+                                value: 'tools',
+                            },
+                            {
+                                label: 'Material',
+                                value: 'material',
+                            },
+                            {
+                                label: 'Furniture',
+                                value: 'furniture',
+                            },
+                            {
+                                label: 'Electronics',
+                                value: 'electronics',
+                            },
+                            {
+                                label: 'Stationary',
+                                value: 'stationary',
+                            },
+                            {
+                                label: 'Rawmaterial',
+                                value: 'rawmaterial',
+                            },
+                            {
+                                label: 'Vehicle',
+                                value: 'vehicle',
+                            },
+
+                            {
+                                label: 'Other',
+                                value: 'other',
+                            },
+                        ],
+                        placeholder: 'Select type',
+                    },
+                    {
+                        queryKey: 'status',
+                        type: 'select',
+                        options: [
+                            {
+                                label: 'Operational',
+                                value: 'operational',
+                            },
+                            {
+                                label: 'Faulty',
+                                value: 'faulty',
+                            },
+                            {
+                                label: 'Under repair',
+                                value: 'underRepair',
+                            },
+                            {
+                                label: 'Disposed',
+                                value: 'disposed',
+                            },
+                        ],
+                        placeholder: 'Select status',
                     },
                     {
                         queryKey: 'date',

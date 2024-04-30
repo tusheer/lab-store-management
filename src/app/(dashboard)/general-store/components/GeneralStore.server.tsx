@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import prisma from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { ItemType, MachineStatus, Prisma } from '@prisma/client';
 import { endOfDay, formatISO, startOfDay } from 'date-fns';
 import { getServerSession } from 'next-auth';
 import GeneralStoreTable from './GeneralStoreTable';
@@ -9,6 +9,8 @@ interface SearchParams {
     search?: string;
     startDate?: string;
     endDate?: string;
+    type?: string;
+    status?: string;
 }
 
 const getGeneralStoreItems = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
@@ -71,6 +73,14 @@ const getGeneralStoreItems = async (id: number, generalStoreId: number, searchPa
         };
     }
 
+    if (searchParams?.status) {
+        whereConditions.status = searchParams.status as MachineStatus;
+    }
+
+    if (searchParams?.type) {
+        whereConditions.type = searchParams.type as ItemType;
+    }
+
     const response = await prisma.storeItem.findMany({
         where: whereConditions,
         select: {
@@ -100,17 +110,23 @@ const GeneralStoreServer = async ({
     search,
     startDate,
     endDate,
+    status,
+    type,
 }: {
     activeFinancialYearId: number;
     generalStoreId: number;
     search: string;
     startDate: string;
     endDate: string;
+    type: string;
+    status: string;
 }) => {
     const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, {
         endDate,
         search,
         startDate,
+        status,
+        type,
     });
 
     return <GeneralStoreTable data={response} />;
