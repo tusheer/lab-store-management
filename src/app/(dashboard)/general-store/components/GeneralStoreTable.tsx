@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react';
 import { GeneralStoreItem } from './GeneralStore.server';
 import NoteAddModal from './NewNoteModal';
 import SeperateItemModal from './SeperateItemModal';
+import UpdateItemStatusModal from './UpdateItemStatusModal';
 
 type StockTableProps = {
     data: NonNullable<GeneralStoreItem>;
@@ -32,6 +33,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
     const [updatedId, setUpdatedId] = useState<string | null>(null);
     const [selectedStore, setSelectedStore] = useState<NonNullable<GeneralStoreItem[0]> | undefined>(undefined);
     const [separateItemModal, setSeparateItemModal] = useState(false);
+    const [isUpdateStatusModalOpen, setIsUpdateStatusModalOpen] = useState(false);
 
     const recentUpdated = useSearchParams().get('recentUpdated');
 
@@ -97,7 +99,6 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                         <TableCell>{d.id}</TableCell>
                                         <TableCell className="max-w-36 truncate text-nowrap">{d.name}</TableCell>
                                         <TableCell className="text-nowrap">
-                                            {' '}
                                             {d.stockAmount + ' ' + d.unitName}
                                         </TableCell>
                                         <TableCell className="text-nowrap">
@@ -198,6 +199,15 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() => {
+                                                            setSelectedStore(d);
+                                                            setIsUpdateStatusModalOpen(true);
+                                                        }}
+                                                        className="cursor-pointer"
+                                                    >
+                                                        Update status
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
                                                             setIsNoteModalOpen(true);
                                                             setSelectedStore(d);
                                                         }}
@@ -230,6 +240,19 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                             }}
                             isOpen={separateItemModal}
                             onClose={() => setSeparateItemModal(false)}
+                        />
+                    )}
+
+                    {selectedStore?.id && (
+                        <UpdateItemStatusModal
+                            key={selectedStore?.id}
+                            data={{
+                                itemId: selectedStore?.id,
+                                name: selectedStore?.name,
+                                status: selectedStore?.status,
+                            }}
+                            isOpen={isUpdateStatusModalOpen}
+                            onClose={() => setIsUpdateStatusModalOpen(false)}
                         />
                     )}
                 </>

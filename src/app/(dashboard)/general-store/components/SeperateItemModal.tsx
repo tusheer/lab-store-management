@@ -68,8 +68,8 @@ const SeperateItemModal: React.FC<SeparateItemModalProps> = ({ isOpen, onClose, 
                     status: formData.status,
                     stock: formData.stock,
                     images: noteImages.map((file) => ({ url: file.url, key: file.key })),
-                    indentNo: '',
-                    brandName: '',
+                    indentNo: formData.indentNo,
+                    brandName: formData.brandName,
                 },
                 data.itemId
             );
@@ -84,83 +84,78 @@ const SeperateItemModal: React.FC<SeparateItemModalProps> = ({ isOpen, onClose, 
         }
     };
     return (
-        <div>
-            <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>
-                            <h4 className="text-lg font-semibold">Separate Item</h4>
-                        </DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="quantity"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormLabel>Quantity</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="Type your quantity here."
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        <h4 className="text-lg font-semibold">Separate Item</h4>
+                    </DialogTitle>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <div>
+                            <FormField
+                                control={form.control}
+                                name="quantity"
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Quantity</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" placeholder="Type your quantity here." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="location"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormLabel>Location</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Type your location here." {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="brandName"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormLabel>Brand Name</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Type your brand name here." {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+                        <div className="mt-2.5">
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Location</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Type your location here." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="mt-2.5">
+                            <FormField
+                                control={form.control}
+                                name="brandName"
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Brand Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Type your brand name here." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="indentNo"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormLabel>Indent No</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Type your indent no here." {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-
+                        <div className="mt-2.5">
+                            <FormField
+                                control={form.control}
+                                name="indentNo"
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Indent No</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Type your indent no here." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="mt-2.5">
                             <FormField
                                 control={form.control}
                                 name="status"
@@ -187,62 +182,60 @@ const SeperateItemModal: React.FC<SeparateItemModalProps> = ({ isOpen, onClose, 
                                     </FormItem>
                                 )}
                             />
+                        </div>
 
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="note"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormLabel>Note</FormLabel>
-                                            <FormControl>
-                                                <Textarea placeholder="Type your note here." {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+                        <div className="mt-2.5">
+                            <FormField
+                                control={form.control}
+                                name="note"
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Note</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder="Type your note here." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
-                            <div className="mt-2.5">
-                                <FormLabel className="mb-3 block">Images</FormLabel>
-                                <Input
-                                    type="file"
-                                    onChange={noteOnChanage}
-                                    multiple={true}
-                                    accept="image/*"
-                                    placeholder="Type your note here."
-                                />
-                            </div>
-                            <div className="mt-2.5 flex flex-wrap gap-3">
-                                {noteFiles.map((file, index) => (
-                                    <div className="relative aspect-square  h-20 w-20  rounded border" key={file.uid}>
-                                        <button
-                                            onClick={() => noteOnRemove(index)}
-                                            className="absolute -right-2 -top-2 rounded-full border bg-gray-50 p-0.5"
-                                        >
-                                            <X className="h-4 w-4 text-gray-800" />
-                                        </button>
-                                        <img className="object-cover" src={file.url} alt="" />
-                                    </div>
-                                ))}
-                            </div>
-                            <DialogFooter className="mt-5">
-                                <Button variant="outline" type="button" onClick={() => onClose()}>
-                                    Cancel
-                                </Button>
-                                <Button type="submit">
-                                    {form.formState.isSubmitting ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : null}
-                                    Save
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
-        </div>
+                        <div className="mt-2.5">
+                            <FormLabel className="mb-3 block">Images</FormLabel>
+                            <Input
+                                type="file"
+                                onChange={noteOnChanage}
+                                multiple={true}
+                                accept="image/*"
+                                placeholder="Type your note here."
+                            />
+                        </div>
+                        <div className="mt-2.5 flex flex-wrap gap-3">
+                            {noteFiles.map((file, index) => (
+                                <div className="relative aspect-square  h-20 w-20  rounded border" key={file.uid}>
+                                    <button
+                                        onClick={() => noteOnRemove(index)}
+                                        className="absolute -right-2 -top-2 rounded-full border bg-gray-50 p-0.5"
+                                    >
+                                        <X className="h-4 w-4 text-gray-800" />
+                                    </button>
+                                    <img className="object-cover" src={file.url} alt="" />
+                                </div>
+                            ))}
+                        </div>
+                        <DialogFooter className="mt-5">
+                            <Button variant="outline" type="button" onClick={() => onClose()}>
+                                Cancel
+                            </Button>
+                            <Button type="submit">
+                                {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                Save
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
     );
 };
 

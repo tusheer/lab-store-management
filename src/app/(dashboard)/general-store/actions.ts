@@ -13,6 +13,7 @@ import {
     SeparateItemSchemaType,
     sourceCreateSchema,
     SourceCreateSchemaType,
+    UpdateStoreItemStatusSchemaType,
 } from './schema';
 
 export const getGeneralStore = async () => {
@@ -552,14 +553,6 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
                         id: store.id,
                     },
                 },
-                storeItemHistory: {
-                    create: {
-                        label: `${userAccount.user.name} separated ${data.quantity} ${storeItem.unitName} of ${storeItem.name} to ${data.location}`,
-                        userId: Number(userAccount.user.id),
-                        institutionId: Number(userAccount.user.institution.id),
-                        storeId: store.id,
-                    },
-                },
             },
 
             include: {
@@ -571,7 +564,7 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
             throw new Error('General store create error');
         }
 
-        prisma.storeItem.update({
+        await prisma.storeItem.update({
             where: {
                 id,
             },
@@ -585,6 +578,11 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
                         storeId: store.id,
                     },
                 },
+                lastUpdatedBy: {
+                    connect: {
+                        id: Number(userAccount.user.id),
+                    },
+                },
             },
         });
 
@@ -593,6 +591,50 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
         }
 
         return generalStore;
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+};
+
+export const updateStoreItemStatus = async (id: number, data: UpdateStoreItemStatusSchemaType) => {
+    try {
+        const userAccount = await getServerSession(authOptions);
+
+        if (!userAccount) {
+            throw new Error('User not found');
+        }
+
+        const store = await getGeneralStore();
+
+        if (!store) {
+            throw new Error('General store not found');
+        }
+
+        const storeItem = await prisma.storeItem.update({
+            where: {
+                id: id,
+                lastUpdatedBy: {
+                    id: Number(userAccount.user.id),
+                },
+            },
+            data: {
+                status: data.status,
+                storeItemHistory: {
+                    create: {
+                        label: `${userAccount.user.name} updated the status of ${data.name} to ${data.status}`,
+                        userId: Number(userAccount.user.id),
+                        institutionId: Number(userAccount.user.institution.id),
+                        storeId: store.id,
+                    },
+                },
+            },
+        });
+
+        if (!storeItem) {
+            throw new Error('Store item not found');
+        }
+
+        return storeItem;
     } catch (error) {
         throw new Error((error as Error).message);
     }

@@ -202,6 +202,11 @@ export const separateItemSchema = z
         }
     );
 
+export const updateStoreItemStatusSchema = z.object({
+    status: z.enum(['operational', 'faulty', 'underRepair', 'disposed']),
+    name: z.string(),
+});
+
 export type NoteCreateSchemaType = z.infer<typeof noteCreateSchema>;
 
 export type SourceCreateSchemaType = z.infer<typeof sourceCreateSchema>;
@@ -213,3 +218,5 @@ export type FinancialYearCreateSchema = z.infer<typeof financialYearCreateSchema
 export type GeneralStoreCreateSchema = z.infer<typeof generalStoreCreateSchema>;
 
 export type SeparateItemSchemaType = z.infer<typeof separateItemSchema>;
+
+export type UpdateStoreItemStatusSchemaType = z.infer<typeof updateStoreItemStatusSchema>;
