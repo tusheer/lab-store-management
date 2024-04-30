@@ -16,7 +16,15 @@ import PurchaseServerTable from './components/PurchaseTable.server';
 const GeneralStores = async ({
     searchParams,
 }: {
-    searchParams: { tab: string; search: string; startDate: string; endDate: string; type: string; status: string };
+    searchParams: {
+        tab: string;
+        search: string;
+        startDate: string;
+        endDate: string;
+        type: string;
+        status: string;
+        page: string;
+    };
 }) => {
     const [activeFinancialyear, generalStore] = await Promise.all([getActiveFinancialYear(), getGeneralStore()]);
     const tab = searchParams.tab || 'stock';
@@ -78,6 +86,7 @@ const GeneralStores = async ({
                         endDate={searchParams.endDate}
                         status={searchParams.status}
                         type={searchParams.type}
+                        page={searchParams.page}
                     />
                 </Suspense>
             )}

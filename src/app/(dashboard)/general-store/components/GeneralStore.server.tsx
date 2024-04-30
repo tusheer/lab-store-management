@@ -11,6 +11,7 @@ interface SearchParams {
     endDate?: string;
     type?: string;
     status?: string;
+    page?: string;
 }
 
 const getGeneralStoreItems = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
@@ -81,27 +82,45 @@ const getGeneralStoreItems = async (id: number, generalStoreId: number, searchPa
         whereConditions.type = searchParams.type as ItemType;
     }
 
-    const response = await prisma.storeItem.findMany({
-        where: whereConditions,
-        select: {
-            lastUpdatedBy: true,
-            name: true,
-            id: true,
-            stockAmount: true,
-            unitName: true,
-            createdAt: true,
-            updatedAt: true,
-            type: true,
-            status: true,
-            alertWhenStockAmountIsLessThan: true,
-        },
-        orderBy: {
-            updatedAt: 'desc',
-        },
-    });
+    // Add pagination if page number is provided
+    const pageNumber = Number(searchParams?.page || 1);
+    const pageSize = 10;
+    const skip = (pageNumber - 1) * pageSize;
 
-    return response;
+    const [items, totalItems] = await Promise.all([
+        prisma.storeItem.findMany({
+            where: whereConditions,
+            select: {
+                lastUpdatedBy: true,
+                name: true,
+                id: true,
+                stockAmount: true,
+                unitName: true,
+                createdAt: true,
+                updatedAt: true,
+                type: true,
+                status: true,
+                alertWhenStockAmountIsLessThan: true,
+            },
+            orderBy: {
+                updatedAt: 'desc',
+            },
+            skip,
+            take: pageSize,
+        }),
+        prisma.storeItem.count({ where: whereConditions }),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    return {
+        items,
+        total: totalItems,
+        totalPages,
+        currentPage: pageNumber,
+    };
 };
+
 export type GeneralStoreItem = Awaited<ReturnType<typeof getGeneralStoreItems>>;
 
 const GeneralStoreServer = async ({
@@ -112,6 +131,7 @@ const GeneralStoreServer = async ({
     endDate,
     status,
     type,
+    page,
 }: {
     activeFinancialYearId: number;
     generalStoreId: number;
@@ -120,6 +140,7 @@ const GeneralStoreServer = async ({
     endDate: string;
     type: string;
     status: string;
+    page?: string;
 }) => {
     const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, {
         endDate,
@@ -127,6 +148,7 @@ const GeneralStoreServer = async ({
         startDate,
         status,
         type,
+        page,
     });
 
     return <GeneralStoreTable data={response} />;

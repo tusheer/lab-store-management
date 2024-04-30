@@ -1,6 +1,7 @@
 'use client';
 
 import Filter from '@/app/components/Filter';
+import Paginator from '@/app/components/Paginator';
 import ProfileHoverCard from '@/app/components/ProfileHoverCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,7 @@ import { cn, getUserAvatar } from '@/lib/utils';
 import { Box, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { GeneralStoreItem } from './GeneralStore.server';
 import NoteAddModal from './NewNoteModal';
 import SeperateItemModal from './SeperateItemModal';
@@ -28,10 +29,13 @@ type StockTableProps = {
 };
 
 const StockTable: React.FC<StockTableProps> = ({ data }) => {
+    const searchParams = useSearchParams();
     const router = useRouter();
     const [isNotMoalOpen, setIsNoteModalOpen] = useState(false);
     const [updatedId, setUpdatedId] = useState<string | null>(null);
-    const [selectedStore, setSelectedStore] = useState<NonNullable<GeneralStoreItem[0]> | undefined>(undefined);
+    const [selectedStore, setSelectedStore] = useState<NonNullable<GeneralStoreItem['items'][0]> | undefined>(
+        undefined
+    );
     const [separateItemModal, setSeparateItemModal] = useState(false);
     const [isUpdateStatusModalOpen, setIsUpdateStatusModalOpen] = useState(false);
 
@@ -134,7 +138,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                 ]}
                 path="/general-store"
             />
-            {data?.length > 0 ? (
+            {data?.items.length > 0 ? (
                 <>
                     <div className="overflow-x-auto rounded-md border">
                         <Table className="min-w-[800px] ">
@@ -152,7 +156,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data?.map((d) => (
+                                {data?.items.map((d) => (
                                     <TableRow
                                         key={d.id}
                                         className={cn(
@@ -335,6 +339,22 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                         <Button className="px-5 py-5">Add new item</Button>
                     </Link>
                 </div>
+            )}
+            {data.totalPages > 1 && (
+                <Paginator
+                    className="mt-5"
+                    currentPage={data.currentPage}
+                    onPageChange={(e) => {
+                        const params = new URLSearchParams(searchParams.toString());
+                        params.set('page', e.toString());
+                        startTransition(() => {
+                            router.push(`/general-store?${params.toString()}`);
+                        });
+                    }}
+                    showPreviousNext={true}
+                    totalPages={data.totalPages}
+                    key={data?.items.length}
+                />
             )}
         </div>
     );
