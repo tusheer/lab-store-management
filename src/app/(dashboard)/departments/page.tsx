@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import prisma from '@/lib/prisma';
 import { MoreHorizontal } from 'lucide-react';
 
-export const getAllDepartments = async () => {
+const getAllDepartments = async () => {
     const subdomain = await getServerSubdomain();
     const response = await prisma.department.findMany({
         select: {
