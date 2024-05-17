@@ -80,13 +80,8 @@ const GeneralStores = async ({
                 <Suspense fallback={<LoaderSpinner />}>
                     <GeneralStoreServer
                         generalStoreId={generalStore?.id}
-                        search={searchParams.search}
+                        searchParams={searchParams}
                         activeFinancialYearId={activeFinancialyear.id}
-                        startDate={searchParams.startDate}
-                        endDate={searchParams.endDate}
-                        status={searchParams.status}
-                        type={searchParams.type}
-                        page={searchParams.page}
                     />
                 </Suspense>
             )}
@@ -114,7 +109,11 @@ const GeneralStores = async ({
             )}
             {tab === 'history' && (
                 <Suspense fallback={<LoaderSpinner />}>
-                    <HistoryServer />
+                    <HistoryServer
+                        generalStoreId={generalStore?.id}
+                        searchParams={searchParams}
+                        financialYearId={activeFinancialyear.id}
+                    />
                 </Suspense>
             )}
         </Container>

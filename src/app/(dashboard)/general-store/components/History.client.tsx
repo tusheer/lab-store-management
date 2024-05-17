@@ -1,8 +1,14 @@
+'use client';
+
+import Filter from '@/app/components/Filter';
+import Paginator from '@/app/components/Paginator';
 import ProfileHoverCard from '@/app/components/ProfileHoverCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getUserAvatar } from '@/lib/utils';
 import { Box } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
 import { HistoryData } from './History.server';
 
 type HistoryTableProps = {
@@ -10,8 +16,10 @@ type HistoryTableProps = {
 };
 
 const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
+    const searchParams = useSearchParams();
+    const router = useRouter();
     // need to add tag here based on the history type
-    if (data?.length === 0)
+    if (data?.items.length === 0)
         return (
             <div className="mt-20">
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">
@@ -22,7 +30,24 @@ const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
         );
 
     return (
-        <div className="mt-10">
+        <div className="mt-6">
+            <Filter
+                className="mb-6"
+                inputs={[
+                    {
+                        queryKey: 'search',
+                        type: 'text',
+                        placeholder: 'Search by name',
+                    },
+                    {
+                        queryKey: 'date',
+                        type: 'date',
+                        placeholder: 'Pick date range',
+                        dateKey: ['startDate', 'endDate'],
+                    },
+                ]}
+                path="/general-store"
+            />
             <div className="overflow-x-auto rounded-md border ">
                 <Table className="min-w-[1200px] ">
                     <TableHeader>
@@ -33,7 +58,7 @@ const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data?.map((d) => (
+                        {data?.items.map((d) => (
                             <TableRow key={d.id} className="cursor-pointer">
                                 <TableCell className="max-w-xs text-wrap">{d.label}</TableCell>
                                 <TableCell>
@@ -64,6 +89,22 @@ const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
                     </TableBody>
                 </Table>
             </div>
+            {data.totalPages > 1 && (
+                <Paginator
+                    className="mt-5"
+                    currentPage={data.currentPage}
+                    onPageChange={(e) => {
+                        const params = new URLSearchParams(searchParams.toString());
+                        params.set('page', e.toString());
+                        startTransition(() => {
+                            router.push(`/general-store?${params.toString()}`);
+                        });
+                    }}
+                    showPreviousNext={true}
+                    totalPages={data.totalPages}
+                    key={data?.items.length}
+                />
+            )}
         </div>
     );
 };

@@ -22,7 +22,7 @@ export const getGeneralStore = async () => {
         if (!userSession) {
             throw new Error('user not found');
         }
-        const generalStore = prisma.store.findFirst({
+        const generalStore = await prisma.store.findFirst({
             where: {
                 institution: {
                     id: Number(userSession.user.institution.id),
@@ -30,10 +30,6 @@ export const getGeneralStore = async () => {
                 isGeneralStore: true,
             },
         });
-
-        if (!generalStore) {
-            throw new Error('General store not found');
-        }
 
         return generalStore;
     } catch (error) {
@@ -132,6 +128,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                             userId: Number(userSession.user.id),
                             institutionId: Number(userSession.user.institution.id),
                             storeId: store.id,
+                            financialYearId: activeFinancialYear.id,
                         },
                     },
                     financialYear: {
@@ -266,6 +263,7 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                             userId: Number(userAccount.user.id),
                             institutionId: Number(userAccount.user.institution.id),
                             storeId: store.id,
+                            financialYearId: activeFinancialYear.id,
                         },
                     },
                     financialYear: {
@@ -388,6 +386,7 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                             userId: Number(userAccount.user.id),
                             institutionId: Number(userAccount.user.institution.id),
                             storeId: store.id,
+                            financialYearId: activeFinancialYear.id,
                         },
                     },
                 },
@@ -413,6 +412,12 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
 export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: number) => {
     try {
         const userAccount = await getServerSession(authOptions);
+
+        const activeFinancialYear = await getActiveFinancialYear();
+
+        if (!activeFinancialYear) {
+            throw new Error('Financial year not found');
+        }
 
         if (!userAccount) {
             throw new Error('User not found');
@@ -446,6 +451,7 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
                         userId: Number(userAccount.user.id),
                         institutionId: Number(userAccount.user.institution.id),
                         storeId: store.id,
+                        financialYearId: activeFinancialYear.id,
                     },
                 },
             },
@@ -576,6 +582,7 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
                         userId: Number(userAccount.user.id),
                         institutionId: Number(userAccount.user.institution.id),
                         storeId: store.id,
+                        financialYearId: activeFinancialYear.id,
                     },
                 },
                 lastUpdatedBy: {
@@ -610,6 +617,12 @@ export const updateStoreItemStatus = async (id: number, data: UpdateStoreItemSta
             throw new Error('General store not found');
         }
 
+        const activeFinancialYear = await getActiveFinancialYear();
+
+        if (!activeFinancialYear) {
+            throw new Error('Financial year not found');
+        }
+
         const storeItem = await prisma.storeItem.update({
             where: {
                 id: id,
@@ -625,6 +638,7 @@ export const updateStoreItemStatus = async (id: number, data: UpdateStoreItemSta
                         userId: Number(userAccount.user.id),
                         institutionId: Number(userAccount.user.institution.id),
                         storeId: store.id,
+                        financialYearId: activeFinancialYear.id,
                     },
                 },
             },

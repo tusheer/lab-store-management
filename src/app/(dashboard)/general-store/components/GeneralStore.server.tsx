@@ -14,7 +14,7 @@ interface SearchParams {
     page?: string;
 }
 
-const getGeneralStoreItems = async (id: number, generalStoreId: number, searchParams?: SearchParams) => {
+const getGeneralStoreItems = async (financialYearId: number, generalStoreId: number, searchParams?: SearchParams) => {
     const userSession = await getServerSession(authOptions);
 
     if (!userSession) {
@@ -23,7 +23,7 @@ const getGeneralStoreItems = async (id: number, generalStoreId: number, searchPa
 
     // Define the base where condition with TypeScript support
     let whereConditions: Prisma.StoreItemWhereInput = {
-        financialYearId: id,
+        financialYearId,
         institution: {
             id: Number(userSession.user.institution.id),
         },
@@ -126,30 +126,13 @@ export type GeneralStoreItem = Awaited<ReturnType<typeof getGeneralStoreItems>>;
 const GeneralStoreServer = async ({
     generalStoreId,
     activeFinancialYearId,
-    search,
-    startDate,
-    endDate,
-    status,
-    type,
-    page,
+    searchParams,
 }: {
     activeFinancialYearId: number;
     generalStoreId: number;
-    search: string;
-    startDate: string;
-    endDate: string;
-    type: string;
-    status: string;
-    page?: string;
+    searchParams?: SearchParams;
 }) => {
-    const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, {
-        endDate,
-        search,
-        startDate,
-        status,
-        type,
-        page,
-    });
+    const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, searchParams);
 
     return <GeneralStoreTable data={response} />;
 };

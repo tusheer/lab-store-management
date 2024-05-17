@@ -84,6 +84,7 @@ model FinancialYear {
   StoreDistribution StoreItemDistribution[]
   institution       Institution             @relation(fields: [institutionId], references: [id])
   institutionId     Int
+  StoreItemHistory  StoreItemHistory[]
 }
 
 model Store {
@@ -219,20 +220,22 @@ model StoreItemNote {
 }
 
 model StoreItemHistory {
-  id            Int         @id @default(autoincrement())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  isActive      Boolean     @default(true)
-  label         String
-  storeIten     StoreItem   @relation(fields: [storeItemId], references: [id])
-  storeItemId   Int
-  images        Json[]
-  user          User        @relation(fields: [userId], references: [id])
-  userId        Int
-  institution   Institution @relation(fields: [institutionId], references: [id])
-  institutionId Int
-  Store         Store?      @relation(fields: [storeId], references: [id])
-  storeId       Int?
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  isActive        Boolean       @default(true)
+  label           String
+  storeItem       StoreItem     @relation(fields: [storeItemId], references: [id])
+  storeItemId     Int
+  images          Json[]
+  user            User          @relation(fields: [userId], references: [id])
+  userId          Int
+  institution     Institution   @relation(fields: [institutionId], references: [id])
+  institutionId   Int
+  Store           Store?        @relation(fields: [storeId], references: [id])
+  storeId         Int?
+  financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
+  financialYearId Int
 }
 
 model Department {
