@@ -1,7 +1,11 @@
 'use server';
+import { checkPermission, RoleActions, roleBasedRedirect } from '@/lib/permissions';
 import prisma from '@/lib/prisma';
 import { getSubdomain } from '@/lib/utils';
+import { getServerSession } from 'next-auth';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { authOptions } from './api/auth/[...nextauth]/authOption';
 
 const institutionMap = new Map();
 
@@ -59,4 +63,13 @@ export const getInstitution = async () => {
     institutionMap.set(subdomain, institution);
 
     return institution;
+};
+
+export const redirectIfNotAllow = async (action: RoleActions) => {
+    const user = await getServerSession(authOptions);
+    const permission = await checkPermission(user?.user.role, action);
+    if (!permission) {
+        const redirectUrl = roleBasedRedirect(user?.user.role);
+        return redirect(redirectUrl);
+    }
 };

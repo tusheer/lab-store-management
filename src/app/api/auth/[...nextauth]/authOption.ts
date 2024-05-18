@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
                         password: true,
                         id: true,
                         avatar: true,
+                        role: true,
                     },
                 });
 
@@ -60,6 +61,7 @@ export const authOptions: NextAuthOptions = {
                     name: user.name,
                     avatar: avatar?.url || null,
                     institution: { subdomain, id: institution?.id.toString() || '' },
+                    role: user.role,
                 };
             },
         }),

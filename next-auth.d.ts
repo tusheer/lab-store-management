@@ -12,6 +12,7 @@ declare module 'next-auth' {
                 subdomain: string;
                 id: string;
             };
+            role: string;
         } & DefaultSession['user'];
     }
 

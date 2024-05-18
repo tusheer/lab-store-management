@@ -36,12 +36,11 @@ model User {
   StoreHistory                 StoreItemHistory[]
   institution                  Institution             @relation(fields: [institutionId], references: [id])
   institutionId                Int
-  permissions                  Json?
   assigedDepartments           Department[]
   Store                        Store?                  @relation(fields: [storeId], references: [id])
   storeId                      Int?
-  isSuperAdmin                 Boolean                 @default(false)
   lastStoreUpdates             Store[]                 @relation("LastUpdatedBy")
+  role                         Role                    @default(SUPER_ADMIN)
 }
 
 model Institution {
@@ -276,4 +275,12 @@ enum SourceType {
   others
   restock
   separation
+}
+
+enum Role {
+  SUPER_ADMIN
+  GENERAL_STORE_MANAGER
+  DEPARTMENT_MANAGER
+  SUB_STORE_MANAGER
+  DEPARTMENT_AND_STORE_MANAGER
 }

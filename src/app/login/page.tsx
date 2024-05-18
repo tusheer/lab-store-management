@@ -1,3 +1,4 @@
+import { roleBasedRedirect } from '@/lib/permissions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '../api/auth/[...nextauth]/authOption';
@@ -7,13 +8,15 @@ const Liginpage = async () => {
     const userSession = await getServerSession(authOptions);
 
     if (userSession?.user) {
-        return redirect('/general-store');
+        const redirectUrl = roleBasedRedirect(userSession.user.role);
+        console.log('redirectUrl', redirectUrl);
+        return redirect(redirectUrl);
     }
 
     return (
         <>
             <div className="relative flex h-svh  items-center justify-center lg:px-0">
-                <div className="relative hidden h-full w-[400px] flex-shrink-0 flex-col bg-muted p-6 text-white lg:flex dark:border-r">
+                <div className="relative hidden h-full w-[400px] flex-shrink-0 flex-col bg-muted p-6 text-white dark:border-r lg:flex">
                     <div className="absolute inset-0 bg-primary" />
                     <div className="relative z-20 flex h-full flex-col items-center justify-center gap-4 text-lg font-medium">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
