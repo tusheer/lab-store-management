@@ -1,4 +1,5 @@
 import { getServerSubdomain } from '@/app/action';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
 import Container from '@/components/ui/Container';
 import PageHeading from '@/components/ui/PageHeading';
 import { Button } from '@/components/ui/button';
@@ -12,8 +13,15 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
 import { MoreHorizontal } from 'lucide-react';
+import { getServerSession } from 'next-auth';
 
 const getAllDepartments = async () => {
+    const userSession = await getServerSession(authOptions);
+
+    if (!userSession) {
+        return [];
+    }
+
     const subdomain = await getServerSubdomain();
     const response = await prisma.department.findMany({
         select: {
@@ -28,6 +36,11 @@ const getAllDepartments = async () => {
         where: {
             institution: {
                 subdomain,
+            },
+            permissions: {
+                some: {
+                    id: Number(userSession.user.id),
+                },
             },
         },
     });

@@ -31,14 +31,13 @@ model User {
   registerID                   String?                 @unique
   lastStoreSourceUpdates       StoreItemSource[]       @relation("LastUpdatedBy")
   lastStoreDistributionUpdates StoreItemDistribution[] @relation("LastUpdatedBy")
-  lastStoreItemlUpdates        StoreItem[]             @relation("LastUpdatedBy")
+  lastStoreItemUpdates         StoreItem[]             @relation("LastUpdatedBy")
   StoreNote                    StoreItemNote[]
   StoreHistory                 StoreItemHistory[]
   institution                  Institution             @relation(fields: [institutionId], references: [id])
   institutionId                Int
-  assigedDepartments           Department[]
-  Store                        Store?                  @relation(fields: [storeId], references: [id])
-  storeId                      Int?
+  assignedDepartments          Department[]            @relation("DepartmentPermissions")
+  assignedStores               Store[]                 @relation("StorePermissions")
   lastStoreUpdates             Store[]                 @relation("LastUpdatedBy")
   role                         Role                    @default(SUPER_ADMIN)
 }
@@ -103,7 +102,7 @@ model Store {
   department        Department?             @relation(fields: [departmentId], references: [id])
   departmentId      Int?
   isGeneralStore    Boolean                 @default(false)
-  permissions       User[]
+  permissions       User[]                  @relation("StorePermissions")
   lastUpdatedById   Int?
   lastUpdatedBy     User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
 }
@@ -246,9 +245,9 @@ model Department {
   name          String
   institution   Institution @relation(fields: [institutionId], references: [id])
   institutionId Int
-  User          User?       @relation(fields: [userId], references: [id])
   userId        Int?
   Store         Store[]
+  permissions   User[]      @relation("DepartmentPermissions")
 }
 
 enum ItemType {
