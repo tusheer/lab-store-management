@@ -5,17 +5,24 @@ import { FileMinus, FilePlus, FileSpreadsheet, ScrollText } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { startTransition } from 'react';
 
-const StoreDetailsTab = () => {
+interface StoreDetailsTabProps {
+    isGeneralStore?: boolean;
+}
+
+const StoreDetailsTab: React.FC<StoreDetailsTabProps> = ({ isGeneralStore = false }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const params = useParams();
     const tab = searchParams.get('tab') || 'details';
+    const routerPath = isGeneralStore
+        ? `/general-store/${params.id}/view`
+        : `/shops/${params.id}/${params.itemId}/view`;
 
     return (
         <Tabs
             onValueChange={(e) => {
                 startTransition(() => {
-                    router.push(`/general-store/${params.id}/view?tab=${e}`);
+                    router.push(`${routerPath}?tab=${e}`);
                 });
             }}
             defaultValue="details"

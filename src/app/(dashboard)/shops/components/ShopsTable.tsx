@@ -1,4 +1,7 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+'use client';
+
+import ProfileHoverCard from '@/app/components/ProfileHoverCard';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -8,11 +11,12 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { getUserAvatar } from '@/lib/utils';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ShopsType } from '../page';
+import { Shop } from '../page';
 
-const ShopsTable = ({ data }: { data: ShopsType }) => {
+const ShopsTable: React.FC<{ shops: Shop[] }> = ({ shops }) => {
     const router = useRouter();
     return (
         <section className="mt-5 overflow-x-auto rounded-md border">
@@ -21,31 +25,37 @@ const ShopsTable = ({ data }: { data: ShopsType }) => {
                     <TableRow>
                         <TableHead>Shop name</TableHead>
                         <TableHead>Total instrument</TableHead>
-                        <TableHead>Department name</TableHead>
+                        <TableHead>Deparment</TableHead>
                         <TableHead>Last updated At</TableHead>
                         <TableHead>Last updated by</TableHead>
                         <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map((department) => (
-                        <TableRow key={department.uid} className="cursor-pointer">
-                            <TableCell>{department.name}</TableCell>
-                            <TableCell>{department.totalShops}</TableCell>
-                            <TableCell>{department.department}</TableCell>
+                    {shops.map((shop) => (
+                        <TableRow key={shop.id} className="cursor-pointer">
+                            <TableCell>{shop.name}</TableCell>
+                            <TableCell>{shop._count.StoreItem}</TableCell>
+                            <TableCell>{shop.department?.name}</TableCell>
                             <TableCell>
                                 {new Intl.DateTimeFormat('en-US', {
                                     dateStyle: 'medium',
-                                }).format(department.lastUpdatedAt)}
+                                }).format(shop.updatedAt)}
                             </TableCell>
                             <TableCell>
-                                <div className="flex items-center gap-1.5">
-                                    <Avatar>
-                                        <AvatarFallback className="h-9 w-9">
-                                            {department.updatedBy.slice(0, 2)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    {department.updatedBy}
+                                <div className="flex items-center gap-1.5 text-nowrap">
+                                    <ProfileHoverCard user={shop.lastUpdatedBy}>
+                                        <Avatar className="h-7 w-7">
+                                            <AvatarImage src={getUserAvatar(shop.lastUpdatedBy?.avatar)} />
+                                            <AvatarFallback className="h-7 w-7 text-xs">
+                                                {shop.lastUpdatedBy?.name
+                                                    ?.split(' ')
+                                                    .map((name: string) => name[0])
+                                                    .join('')}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </ProfileHoverCard>
+                                    {shop.lastUpdatedBy?.name}
                                 </div>
                             </TableCell>
                             <TableCell>
@@ -59,13 +69,11 @@ const ShopsTable = ({ data }: { data: ShopsType }) => {
                                     <DropdownMenuContent align="end">
                                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                         <DropdownMenuItem
-                                            onClick={() => {
-                                                router.push(`/shops/1/instruments`);
-                                            }}
+                                            className="cursor-pointer"
+                                            onClick={() => router.push(`/shops/${shop.id}`)}
                                         >
-                                            View all instrument
+                                            View shop
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="cursor-pointer">Edit shop</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>

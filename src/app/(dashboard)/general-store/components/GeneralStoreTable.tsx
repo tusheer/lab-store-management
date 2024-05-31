@@ -26,9 +26,11 @@ import UpdateItemStatusModal from './UpdateItemStatusModal';
 
 type StockTableProps = {
     data: NonNullable<GeneralStoreItem>;
+    isGeneralStore?: boolean;
+    id?: number;
 };
 
-const StockTable: React.FC<StockTableProps> = ({ data }) => {
+const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, id }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [isNotMoalOpen, setIsNoteModalOpen] = useState(false);
@@ -40,6 +42,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
     const [isUpdateStatusModalOpen, setIsUpdateStatusModalOpen] = useState(false);
 
     const recentUpdated = useSearchParams().get('recentUpdated');
+    const routerPath = isGeneralStore ? '/general-store' : `/shops/${id}`;
 
     useEffect(() => {
         if (recentUpdated) {
@@ -213,14 +216,14 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
                                                     <DropdownMenuItem
-                                                        onClick={() => router.push(`/general-store/${d.id}/view`)}
+                                                        onClick={() => router.push(`${routerPath}/${d.id}/view`)}
                                                         className="cursor-pointer"
                                                     >
                                                         Store details
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() =>
-                                                            router.push(`/general-store/${d.id}/view?tab=distribution`)
+                                                            router.push(`${routerPath}/${d.id}/view?tab=distribution`)
                                                         }
                                                         className="cursor-pointer"
                                                     >
@@ -228,7 +231,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() =>
-                                                            router.push(`/general-store/${d.id}/view?tab=source`)
+                                                            router.push(`${routerPath}/${d.id}/view?tab=source`)
                                                         }
                                                         className="cursor-pointer"
                                                     >
@@ -236,7 +239,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() =>
-                                                            router.push(`/general-store/${d.id}/view?tab=notes`)
+                                                            router.push(`${routerPath}/${d.id}/view?tab=notes`)
                                                         }
                                                         className="cursor-pointer"
                                                     >
@@ -245,7 +248,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem
                                                         onClick={() => {
-                                                            router.push(`/general-store/${d.id}/distribution/create`);
+                                                            router.push(`${routerPath}/${d.id}/distribution/create`);
                                                         }}
                                                         className="cursor-pointer hover:bg-gray-100"
                                                     >
@@ -253,7 +256,7 @@ const StockTable: React.FC<StockTableProps> = ({ data }) => {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() => {
-                                                            router.push(`/general-store/${d.id}/source/create`);
+                                                            router.push(`${routerPath}/${d.id}/source/create`);
                                                         }}
                                                         className="cursor-pointer"
                                                     >

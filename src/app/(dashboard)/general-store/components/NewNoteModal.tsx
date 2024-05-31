@@ -11,7 +11,7 @@ import { Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { createNewGeneralStoreNote } from '../actions';
+import { createNewStoreNote } from '../actions';
 import { NoteCreateSchemaType, noteCreateSchema } from '../schema';
 
 type NewNoteModalProps = {
@@ -46,12 +46,15 @@ const NoteAddModal: React.FC<NewNoteModalProps> = ({ isOpen, onClose, selectedSt
             if (selectedStoreId === undefined) throw new Error('Store id is not defined');
 
             const noteImages = await noteOnUpload();
-            await createNewGeneralStoreNote(
+            await createNewStoreNote(
                 {
                     ...data,
                     images: noteImages.map((file) => ({ url: file.url, key: file.key })),
                 },
-                selectedStoreId
+                selectedStoreId,
+                {
+                    isGeneralStore: true,
+                }
             );
 
             onClose();

@@ -71,7 +71,8 @@ const SeperateItemModal: React.FC<SeparateItemModalProps> = ({ isOpen, onClose, 
                     indentNo: formData.indentNo,
                     brandName: formData.brandName,
                 },
-                data.itemId
+                data.itemId,
+                { isGeneralStore: true }
             );
 
             onClose();

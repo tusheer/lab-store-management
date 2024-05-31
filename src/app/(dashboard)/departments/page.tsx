@@ -17,11 +17,9 @@ import { getServerSession } from 'next-auth';
 
 const getAllDepartments = async () => {
     const userSession = await getServerSession(authOptions);
-
     if (!userSession) {
         return [];
     }
-
     const subdomain = await getServerSubdomain();
     const response = await prisma.department.findMany({
         select: {

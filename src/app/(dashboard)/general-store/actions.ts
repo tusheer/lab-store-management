@@ -1,8 +1,8 @@
 'use server';
-import prisma from '@/lib/prisma';
-
 import { getActiveFinancialYear } from '@/app/action';
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOption';
+import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import {
     distributionCreateFormSchema,
@@ -16,28 +16,51 @@ import {
     UpdateStoreItemStatusSchemaType,
 } from './schema';
 
-export const getGeneralStore = async () => {
+type StoreParams = {
+    isGeneralStore?: boolean;
+    id?: number;
+};
+
+export const getStore = async ({ isGeneralStore = false, id }: StoreParams) => {
     try {
+        // Fetch user session
         const userSession = await getServerSession(authOptions);
         if (!userSession) {
-            throw new Error('user not found');
+            throw new Error('User not found');
         }
-        const generalStore = await prisma.store.findFirst({
-            where: {
-                institution: {
-                    id: Number(userSession.user.institution.id),
-                },
-                isGeneralStore: true,
+
+        // Define query conditions
+        const queryConditions: Prisma.StoreWhereInput = {
+            institution: {
+                id: Number(userSession.user.institution.id),
             },
+        };
+
+        // Add condition based on whether it is a general store or a specific store
+        if (isGeneralStore) {
+            queryConditions['isGeneralStore'] = true;
+        } else if (id !== undefined) {
+            queryConditions['id'] = id;
+        } else {
+            throw new Error('Store ID must be provided if not fetching the general store');
+        }
+
+        // Fetch store based on conditions
+        const store = await prisma.store.findFirst({
+            where: queryConditions,
         });
 
-        return generalStore;
+        if (!store) {
+            throw new Error('Store not found');
+        }
+
+        return store;
     } catch (error) {
         throw new Error((error as Error).message);
     }
 };
 
-export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) => {
+export const createNewStoreItem = async (data: GeneralStoreCreateSchema, storeParams: StoreParams) => {
     try {
         const validateData = generalStoreCreateSchema.safeParse(data);
 
@@ -48,7 +71,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
                 throw new Error('user not found');
             }
 
-            const store = await getGeneralStore();
+            const store = await getStore(storeParams);
 
             if (!store) {
                 throw new Error('General store not found');
@@ -180,7 +203,7 @@ export const createNewGeneralStoreItem = async (data: GeneralStoreCreateSchema) 
     }
 };
 
-export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) => {
+export const addNewSourceToStore = async (data: SourceCreateSchemaType, storeParams: StoreParams) => {
     try {
         const validateData = sourceCreateSchema.safeParse(data);
         if (validateData.success) {
@@ -190,7 +213,7 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
                 throw new Error('User not found');
             }
 
-            const store = await getGeneralStore();
+            const store = await getStore(storeParams);
 
             if (!store) {
                 throw new Error('General store not found');
@@ -305,7 +328,11 @@ export const addNewSourceToGeneralStore = async (data: SourceCreateSchemaType) =
     }
 };
 
-export const addNewDistributionToGeneralStore = async (data: DistributionCreateSchemaType, id: number) => {
+export const addNewDistributionToStore = async (
+    data: DistributionCreateSchemaType,
+    id: number,
+    storeParams: StoreParams
+) => {
     try {
         const validateData = distributionCreateFormSchema.safeParse(data);
         if (validateData.success) {
@@ -315,7 +342,7 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
                 throw new Error('User not found');
             }
 
-            const store = await getGeneralStore();
+            const store = await getStore(storeParams);
 
             if (!store) {
                 throw new Error('General store not found');
@@ -409,7 +436,7 @@ export const addNewDistributionToGeneralStore = async (data: DistributionCreateS
     }
 };
 
-export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: number) => {
+export const createNewStoreNote = async (data: NoteCreateSchemaType, id: number, storeParams: StoreParams) => {
     try {
         const userAccount = await getServerSession(authOptions);
 
@@ -423,7 +450,7 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
             throw new Error('User not found');
         }
 
-        const store = await getGeneralStore();
+        const store = await getStore(storeParams);
 
         if (!store) {
             throw new Error('General store not found');
@@ -467,7 +494,7 @@ export const createNewGeneralStoreNote = async (data: NoteCreateSchemaType, id: 
     }
 };
 
-export const separateStoreItem = async (data: SeparateItemSchemaType, id: number) => {
+export const separateStoreItem = async (data: SeparateItemSchemaType, id: number, storeParams: StoreParams) => {
     try {
         const userAccount = await getServerSession(authOptions);
         const storeItem = await prisma.storeItem.findFirst({
@@ -484,7 +511,7 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
             throw new Error('User not found');
         }
 
-        const store = await getGeneralStore();
+        const store = await getStore(storeParams);
 
         if (!store) {
             throw new Error('General store not found');
@@ -603,7 +630,11 @@ export const separateStoreItem = async (data: SeparateItemSchemaType, id: number
     }
 };
 
-export const updateStoreItemStatus = async (id: number, data: UpdateStoreItemStatusSchemaType) => {
+export const updateStoreItemStatus = async (
+    id: number,
+    data: UpdateStoreItemStatusSchemaType,
+    storeParams: StoreParams
+) => {
     try {
         const userAccount = await getServerSession(authOptions);
 
@@ -611,7 +642,7 @@ export const updateStoreItemStatus = async (id: number, data: UpdateStoreItemSta
             throw new Error('User not found');
         }
 
-        const store = await getGeneralStore();
+        const store = await getStore(storeParams);
 
         if (!store) {
             throw new Error('General store not found');

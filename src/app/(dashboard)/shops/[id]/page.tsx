@@ -6,15 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Box } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { getStore } from './actions';
-import DistributionTableServer from './components/DistributionTable.server';
-import GeneralStoreServer from './components/GeneralStore.server';
-import GeneralStoreTab from './components/GeneralStoreTab';
-import HistoryServer from './components/History.server';
-import PurchaseServerTable from './components/PurchaseTable.server';
+import { getStore } from '../../general-store/actions';
+import DistributionTableServer from '../../general-store/components/DistributionTable.server';
+import GeneralStoreServer from '../../general-store/components/GeneralStore.server';
+import GeneralStoreTab from '../../general-store/components/GeneralStoreTab';
+import HistoryServer from '../../general-store/components/History.server';
+import PurchaseServerTable from '../../general-store/components/PurchaseTable.server';
 
-const GeneralStores = async ({
+const ShopStorePage = async ({
     searchParams,
+    params,
 }: {
     searchParams: {
         tab: string;
@@ -25,10 +26,13 @@ const GeneralStores = async ({
         status: string;
         page: string;
     };
+    params: {
+        id: string;
+    };
 }) => {
     const [activeFinancialyear, generalStore] = await Promise.all([
         getActiveFinancialYear(),
-        getStore({ isGeneralStore: true }),
+        getStore({ id: Number(params.id) }),
     ]);
     const tab = searchParams.tab || 'stock';
     if (!activeFinancialyear) {
@@ -37,9 +41,6 @@ const GeneralStores = async ({
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">
                     <Box size={100} color="gray" strokeWidth={0.7} />
                     <h4 className="text-xl font-medium text-gray-500"> No active financial year found</h4>
-                    <Link className="" href={{ pathname: '/financial-year', query: { modal: true } }}>
-                        <Button className="px-5 py-5">Add a new financial year</Button>
-                    </Link>
                 </div>
             </Container>
         );
@@ -50,7 +51,7 @@ const GeneralStores = async ({
             <Container>
                 <div className="mt-10 flex flex-col items-center justify-center gap-4">
                     <Box size={100} color="gray" strokeWidth={0.7} />
-                    <h4 className="text-xl font-medium text-gray-500">General store not created yet</h4>
+                    <h4 className="text-xl font-medium text-gray-500">Store not created yet</h4>
                 </div>
             </Container>
         );
@@ -59,11 +60,11 @@ const GeneralStores = async ({
     return (
         <Container>
             <div className="flex  items-center justify-between lg:flex-row lg:items-start">
-                <PageHeading title={`General store - ${activeFinancialyear.name}`} />
-                <Link href="/general-store/new" className="hidden lg:block">
+                <PageHeading title={`${activeFinancialyear.name}`} />
+                <Link href={`/shops/${params.id}/new`} className="hidden lg:block">
                     <Button>Add new item</Button>
                 </Link>
-                <Link href="/general-store/new" className="fixed bottom-[76px] right-7 z-30 block lg:hidden">
+                <Link href={`/shops/${params.id}/new`} className="fixed bottom-[76px] right-7 z-30 block lg:hidden">
                     <div className="rounded-full bg-primary px-3 py-3 text-white">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -78,10 +79,12 @@ const GeneralStores = async ({
                     </div>
                 </Link>
             </div>
-            <GeneralStoreTab isGeneralStore />
+            <GeneralStoreTab id={Number(params.id)} />
             {tab === 'stock' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <GeneralStoreServer
+                        id={Number(params.id)}
+                        isGeneralStore={false}
                         generalStoreId={generalStore?.id}
                         searchParams={searchParams}
                         activeFinancialYearId={activeFinancialyear.id}
@@ -123,4 +126,4 @@ const GeneralStores = async ({
     );
 };
 
-export default GeneralStores;
+export default ShopStorePage;

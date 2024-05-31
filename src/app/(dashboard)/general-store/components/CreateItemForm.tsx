@@ -25,10 +25,15 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { createNewGeneralStoreItem } from '../actions';
+import { createNewStoreItem } from '../actions';
 import { GeneralStoreCreateSchema, generalStoreCreateSchema } from '../schema';
 
-const CreateItemForm = () => {
+interface GeneralStoreCreateProps {
+    isGeneralStore?: boolean;
+    id?: number;
+}
+
+const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore = false }) => {
     const form = useForm<GeneralStoreCreateSchema>({
         resolver: zodResolver(generalStoreCreateSchema),
     });
@@ -58,27 +63,34 @@ const CreateItemForm = () => {
     });
 
     const [selectedSourceType, setSelectedSourceType] = useState('');
+    const routerPath = isGeneralStore ? '/general-store' : `/shops/${id}`;
 
     const onSubmit = async (data: GeneralStoreCreateSchema) => {
         try {
             const cashMemoImages = await onCashmemoImageUpload();
             const noteImages = await noteOnUpload();
 
-            const resposen = await createNewGeneralStoreItem({
-                ...data,
-                quantity: Number(data.quantity),
-                totalPrice: data.totalPrice,
-                indentNo: data.indentNo,
-                cashMemoImage: cashMemoImages[0]
-                    ? {
-                          key: cashMemoImages[0].key,
-                          url: cashMemoImages[0].url,
-                      }
-                    : undefined,
-                images: noteImages.map((file) => ({ url: file.url, key: file.key })),
-            });
+            const resposen = await createNewStoreItem(
+                {
+                    ...data,
+                    quantity: Number(data.quantity),
+                    totalPrice: data.totalPrice,
+                    indentNo: data.indentNo,
+                    cashMemoImage: cashMemoImages[0]
+                        ? {
+                              key: cashMemoImages[0].key,
+                              url: cashMemoImages[0].url,
+                          }
+                        : undefined,
+                    images: noteImages.map((file) => ({ url: file.url, key: file.key })),
+                },
+                {
+                    isGeneralStore,
+                    id,
+                }
+            );
 
-            router.push(`/general-store?recentUpdated=${resposen.id}`);
+            router.push(`${routerPath}?recentUpdated=${resposen.id}`);
             toast.success('Created successful');
         } catch (error) {
             toast.error('error');
@@ -88,7 +100,7 @@ const CreateItemForm = () => {
     return (
         <div className="max-w-3xl">
             <div className="mb-5">
-                <PageHeading title={`Create general store item `} />
+                <PageHeading title={`Create store item `} />
             </div>
             <Form {...form}>
                 <form className="w-full space-y-3" onSubmit={form.handleSubmit(onSubmit)}>

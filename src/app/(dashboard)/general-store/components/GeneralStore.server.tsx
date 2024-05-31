@@ -127,14 +127,18 @@ const GeneralStoreServer = async ({
     generalStoreId,
     activeFinancialYearId,
     searchParams,
+    id,
+    isGeneralStore = false,
 }: {
     activeFinancialYearId: number;
     generalStoreId: number;
     searchParams?: SearchParams;
+    isGeneralStore?: boolean;
+    id?: number;
 }) => {
     const response = await getGeneralStoreItems(activeFinancialYearId, generalStoreId, searchParams);
 
-    return <GeneralStoreTable data={response} />;
+    return <GeneralStoreTable id={id} isGeneralStore={isGeneralStore} data={response} />;
 };
 
 export default GeneralStoreServer;

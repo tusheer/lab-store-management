@@ -1,5 +1,7 @@
 'use client';
 
+import { addNewDistributionToStore } from '@/app/(dashboard)/general-store/actions';
+import { distributionCreateFormSchema, DistributionCreateSchemaType } from '@/app/(dashboard)/general-store/schema';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,8 +16,6 @@ import { CalendarIcon, Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { addNewDistributionToStore } from '../../../../actions';
-import { DistributionCreateSchemaType, distributionCreateFormSchema } from '../../../../schema';
 
 type DistributionFormProps = {
     data: {

@@ -41,7 +41,9 @@ const UpdateItemStatusModal: React.FC<UpdateItemStatusModalProps> = ({ data, isO
         try {
             if (data.itemId === undefined) throw new Error('Store id is not defined');
 
-            await updateStoreItemStatus(data.itemId, formData);
+            await updateStoreItemStatus(data.itemId, formData, {
+                isGeneralStore: true,
+            });
             onClose();
             form.reset();
             router.refresh();

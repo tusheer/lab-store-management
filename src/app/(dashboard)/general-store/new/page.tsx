@@ -4,7 +4,7 @@ import CreateItemForm from '../components/CreateItemForm';
 const CreateGeneralStoreItemPage = () => {
     return (
         <Container>
-            <CreateItemForm />
+            <CreateItemForm isGeneralStore />
         </Container>
     );
 };

@@ -5,9 +5,14 @@ import { FileMinus, FilePlus, Package } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 
-const GeneralStoreTab = () => {
-    const [, startTrasition] = useTransition();
+interface GeneralStoreTabProps {
+    isGeneralStore?: boolean;
+    id?: number;
+}
 
+const GeneralStoreTab: React.FC<GeneralStoreTabProps> = ({ isGeneralStore = false, id }) => {
+    const [, startTrasition] = useTransition();
+    const routerPath = isGeneralStore ? '/general-store' : `/shops/${id}`;
     const router = useRouter();
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab') || 'stock';
@@ -16,7 +21,7 @@ const GeneralStoreTab = () => {
         <Tabs
             onValueChange={(e) => {
                 startTrasition(() => {
-                    router.push(`/general-store?tab=${e}`);
+                    router.push(`${routerPath}?tab=${e}`);
                 });
             }}
             defaultValue={tab as string}
