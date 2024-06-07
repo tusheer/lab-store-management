@@ -1,16 +1,16 @@
-import { getGeneralStoreDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
+import SourceForm from '@/app/(dashboard)/general-store/[id]/source/create/components/SourceForm';
+import { getGeneralStoreItemDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
 import Container from '@/components/ui/Container';
 import { Breadcrumb } from '@/components/ui/breadcumb';
-import DistributionForm from './components/SourceForm';
 
 type DistributionAddPageProps = {
     params: {
-        id: string;
+        itemId: string;
     };
 };
 
-const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
-    const response = await getGeneralStoreDetails(Number(params.id));
+const SourceCreatePage = async ({ params }: DistributionAddPageProps) => {
+    const response = await getGeneralStoreItemDetails(Number(params.itemId));
 
     if (response === null) {
         return <div>no found</div>;
@@ -22,7 +22,7 @@ const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
             <h2 className="mt-6 text-2xl font-semibold">
                 Add source to <span className="text-primary">&quot;{response.name}&quot;</span>
             </h2>
-            <DistributionForm
+            <SourceForm
                 data={{
                     storeId: response.id,
                     name: response.name,
@@ -34,4 +34,4 @@ const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
     );
 };
 
-export default DistributeCreatePage;
+export default SourceCreatePage;

@@ -1,4 +1,4 @@
-import { getGeneralStoreDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
+import { getGeneralStoreItemDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
 import GeneralStoreItemDetailsCard from '@/app/(dashboard)/general-store/[id]/view/components/DetailsCard';
 import DistributionTableServer from '@/app/(dashboard)/general-store/[id]/view/components/DistributionTable.server';
 import HistoryTableServer from '@/app/(dashboard)/general-store/[id]/view/components/HistoryTable.server';
@@ -12,7 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Suspense } from 'react';
 
-export type GeneralStoreItemDetails = Awaited<ReturnType<typeof getGeneralStoreDetails>>;
+export type GeneralStoreItemDetails = Awaited<ReturnType<typeof getGeneralStoreItemDetails>>;
 
 type StoreDetailsPageProps = {
     params: {
@@ -26,7 +26,7 @@ type StoreDetailsPageProps = {
 const StoreDetailsPage = async ({ params, searchParams }: StoreDetailsPageProps) => {
     // ??If fianancialyear isnot active then will veiw different view
 
-    const data = await getGeneralStoreDetails(Number(params.itemId));
+    const data = await getGeneralStoreItemDetails(Number(params.itemId));
 
     if (data === null) {
         return <div>no found</div>;

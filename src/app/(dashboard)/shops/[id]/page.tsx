@@ -59,7 +59,7 @@ const ShopStorePage = async ({
 
     return (
         <Container>
-            <div className="flex  items-center justify-between lg:flex-row lg:items-start">
+            <div className="flex items-center justify-between lg:flex-row lg:items-start">
                 <PageHeading title={`${activeFinancialyear.name}`} />
                 <Link href={`/shops/${params.id}/new`} className="hidden lg:block">
                     <Button>Add new item</Button>

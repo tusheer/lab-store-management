@@ -24,7 +24,7 @@ interface ProfileHoverCardProps {
 
 const ProfileHoverCard: React.FC<ProfileHoverCardProps> = ({ user, children }) => {
     if (!user) {
-        return <div>no user found</div>;
+        return <div>No user</div>;
     }
 
     return (
@@ -36,7 +36,7 @@ const ProfileHoverCard: React.FC<ProfileHoverCardProps> = ({ user, children }) =
                 <div className="flex flex-col items-center gap-1.5">
                     <Avatar className="h-16 w-16">
                         <AvatarImage src={getUserAvatar(user.avatar)} />
-                        <AvatarFallback className="h-16 w-16 text-xs">
+                        <AvatarFallback className="flex h-16 w-16 items-center justify-center bg-muted text-center text-xl">
                             {user.name
                                 ?.split(' ')
                                 .map((name: string) => name[0])
@@ -46,11 +46,11 @@ const ProfileHoverCard: React.FC<ProfileHoverCardProps> = ({ user, children }) =
                     <div className="flex flex-col items-center gap-1">
                         <h4 className="text-lg font-semibold text-gray-800">{user.name}</h4>
                         <p className="text-sm text-gray-500">{user.email}</p>
-                        <p className="text-sm text-gray-800">
+                        <p className="text-balance text-center text-sm text-gray-800">
                             <span className="font-semibold">Department: </span>
                             {user.department}
                         </p>
-                        <p className="text-sm text-gray-800">
+                        <p className="text-center text-sm text-gray-800">
                             <span className="font-semibold">Designation: </span>
                             {user.designation}
                         </p>

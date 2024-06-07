@@ -14,7 +14,7 @@ const RegisterUserPage = async () => {
         },
     });
     return (
-        <div className="relative flex h-svh  items-center justify-center lg:px-0">
+        <div className="relative flex h-svh items-center justify-center lg:px-0">
             <div className="w-full">
                 <div className="mx-auto flex w-full max-w-2xl flex-col justify-center space-y-6">
                     <div className="flex flex-col space-y-2 text-center">

@@ -15,7 +15,7 @@ const Liginpage = async () => {
 
     return (
         <>
-            <div className="relative flex h-svh  items-center justify-center lg:px-0">
+            <div className="relative flex h-svh items-center justify-center lg:px-0">
                 <div className="relative hidden h-full w-[400px] flex-shrink-0 flex-col bg-muted p-6 text-white dark:border-r lg:flex">
                     <div className="absolute inset-0 bg-primary" />
                     <div className="relative z-20 flex h-full flex-col items-center justify-center gap-4 text-lg font-medium">

@@ -49,7 +49,7 @@ const useFileUpload = ({
 
     const { startUpload } = useUploadThing(endpoint, {
         onClientUploadComplete: (file) => {
-            return file;
+            // return file;
         },
     });
 

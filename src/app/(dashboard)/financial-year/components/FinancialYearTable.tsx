@@ -23,7 +23,7 @@ const FinancialYearTable = ({ data }: { data: FinancialYear }) => {
         <section className="mt-5">
             <ConfirmInactiveFinalcialYear open={inactiveModal} setOpen={setInactiveModal} id={inactiveId} />
             <div className="overflow-x-auto rounded-md border">
-                <Table className="min-w-[650px] ">
+                <Table className="min-w-[650px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>

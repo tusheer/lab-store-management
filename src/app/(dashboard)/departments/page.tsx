@@ -53,7 +53,7 @@ const DashboardPage = async () => {
                 <PageHeading title="Departments" description="View all departments" />
             </div>
             <section className="mt-5 overflow-x-auto rounded-md border">
-                <Table className="min-w-[800px] ">
+                <Table className="min-w-[800px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Department name</TableHead>

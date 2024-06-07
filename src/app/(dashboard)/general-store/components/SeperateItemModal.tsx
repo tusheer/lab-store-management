@@ -213,7 +213,7 @@ const SeperateItemModal: React.FC<SeparateItemModalProps> = ({ isOpen, onClose, 
                         </div>
                         <div className="mt-2.5 flex flex-wrap gap-3">
                             {noteFiles.map((file, index) => (
-                                <div className="relative aspect-square  h-20 w-20  rounded border" key={file.uid}>
+                                <div className="relative aspect-square h-20 w-20 rounded border" key={file.uid}>
                                     <button
                                         onClick={() => noteOnRemove(index)}
                                         className="absolute -right-2 -top-2 rounded-full border bg-gray-50 p-0.5"

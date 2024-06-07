@@ -33,10 +33,10 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                 path="/general-store"
             />
             {data?.length > 0 ? (
-                <div className="overflow-x-auto rounded-md border ">
-                    <Table className="min-w-[1200px] ">
+                <div className="overflow-x-auto rounded-md border">
+                    <Table className="min-w-[1200px]">
                         <TableHeader>
-                            <TableRow>
+                            <TableRow className="text-nowrap">
                                 <TableHead>ID</TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Quantity</TableHead>
@@ -51,7 +51,7 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                         </TableHeader>
                         <TableBody>
                             {data?.map((d) => (
-                                <TableRow key={d.id} className="cursor-pointer">
+                                <TableRow key={d.id} className="cursor-pointer text-nowrap">
                                     <TableCell>{d.id}</TableCell>
                                     <TableCell>{d.name}</TableCell>
                                     <TableCell>{d.quantity + ' ' + d.unitName}</TableCell>
@@ -70,7 +70,7 @@ const DistributionTable: React.FC<DistributionTableProps> = ({ data }) => {
                                         }).format(d.allocatedAt)}
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-1.5">
+                                        <div className="flex items-center gap-1.5 text-nowrap">
                                             <ProfileHoverCard user={d.lastUpdatedBy}>
                                                 <Avatar className="h-7 w-7">
                                                     <AvatarImage src={getUserAvatar(d.lastUpdatedBy?.avatar)} />

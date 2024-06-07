@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const generalStoreCreateSchema = z
     .object({
         type: z
-            .enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle'])
+            .enum(['machine', 'tools', 'rawmaterial', 'other', 'electronics', 'furniture', 'vehicle', 'stationary'])
             .default('other'),
         name: z.string(),
         quantity: zodStrng('error'),
@@ -17,7 +17,7 @@ export const generalStoreCreateSchema = z
         indentNo: zodStrng('error'),
         cashMemoNo: z.string().optional(),
         cashMemoDate: z.date().optional(),
-        sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
+        sourceType: z.enum(['purchase', 'donation', 'others', 'restock', 'generalStore']),
         cashMemoImage: z
             .object({
                 url: z.string(),
@@ -73,7 +73,7 @@ export const financialYearCreateSchema = z.object({
 
 export const distributionCreateFormSchema = z
     .object({
-        storeId: z.number(),
+        storeItemId: z.number(),
         personName: z.string().min(1),
         department: z.string().min(1),
         name: z.string().min(1),
@@ -124,7 +124,7 @@ export const sourceCreateSchema = z
         unitName: z.string().min(1),
         stock: z.number(),
         cashMemoDate: z.date().optional(),
-        sourceType: z.enum(['purchase', 'donation', 'others', 'restock']),
+        sourceType: z.enum(['purchase', 'donation', 'others', 'restock', 'generalStore']),
         cashMemoImage: z
             .object({
                 url: z.string(),

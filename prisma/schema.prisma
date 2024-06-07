@@ -2,284 +2,285 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+    provider = "postgresql"
+    url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+    // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 model User {
-  id                           Int                     @id @default(autoincrement())
-  email                        String                  @unique @map("email")
-  password                     String?
-  name                         String?
-  isActive                     Boolean                 @default(true)
-  isDeleted                    Boolean                 @default(false)
-  createdAt                    DateTime                @default(now())
-  updatedAt                    DateTime                @updatedAt
-  phone                        String?
-  address                      String?
-  avatar                       Json?
-  designation                  String?
-  department                   String?
-  reportingBossId              Int? // Nullable
-  reportingBoss                User?                   @relation("ReportingBoss", fields: [reportingBossId], references: [id])
-  subordinates                 User[]                  @relation("ReportingBoss")
-  registerID                   String?                 @unique
-  lastStoreSourceUpdates       StoreItemSource[]       @relation("LastUpdatedBy")
-  lastStoreDistributionUpdates StoreItemDistribution[] @relation("LastUpdatedBy")
-  lastStoreItemUpdates         StoreItem[]             @relation("LastUpdatedBy")
-  StoreNote                    StoreItemNote[]
-  StoreHistory                 StoreItemHistory[]
-  institution                  Institution             @relation(fields: [institutionId], references: [id])
-  institutionId                Int
-  assignedDepartments          Department[]            @relation("DepartmentPermissions")
-  assignedStores               Store[]                 @relation("StorePermissions")
-  lastStoreUpdates             Store[]                 @relation("LastUpdatedBy")
-  role                         Role                    @default(SUPER_ADMIN)
+    id                           Int                     @id @default(autoincrement())
+    email                        String                  @unique @map("email")
+    password                     String?
+    name                         String?
+    isActive                     Boolean                 @default(true)
+    isDeleted                    Boolean                 @default(false)
+    createdAt                    DateTime                @default(now())
+    updatedAt                    DateTime                @updatedAt
+    phone                        String?
+    address                      String?
+    avatar                       Json?
+    designation                  String?
+    department                   String?
+    reportingBossId              Int? // Nullable
+    reportingBoss                User?                   @relation("ReportingBoss", fields: [reportingBossId], references: [id])
+    subordinates                 User[]                  @relation("ReportingBoss")
+    registerID                   String?                 @unique
+    lastStoreSourceUpdates       StoreItemSource[]       @relation("LastUpdatedBy")
+    lastStoreDistributionUpdates StoreItemDistribution[] @relation("LastUpdatedBy")
+    lastStoreItemUpdates         StoreItem[]             @relation("LastUpdatedBy")
+    StoreNote                    StoreItemNote[]
+    StoreHistory                 StoreItemHistory[]
+    institution                  Institution             @relation(fields: [institutionId], references: [id])
+    institutionId                Int
+    assignedDepartments          Department[]            @relation("DepartmentPermissions")
+    assignedStores               Store[]                 @relation("StorePermissions")
+    lastStoreUpdates             Store[]                 @relation("LastUpdatedBy")
+    role                         Role                    @default(SUPER_ADMIN)
 }
 
 model Institution {
-  id                Int                     @id @default(autoincrement())
-  name              String
-  logo              Json?
-  subdomain         String                  @unique
-  title             String?
-  address           String
-  phone             String
-  email             String
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt
-  isDeleted         Boolean                 @default(false)
-  isActive          Boolean                 @default(true)
-  FinancialYear     FinancialYear[]
-  StoreSource       StoreItemSource[]
-  StoreDistribution StoreItemDistribution[]
-  StoreItem         StoreItem[]
-  StoreNote         StoreItemNote[]
-  StoreHistory      StoreItemHistory[]
-  User              User[]
-  Department        Department[]
-  permissions       Json?
-  meta              Json?
-  Store             Store[]
+    id                Int                     @id @default(autoincrement())
+    name              String
+    logo              Json?
+    subdomain         String                  @unique
+    title             String?
+    address           String
+    phone             String
+    email             String
+    createdAt         DateTime                @default(now())
+    updatedAt         DateTime                @updatedAt
+    isDeleted         Boolean                 @default(false)
+    isActive          Boolean                 @default(true)
+    FinancialYear     FinancialYear[]
+    StoreSource       StoreItemSource[]
+    StoreDistribution StoreItemDistribution[]
+    StoreItem         StoreItem[]
+    StoreNote         StoreItemNote[]
+    StoreHistory      StoreItemHistory[]
+    User              User[]
+    Department        Department[]
+    permissions       Json?
+    meta              Json?
+    Store             Store[]
 }
 
 model FinancialYear {
-  id                Int                     @id @default(autoincrement())
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt
-  isDeleted         Boolean                 @default(false)
-  name              String
-  startDate         DateTime
-  endDate           DateTime
-  isActive          Boolean                 @default(true)
-  StoreItem         StoreItem[]
-  StoreSource       StoreItemSource[]
-  StoreDistribution StoreItemDistribution[]
-  institution       Institution             @relation(fields: [institutionId], references: [id])
-  institutionId     Int
-  StoreItemHistory  StoreItemHistory[]
+    id                Int                     @id @default(autoincrement())
+    createdAt         DateTime                @default(now())
+    updatedAt         DateTime                @updatedAt
+    isDeleted         Boolean                 @default(false)
+    name              String
+    startDate         DateTime
+    endDate           DateTime
+    isActive          Boolean                 @default(true)
+    StoreItem         StoreItem[]
+    StoreSource       StoreItemSource[]
+    StoreDistribution StoreItemDistribution[]
+    institution       Institution             @relation(fields: [institutionId], references: [id])
+    institutionId     Int
+    StoreItemHistory  StoreItemHistory[]
 }
 
 model Store {
-  id                Int                     @id @default(autoincrement())
-  name              String
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt
-  isDeleted         Boolean                 @default(false)
-  isActive          Boolean                 @default(true)
-  institution       Institution             @relation(fields: [institutionId], references: [id])
-  institutionId     Int
-  StoreSource       StoreItemSource[]
-  StoreItem         StoreItem[]
-  StoreNote         StoreItemNote[]
-  StoreHistory      StoreItemHistory[]
-  StoreDistribution StoreItemDistribution[]
-  department        Department?             @relation(fields: [departmentId], references: [id])
-  departmentId      Int?
-  isGeneralStore    Boolean                 @default(false)
-  permissions       User[]                  @relation("StorePermissions")
-  lastUpdatedById   Int?
-  lastUpdatedBy     User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+    id                Int                     @id @default(autoincrement())
+    name              String
+    createdAt         DateTime                @default(now())
+    updatedAt         DateTime                @updatedAt
+    isDeleted         Boolean                 @default(false)
+    isActive          Boolean                 @default(true)
+    institution       Institution             @relation(fields: [institutionId], references: [id])
+    institutionId     Int
+    StoreSource       StoreItemSource[]
+    StoreItem         StoreItem[]
+    StoreNote         StoreItemNote[]
+    StoreHistory      StoreItemHistory[]
+    StoreDistribution StoreItemDistribution[]
+    department        Department?             @relation(fields: [departmentId], references: [id])
+    departmentId      Int?
+    isGeneralStore    Boolean                 @default(false)
+    permissions       User[]                  @relation("StorePermissions")
+    lastUpdatedById   Int?
+    lastUpdatedBy     User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
 }
 
 model StoreItemSource {
-  id                 Int           @id @default(autoincrement())
-  purchasedAt        DateTime?
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  isDeleted          Boolean       @default(false)
-  isActive           Boolean       @default(true)
-  name               String
-  brandName          String?
-  quantity           Int?
-  unitName           String?
-  totalPrice         Int?
-  sellerInformation  String?
-  cashMemoNo         String?
-  cashMemoDate       DateTime?
-  cashMemoImage      Json?
-  oicSignature       String?
-  skSignature        String?
-  lastUpdatedById    Int?
-  lastUpdatedBy      User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
-  note               String?
-  images             Json[]
-  finalQuantity      Int?
-  indentNo           Int?
-  warrantyExpireDate DateTime?
-  warrantyType       String?
-  GeneralStore       StoreItem?    @relation(fields: [generalStoreId], references: [id])
-  generalStoreId     Int?
-  financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
-  financialYearId    Int
-  sourceType         SourceType    @default(others)
-  institution        Institution   @relation(fields: [institutionId], references: [id])
-  institutionId      Int
-  Store              Store         @relation(fields: [storeId], references: [id])
-  storeId            Int
+    id                 Int           @id @default(autoincrement())
+    purchasedAt        DateTime?
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+    isDeleted          Boolean       @default(false)
+    isActive           Boolean       @default(true)
+    name               String
+    brandName          String?
+    quantity           Int?
+    unitName           String?
+    totalPrice         Int?
+    sellerInformation  String?
+    cashMemoNo         String?
+    cashMemoDate       DateTime?
+    cashMemoImage      Json?
+    oicSignature       String?
+    skSignature        String?
+    lastUpdatedById    Int?
+    lastUpdatedBy      User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+    note               String?
+    images             Json[]
+    finalQuantity      Int?
+    indentNo           Int?
+    warrantyExpireDate DateTime?
+    warrantyType       String?
+    GeneralStore       StoreItem?    @relation(fields: [generalStoreId], references: [id])
+    generalStoreId     Int?
+    financialYear      FinancialYear @relation(fields: [financialYearId], references: [id])
+    financialYearId    Int
+    sourceType         SourceType    @default(others)
+    institution        Institution   @relation(fields: [institutionId], references: [id])
+    institutionId      Int
+    Store              Store         @relation(fields: [storeId], references: [id])
+    storeId            Int
 }
 
 model StoreItemDistribution {
-  id              Int           @id @default(autoincrement())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  isDeleted       Boolean       @default(false)
-  isActive        Boolean       @default(true)
-  allocatedAt     DateTime      @default(now())
-  personName      String?
-  name            String
-  shopName        String?
-  department      String
-  quantity        Int?
-  unitName        String?
-  lastUpdatedById Int? // Nullable
-  lastUpdatedBy   User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
-  note            String?
-  images          Json[]
-  finalQuantity   Int?
-  StoreItem       StoreItem?    @relation(fields: [storeItemId], references: [id])
-  storeItemId     Int?
-  financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
-  financialYearId Int
-  indentNo        Int?
-  institution     Institution   @relation(fields: [institutionId], references: [id])
-  institutionId   Int
-  Store           Store         @relation(fields: [storeId], references: [id])
-  storeId         Int
+    id              Int           @id @default(autoincrement())
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+    isDeleted       Boolean       @default(false)
+    isActive        Boolean       @default(true)
+    allocatedAt     DateTime      @default(now())
+    personName      String?
+    name            String
+    shopName        String?
+    department      String
+    quantity        Int?
+    unitName        String?
+    lastUpdatedById Int? // Nullable
+    lastUpdatedBy   User?         @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+    note            String?
+    images          Json[]
+    finalQuantity   Int?
+    StoreItem       StoreItem?    @relation(fields: [storeItemId], references: [id])
+    storeItemId     Int?
+    financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
+    financialYearId Int
+    indentNo        Int?
+    institution     Institution   @relation(fields: [institutionId], references: [id])
+    institutionId   Int
+    Store           Store         @relation(fields: [storeId], references: [id])
+    storeId         Int
 }
 
 model StoreItem {
-  id                             Int                     @id @default(autoincrement())
-  createdAt                      DateTime                @default(now())
-  updatedAt                      DateTime                @updatedAt
-  isDeleted                      Boolean                 @default(false)
-  isActive                       Boolean                 @default(true)
-  name                           String
-  stockAmount                    Int
-  unitName                       String
-  lastUpdatedById                Int? // Nullable
-  lastUpdatedBy                  User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
-  storeItemNotes                 StoreItemNote[]
-  alertWhenStockAmountIsLessThan Int?
-  type                           ItemType                @default(other)
-  status                         MachineStatus           @default(operational)
-  storageLocation                String?
-  sources                        StoreItemSource[]
-  distributions                  StoreItemDistribution[]
-  financialYear                  FinancialYear           @relation(fields: [financialYearId], references: [id])
-  financialYearId                Int
-  storeItemHistory               StoreItemHistory[]
-  institution                    Institution             @relation(fields: [institutionId], references: [id])
-  institutionId                  Int
-  Store                          Store                   @relation(fields: [storeId], references: [id])
-  storeId                        Int
+    id                             Int                     @id @default(autoincrement())
+    createdAt                      DateTime                @default(now())
+    updatedAt                      DateTime                @updatedAt
+    isDeleted                      Boolean                 @default(false)
+    isActive                       Boolean                 @default(true)
+    name                           String
+    stockAmount                    Int
+    unitName                       String
+    lastUpdatedById                Int? // Nullable
+    lastUpdatedBy                  User?                   @relation("LastUpdatedBy", fields: [lastUpdatedById], references: [id])
+    storeItemNotes                 StoreItemNote[]
+    alertWhenStockAmountIsLessThan Int?
+    type                           ItemType                @default(other)
+    status                         MachineStatus           @default(operational)
+    storageLocation                String?
+    sources                        StoreItemSource[]
+    distributions                  StoreItemDistribution[]
+    financialYear                  FinancialYear           @relation(fields: [financialYearId], references: [id])
+    financialYearId                Int
+    storeItemHistory               StoreItemHistory[]
+    institution                    Institution             @relation(fields: [institutionId], references: [id])
+    institutionId                  Int
+    Store                          Store                   @relation(fields: [storeId], references: [id])
+    storeId                        Int
 }
 
 model StoreItemNote {
-  id            Int         @id @default(autoincrement())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  isActive      Boolean     @default(true)
-  note          String
-  storeItem     StoreItem   @relation(fields: [storeItemId], references: [id])
-  storeItemId   Int
-  images        Json[]
-  user          User        @relation(fields: [userId], references: [id])
-  userId        Int
-  institution   Institution @relation(fields: [institutionId], references: [id])
-  institutionId Int
-  Store         Store       @relation(fields: [storeId], references: [id])
-  storeId       Int
+    id            Int         @id @default(autoincrement())
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    isActive      Boolean     @default(true)
+    note          String
+    storeItem     StoreItem   @relation(fields: [storeItemId], references: [id])
+    storeItemId   Int
+    images        Json[]
+    user          User        @relation(fields: [userId], references: [id])
+    userId        Int
+    institution   Institution @relation(fields: [institutionId], references: [id])
+    institutionId Int
+    Store         Store       @relation(fields: [storeId], references: [id])
+    storeId       Int
 }
 
 model StoreItemHistory {
-  id              Int           @id @default(autoincrement())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  isActive        Boolean       @default(true)
-  label           String
-  storeItem       StoreItem     @relation(fields: [storeItemId], references: [id])
-  storeItemId     Int
-  images          Json[]
-  user            User          @relation(fields: [userId], references: [id])
-  userId          Int
-  institution     Institution   @relation(fields: [institutionId], references: [id])
-  institutionId   Int
-  Store           Store?        @relation(fields: [storeId], references: [id])
-  storeId         Int?
-  financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
-  financialYearId Int
+    id              Int           @id @default(autoincrement())
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+    isActive        Boolean       @default(true)
+    label           String
+    storeItem       StoreItem     @relation(fields: [storeItemId], references: [id])
+    storeItemId     Int
+    images          Json[]
+    user            User          @relation(fields: [userId], references: [id])
+    userId          Int
+    institution     Institution   @relation(fields: [institutionId], references: [id])
+    institutionId   Int
+    Store           Store?        @relation(fields: [storeId], references: [id])
+    storeId         Int?
+    financialYear   FinancialYear @relation(fields: [financialYearId], references: [id])
+    financialYearId Int
 }
 
 model Department {
-  id            Int         @id @default(autoincrement())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  isDeleted     Boolean     @default(false)
-  isActive      Boolean     @default(true)
-  name          String
-  institution   Institution @relation(fields: [institutionId], references: [id])
-  institutionId Int
-  userId        Int?
-  Store         Store[]
-  permissions   User[]      @relation("DepartmentPermissions")
+    id            Int         @id @default(autoincrement())
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    isDeleted     Boolean     @default(false)
+    isActive      Boolean     @default(true)
+    name          String
+    institution   Institution @relation(fields: [institutionId], references: [id])
+    institutionId Int
+    userId        Int?
+    Store         Store[]
+    permissions   User[]      @relation("DepartmentPermissions")
 }
 
 enum ItemType {
-  machine
-  tools
-  rawmaterial
-  equipment
-  vehicle
-  furniture
-  electronics
-  other
+    machine
+    tools
+    rawmaterial
+    vehicle
+    furniture
+    stationary
+    electronics
+    other
 }
 
 enum MachineStatus {
-  operational
-  faulty
-  underRepair
-  disposed
+    operational
+    faulty
+    underRepair
+    disposed
 }
 
 enum SourceType {
-  purchase
-  donation
-  others
-  restock
-  separation
+    purchase
+    donation
+    others
+    restock
+    separation
+    generalStore
 }
 
 enum Role {
-  SUPER_ADMIN
-  GENERAL_STORE_MANAGER
-  DEPARTMENT_MANAGER
-  SUB_STORE_MANAGER
-  DEPARTMENT_AND_STORE_MANAGER
+    SUPER_ADMIN
+    GENERAL_STORE_MANAGER
+    DEPARTMENT_MANAGER
+    SUB_STORE_MANAGER
+    DEPARTMENT_AND_STORE_MANAGER
 }

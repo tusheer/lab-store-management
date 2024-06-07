@@ -1,7 +1,7 @@
 'use server';
 import prisma from '@/lib/prisma';
 
-export const getGeneralStoreDetails = async (id: number) => {
+export const getGeneralStoreItemDetails = async (id: number) => {
     const response = await prisma.storeItem.findUnique({
         where: {
             id,

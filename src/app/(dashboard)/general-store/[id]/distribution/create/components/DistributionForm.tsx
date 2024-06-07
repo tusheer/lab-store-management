@@ -19,14 +19,16 @@ import { DistributionCreateSchemaType, distributionCreateFormSchema } from '../.
 
 type DistributionFormProps = {
     data: {
-        storeId: number;
+        storeItemId: number;
+        storeId?: number;
         name: string;
         unitName: string;
         stock: number;
     };
+    isGeneralStore?: boolean;
 };
 
-const DistributionForm: React.FC<DistributionFormProps> = ({ data }) => {
+const DistributionForm: React.FC<DistributionFormProps> = ({ data: propsData, isGeneralStore = false }) => {
     const router = useRouter();
     const form = useForm<DistributionCreateSchemaType>({
         resolver: zodResolver(distributionCreateFormSchema),
@@ -36,13 +38,15 @@ const DistributionForm: React.FC<DistributionFormProps> = ({ data }) => {
             personName: '',
             quantity: '',
             allocatedAt: new Date(),
-            name: data.name,
-            storeId: data.storeId,
-            unitName: data.unitName,
+            name: propsData.name,
+            storeItemId: propsData.storeItemId,
+            unitName: propsData.unitName,
             note: '',
-            stock: data.stock,
+            stock: propsData.stock,
         },
     });
+
+    const routerPath = isGeneralStore ? '/general-store' : `/shops/${propsData.storeId}`;
 
     const { files, onChange, onUpload, onRemove } = useFileUpload({
         endpoint: 'imageUploader',
@@ -58,14 +62,15 @@ const DistributionForm: React.FC<DistributionFormProps> = ({ data }) => {
                     ...data,
                     images: files.map((file) => ({ url: file.url, key: file.key })),
                 },
-                data.storeId,
+                data.storeItemId,
                 {
-                    isGeneralStore: true,
+                    isGeneralStore: isGeneralStore,
+                    id: propsData.storeId,
                 }
             );
 
             toast.success('Create successfully');
-            router.push(`/general-store?recentUpdated=${data.storeId}`);
+            router.push(`${routerPath}?recentUpdated=${propsData.storeId}`);
         } catch (error) {
             toast.error((error as Error).message);
         }
@@ -73,7 +78,7 @@ const DistributionForm: React.FC<DistributionFormProps> = ({ data }) => {
     return (
         <div className="mt-6 w-full max-w-2xl pb-6">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className=" w-full space-y-3">
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-3">
                     <div className="flex w-full gap-3">
                         <FormField
                             control={form.control}
@@ -209,7 +214,7 @@ const DistributionForm: React.FC<DistributionFormProps> = ({ data }) => {
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {files.map((file, index) => (
-                            <div className="relative aspect-square  h-20 w-20  rounded border" key={file.uid}>
+                            <div className="relative aspect-square h-20 w-20 rounded border" key={file.uid}>
                                 <button
                                     onClick={() => onRemove(index)}
                                     className="absolute -right-2 -top-2 rounded-full border bg-gray-50 p-0.5"

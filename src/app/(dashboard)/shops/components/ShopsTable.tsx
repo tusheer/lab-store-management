@@ -20,7 +20,7 @@ const ShopsTable: React.FC<{ shops: Shop[] }> = ({ shops }) => {
     const router = useRouter();
     return (
         <section className="mt-5 overflow-x-auto rounded-md border">
-            <Table className="min-w-[950px] ">
+            <Table className="min-w-[950px]">
                 <TableHeader>
                     <TableRow>
                         <TableHead>Shop name</TableHead>

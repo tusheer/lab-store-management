@@ -82,8 +82,8 @@ const UpdateProfileComponent: React.FC<UpdateProfileComponentProps> = ({ data })
     return (
         <div className="mx-auto mt-6 max-w-lg">
             <h1 className="mb-6 text-xl font-semibold text-gray-900">Update profile</h1>
-            <div className="relative h-32 w-32  cursor-pointer">
-                <Avatar className="h-32 w-32 flex-shrink-0 border ">
+            <div className="relative h-32 w-32 cursor-pointer">
+                <Avatar className="h-32 w-32 flex-shrink-0 border">
                     <AvatarImage src={files[0]?.url || ''} />
                     <AvatarFallback className="text-lg">
                         {data?.name

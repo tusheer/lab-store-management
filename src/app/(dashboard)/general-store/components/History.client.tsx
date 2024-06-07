@@ -48,8 +48,8 @@ const HistoryTable: React.FC<HistoryTableProps> = ({ data }) => {
                 ]}
                 path="/general-store"
             />
-            <div className="overflow-x-auto rounded-md border ">
-                <Table className="min-w-[1200px] ">
+            <div className="overflow-x-auto rounded-md border">
+                <Table className="min-w-[1200px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Label</TableHead>

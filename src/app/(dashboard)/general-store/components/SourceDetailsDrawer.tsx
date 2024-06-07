@@ -26,7 +26,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                             <div className="grid min-w-[550px] gap-3.5">
                                 <div className="grid grid-cols-12">
                                     <p className="col-span-6 text-sm font-medium text-gray-500 lg:col-span-3">Name</p>
-                                    <p className="col-span-6  text-sm font-medium text-gray-700">{data.name}</p>
+                                    <p className="col-span-6 text-sm font-medium text-gray-700">{data.name}</p>
                                 </div>
 
                                 <div className="grid grid-cols-12 items-center">
@@ -80,7 +80,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                         Last updated by
                                     </p>
 
-                                    <div className="col-span-6 flex  items-center gap-1.5">
+                                    <div className="col-span-6 flex items-center gap-1.5">
                                         <ProfileHoverCard user={data.lastUpdatedBy}>
                                             <Avatar className="h-7 w-7">
                                                 <AvatarImage src={getUserAvatar(data.lastUpdatedBy?.avatar)} />
@@ -165,7 +165,7 @@ const SourceDetailsDrawer: React.FC<SourceDetailsDrawerProps> = ({ isOpen, onClo
                                     <p className="col-span-6 text-sm font-medium capitalize text-gray-700">
                                         {data.cashMemoImage ? (
                                             <img
-                                                className=" h-28 w-28 object-cover"
+                                                className="h-28 w-28 object-cover"
                                                 src={(data.cashMemoImage as { url: string }).url}
                                                 alt=""
                                             />

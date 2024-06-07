@@ -49,7 +49,7 @@ const ShopFilter = () => {
         <>
             <div className="mt-6 flex items-center gap-4">
                 <Input
-                    className=" w-10/12 lg:w-3/12"
+                    className="w-10/12 lg:w-3/12"
                     placeholder="Search by name or department name"
                     {...form.register('search')}
                 />

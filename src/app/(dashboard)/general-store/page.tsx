@@ -58,7 +58,7 @@ const GeneralStores = async ({
 
     return (
         <Container>
-            <div className="flex  items-center justify-between lg:flex-row lg:items-start">
+            <div className="flex items-center justify-between lg:flex-row lg:items-start">
                 <PageHeading title={`General store - ${activeFinancialyear.name}`} />
                 <Link href="/general-store/new" className="hidden lg:block">
                     <Button>Add new item</Button>
@@ -82,6 +82,7 @@ const GeneralStores = async ({
             {tab === 'stock' && (
                 <Suspense fallback={<LoaderSpinner />}>
                     <GeneralStoreServer
+                        isGeneralStore
                         generalStoreId={generalStore?.id}
                         searchParams={searchParams}
                         activeFinancialYearId={activeFinancialyear.id}

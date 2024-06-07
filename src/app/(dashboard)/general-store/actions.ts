@@ -189,7 +189,7 @@ export const createNewStoreItem = async (data: GeneralStoreCreateSchema, storePa
                     },
                 });
             }
-
+            console.log('generalStore', generalStore);
             if (!generalStore) {
                 throw new Error('something wrong');
             }

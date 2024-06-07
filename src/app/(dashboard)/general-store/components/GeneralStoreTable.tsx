@@ -78,10 +78,6 @@ const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, i
                                 value: 'tools',
                             },
                             {
-                                label: 'Material',
-                                value: 'material',
-                            },
-                            {
                                 label: 'Furniture',
                                 value: 'furniture',
                             },
@@ -101,7 +97,10 @@ const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, i
                                 label: 'Vehicle',
                                 value: 'vehicle',
                             },
-
+                            {
+                                label: 'Vehicle',
+                                value: 'vehicle',
+                            },
                             {
                                 label: 'Other',
                                 value: 'other',
@@ -139,12 +138,12 @@ const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, i
                         dateKey: ['startDate', 'endDate'],
                     },
                 ]}
-                path="/general-store"
+                path={routerPath}
             />
             {data?.items.length > 0 ? (
                 <>
                     <div className="overflow-x-auto rounded-md border">
-                        <Table className="min-w-[800px] ">
+                        <Table className="min-w-[800px]">
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>ID</TableHead>
@@ -336,7 +335,7 @@ const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, i
                     <h4 className="text-xl font-medium text-gray-500">No data found</h4>
                     <Link
                         href={{
-                            pathname: '/general-store/new',
+                            pathname: `${routerPath}/new`,
                         }}
                     >
                         <Button className="px-5 py-5">Add new item</Button>
@@ -351,7 +350,7 @@ const StockTable: React.FC<StockTableProps> = ({ data, isGeneralStore = false, i
                         const params = new URLSearchParams(searchParams.toString());
                         params.set('page', e.toString());
                         startTransition(() => {
-                            router.push(`/general-store?${params.toString()}`);
+                            router.push(`${routerPath}?${params.toString()}`);
                         });
                     }}
                     showPreviousNext={true}

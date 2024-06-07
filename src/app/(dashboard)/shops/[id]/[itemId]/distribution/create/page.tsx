@@ -1,16 +1,17 @@
-import { getGeneralStoreDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
+import DistributionForm from '@/app/(dashboard)/general-store/[id]/distribution/create/components/DistributionForm';
+import { getGeneralStoreItemDetails } from '@/app/(dashboard)/general-store/[id]/view/action';
 import Container from '@/components/ui/Container';
 import { Breadcrumb } from '@/components/ui/breadcumb';
-import DistributionForm from './components/DistributionForm';
 
 type DistributionAddPageProps = {
     params: {
+        itemId: string;
         id: string;
     };
 };
 
 const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
-    const response = await getGeneralStoreDetails(Number(params.id));
+    const response = await getGeneralStoreItemDetails(Number(params.itemId));
 
     if (response === null) {
         return <div>no found</div>;
@@ -23,11 +24,13 @@ const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
                 Add Distributation for <span className="text-primary">&quot;{response.name}&quot;</span>
             </h2>
             <DistributionForm
+                isGeneralStore={false}
                 data={{
-                    storeId: response.id,
                     name: response.name,
                     unitName: response.unitName,
                     stock: response.stockAmount,
+                    storeItemId: Number(params.itemId),
+                    storeId: Number(params.id),
                 }}
             />
         </Container>

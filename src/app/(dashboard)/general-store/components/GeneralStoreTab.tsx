@@ -2,7 +2,8 @@
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileMinus, FilePlus, Package } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
+import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface GeneralStoreTabProps {

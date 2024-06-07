@@ -210,6 +210,7 @@ const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore 
                                                     <SelectItem value="electronics">Electronics</SelectItem>
                                                     <SelectItem value="furniture">Furniture</SelectItem>
                                                     <SelectItem value="vehicle">Vehicle</SelectItem>
+                                                    <SelectItem value="stationary">Stationary</SelectItem>
                                                     <SelectItem value="other">Other</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
@@ -280,6 +281,9 @@ const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore 
                                             <SelectContent>
                                                 <SelectGroup>
                                                     <SelectLabel>Source source type</SelectLabel>
+                                                    {!isGeneralStore && (
+                                                        <SelectItem value="generalStore">General store</SelectItem>
+                                                    )}
                                                     <SelectItem value="purchase">Purchase</SelectItem>
                                                     <SelectItem value="donation">Donation</SelectItem>
                                                     <SelectItem value="others">Others</SelectItem>
@@ -321,7 +325,7 @@ const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore 
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {noteFiles.map((file, index) => (
-                            <div className="relative aspect-square  h-20 w-20  rounded border" key={file.uid}>
+                            <div className="relative aspect-square h-20 w-20 rounded border" key={file.uid}>
                                 <button
                                     onClick={() => noteOnRemove(index)}
                                     className="absolute -right-2 -top-2 rounded-full border bg-gray-50 p-0.5"
@@ -472,7 +476,7 @@ const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore 
                                     <div className="flex flex-wrap gap-3">
                                         {cashmemoFiles.map((file, index) => (
                                             <div
-                                                className="relative aspect-square  h-20 w-20  rounded border"
+                                                className="relative aspect-square h-20 w-20 rounded border"
                                                 key={file.uid}
                                             >
                                                 <button
@@ -528,7 +532,7 @@ const CreateItemForm: React.FC<GeneralStoreCreateProps> = ({ id, isGeneralStore 
                                     )}
                                 />
                             </div>
-                            <div className="flex gap-3 ">
+                            <div className="flex gap-3">
                                 <FormField
                                     control={form.control}
                                     name="sellerInformation"

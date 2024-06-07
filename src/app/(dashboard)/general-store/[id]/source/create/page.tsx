@@ -1,6 +1,6 @@
 import Container from '@/components/ui/Container';
 import { Breadcrumb } from '@/components/ui/breadcumb';
-import { getGeneralStoreDetails } from '../../view/action';
+import { getGeneralStoreItemDetails } from '../../view/action';
 import DistributionForm from './components/SourceForm';
 
 type DistributionAddPageProps = {
@@ -10,7 +10,7 @@ type DistributionAddPageProps = {
 };
 
 const DistributeCreatePage = async ({ params }: DistributionAddPageProps) => {
-    const response = await getGeneralStoreDetails(Number(params.id));
+    const response = await getGeneralStoreItemDetails(Number(params.id));
 
     if (response === null) {
         return <div>no found</div>;

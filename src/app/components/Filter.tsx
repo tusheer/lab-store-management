@@ -121,9 +121,9 @@ const Filter: React.FC<ShopFilterProps> = ({ path, inputs, className }) => {
     };
 
     return (
-        <div className={cn('flex w-full gap-6  overflow-x-auto lg:overflow-visible', className)}>
+        <div className={cn('flex w-full gap-6 overflow-x-auto lg:overflow-visible', className)}>
             <Form {...form}>
-                <div className="flex gap-4 ">
+                <div className="flex gap-4">
                     {inputs.map((input) => (
                         <div key={input.queryKey}>
                             {input.label && <Label htmlFor={input.queryKey}>{input.label}</Label>}
